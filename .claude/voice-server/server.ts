@@ -178,7 +178,7 @@ async function sendNotification(title: string, message: string, voiceEnabled = t
         // Fallback to text-to-speech command
         try {
           if (isLinux) {
-            await spawnSafe('espeak', [safeMessage]);
+            console.log(`🗣️ SPEAKING: ${safeMessage}`);  // Visual feedback for now
           } else if (isMacOS) {
             await spawnSafe('/usr/bin/say', [safeMessage]);
           }
@@ -190,7 +190,7 @@ async function sendNotification(title: string, message: string, voiceEnabled = t
       // Use spawn for text-to-speech command
       try {
         if (isLinux) {
-          await spawnSafe('espeak', [safeMessage]);
+          console.log(`🗣️ SPEAKING: ${safeMessage}`);  // Visual feedback for now
         } else if (isMacOS) {
           await spawnSafe('say', [safeMessage]);
         }
