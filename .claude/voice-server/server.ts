@@ -6,13 +6,18 @@
 import { serve } from "bun";
 import { spawn } from "child_process";
 import { writeFile, unlink } from "fs/promises";
-import { tmpdir } from "os";
+import { tmpdir, platform } from "os";
 import { join } from "path";
 import { homedir } from "os";
 import { existsSync } from "fs";
 
-// Load .env from user home directory
-const envPath = join(homedir(), '.env');
+// OS detection for cross-platform audio support
+const isLinux = platform() === 'linux';
+const isMacOS = platform() === 'darwin';
+
+// Load .env from PAI project directory or fallback to home directory
+const paiHome = process.env.PAI_HOME || join(homedir(), 'tiffany-pai');
+const envPath = existsSync(join(paiHome, '.env')) ? join(paiHome, '.env') : join(homedir(), '.env');
 if (existsSync(envPath)) {
   const envContent = await Bun.file(envPath).text();
   envContent.split('\n').forEach(line => {
@@ -162,31 +167,47 @@ async function sendNotification(title: string, message: string, voiceEnabled = t
     if (audioFile) {
       // Use spawn for safer audio playback
       try {
-        await spawnSafe('/usr/bin/afplay', [audioFile]);
+        if (isLinux) {
+          await spawnSafe('mpg123', [audioFile]);
+        } else if (isMacOS) {
+          await spawnSafe('/usr/bin/afplay', [audioFile]);
+        }
         await unlink(audioFile).catch(() => {});
       } catch (error) {
         console.error("Failed to play ElevenLabs audio:", error);
-        // Fallback to say command
+        // Fallback to text-to-speech command
         try {
-          await spawnSafe('/usr/bin/say', [safeMessage]);
+          if (isLinux) {
+            await spawnSafe('espeak', [safeMessage]);
+          } else if (isMacOS) {
+            await spawnSafe('/usr/bin/say', [safeMessage]);
+          }
         } catch (e) {
           console.error("Failed to speak message:", e);
         }
       }
     } else {
-      // Use spawn for say command
+      // Use spawn for text-to-speech command
       try {
-        await spawnSafe('say', [safeMessage]);
+        if (isLinux) {
+          await spawnSafe('espeak', [safeMessage]);
+        } else if (isMacOS) {
+          await spawnSafe('say', [safeMessage]);
+        }
       } catch (error) {
-        console.error("Say command error:", error);
+        console.error("Text-to-speech command error:", error);
       }
     }
   }
   
-  // Use spawn for osascript with proper escaping
+  // Use spawn for desktop notifications with proper escaping
   try {
-    const script = `display notification "${safeMessage}" with title "${safeTitle}" sound name ""`;
-    await spawnSafe('/usr/bin/osascript', ['-e', script]);
+    if (isLinux) {
+      await spawnSafe('notify-send', [safeTitle, safeMessage]);
+    } else if (isMacOS) {
+      const script = `display notification "${safeMessage}" with title "${safeTitle}" sound name ""`;
+      await spawnSafe('/usr/bin/osascript', ['-e', script]);
+    }
   } catch (error) {
     console.error("Notification display error:", error);
   }
@@ -331,7 +352,8 @@ console.log(`🚀 PAIVoice Server running on port ${PORT}`);
 if (ELEVENLABS_API_KEY) {
   console.log(`🎙️  Using ElevenLabs voice: ${ELEVENLABS_VOICE_ID}`);
 } else {
-  console.log(`🎙️  Using macOS 'say' command (no ElevenLabs API key)`);
+  console.log(`🎙️  Using ${isLinux ? 'Linux espeak' : 'macOS say'} command (no ElevenLabs API key)`);
 }
 console.log(`📡 POST to http://localhost:${PORT}/notify`);
 console.log(`🔒 Security: CORS restricted to localhost, rate limiting enabled`);
+console.log(`💻 Platform: ${isLinux ? 'Linux' : isMacOS ? 'macOS' : 'Other'} audio support`);
