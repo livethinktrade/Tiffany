@@ -164,6 +164,134 @@ For example:
 • Pronunciation hints for unusual terms
 • Skip special characters that don't speak well
 
+# 🚀 TIFFANY MCP ARCHITECTURE PROJECT (IN PROGRESS)
+
+## Project Overview
+
+**Current Phase**: Converting Tiffany Accountability Agent from 102-node n8n workflow to Cloudflare Workers MCP server architecture.
+
+**Core Architecture Discovery**:
+```
+Telegram → n8n (Kai Router) → Tiffany MCP Server → Response
+```
+
+**Project Goal**: Transform from GUI-based n8n development to code-based MCP serverless architecture following Daniel Miessler's proven pattern.
+
+## Extracted Architecture Components
+
+### Current Tiffany Workflow (qNqFdwPIbfnsTQt5)
+- **Complexity**: 102 nodes, 81 connections
+- **AI Router Agent**: Core decision-making intelligence
+- **Smart Routing Switch**: 4-path routing system
+  - Path 0: TELOS file retrieval → Mentor advice
+  - Path 1: Conversation logging
+  - Path 2: Quote collection and generation
+  - Path 3: Gains tracking with Airtable storage
+
+### Key Functions Identified
+1. **Daily Automation**: Scheduled quotes, gains requests, definite purpose affirmations
+2. **Memory Management**: Window buffer memory with persistent context
+3. **TELOS Integration**: File operations and mentor advice system
+4. **Gains Tracking**: Airtable storage with user state management
+5. **Quote System**: Custom AI-generated daily quotes with storage
+6. **Multiple AI Models**: OpenRouter chat models for different functions
+
+## MCP Server Architecture Plan
+
+### Following Miessler Pattern
+- **Single JavaScript file** per MCP server
+- **Cloudflare Workers deployment** via `wrangler deploy`
+- **Zero infrastructure management**
+- **Global edge distribution**
+- **Pattern**: `tiffany-mcp.danielmiessler.workers.dev`
+
+### Agent → MCP Server Evolution
+- **Current**: 7 specialized agents (researcher, engineer, designer, pentester, architect, writer, general-purpose)
+- **Future**: Each agent becomes `{agent}-mcp.danielmiessler.workers.dev`
+- **Individual scaling** and specialized tools per agent
+- **Dual Existence**: Local development (Claude Code) + 24/7 serverless (MCP servers)
+
+## Current Development Status
+
+### Archon Task Board (Agile Shipping)
+**Project ID**: `e23170d2-aa6f-4fc1-857a-330e20fba6b6`
+
+**Completed Tasks**:
+- ✅ Extract Tiffany routing logic from n8n workflow
+
+**In Progress**:
+- 🔄 Create basic Tiffany MCP server structure
+
+**Pending**:
+- 📋 Deploy Tiffany MCP to Cloudflare Workers
+- 📋 Simplify n8n workflow to call Tiffany MCP
+- 📋 Test end-to-end Telegram → MCP → Response
+
+### Development Principles
+- **Ship immediately** for testing (Agile approach)
+- **Version control** all agent logic in Git
+- **Code-based development** vs n8n GUI
+- **Preserve functionality** while gaining development speed
+
+## Context Integration
+
+### Shared Context (Kai distributes to agents)
+```
+/.claude/context/
+├── personal/
+│   ├── telos.md           # Goals, challenges, strategies
+│   ├── projects.md        # Active initiatives & deadlines
+│   ├── patterns.md        # Behavioral analysis & triggers
+│   └── preferences.md     # Communication style & timing
+├── memory/
+│   ├── mem0_integration.md    # Memory system configuration
+│   └── context_rules.md       # Context hydration logic
+└── system/
+    ├── agent_coordination.md  # Inter-agent workflows
+    └── interface_config.md    # Multi-interface settings
+```
+
+### Agent-Specific Context
+```
+├── agents/
+│   ├── tiffany.md         # Accountability coaching personality
+│   ├── caleb.md           # Content creation style & templates
+│   ├── mark.md            # Health coaching approach & metrics
+│   ├── megan.md           # Project management methodology
+│   └── dev.md             # System improvement protocols
+```
+
+## Future Architecture Vision
+
+### Complete Agent Ecosystem
+- **Tiffany MCP**: Accountability coaching and gains tracking
+- **Caleb MCP**: Content creation and social media
+- **Mark MCP**: Health coaching and fitness tracking
+- **Megan MCP**: Project management and task coordination
+- **Dev MCP**: System improvements and deployments
+
+### Command System Integration
+Following 20+ command pattern with MCP integration:
+- Blog post creation → Content MCP
+- Security scanning → Pentester MCP
+- Visual testing → Designer MCP
+- Code development → Engineer MCP
+
+## Next Session Continuation
+
+**If resuming this project**:
+1. Check Archon task status: `mcp__archon__find_tasks(project_id="e23170d2-aa6f-4fc1-857a-330e20fba6b6")`
+2. Continue from current task: "Create basic Tiffany MCP server structure"
+3. Reference extracted routing logic from n8n workflow qNqFdwPIbfnsTQt5
+4. Follow Cloudflare Workers deployment pattern
+
+**Key Files**:
+- Project documentation: `/.claude/context/projects/tiffany-mcp-integration.md`
+- Current n8n workflow: ID `qNqFdwPIbfnsTQt5`
+- Archon project tracking for task management
+
+---
+
 ## Account Information
 
 My YouTube channel is: https://www.youtube.com/@unsupervised-learning
