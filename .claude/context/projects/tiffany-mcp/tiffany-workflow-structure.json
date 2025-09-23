@@ -1,0 +1,24 @@
+{
+  "workflow_id": "qNqFdwPIbfnsTQt5",
+  "name": "Tiffany Accountability Agent",
+  "active": true,
+  "nodeCount": 102,
+  "connectionCount": 81,
+  "key_nodes": {
+    "telegram_trigger": "10cfcf9c-4237-407e-847c-2b8cfe7035a9",
+    "smart_routing": "42d6de68-8921-4e4b-935e-b1c43fa15ab0",
+    "tiffany_agent": "ef2f4edd-f4a1-4331-9e26-e34d9101c740",
+    "ai_agent1": "206ab882-bba9-41c9-b345-a95f5a0c08c6",
+    "information_extractor": "8b2a6897-9eb3-4059-b74a-8417e379c482",
+    "mentors_agent": "3b47760c-b856-41e9-9e63-c7f7d0cbd4b4",
+    "quote_generator": "d4478595-f162-4e67-b540-eb0a08d52fb5"
+  },
+  "routing_paths": {
+    "path_0": "Retrieve TELOS file → Mentor advice",
+    "path_1": "Execute Command - Log Conversation",
+    "path_2": "Send message and wait for response → Quote collection",
+    "path_3": "AI Agent1 → Gains tracking"
+  },
+  "extracted_to_mcp": "2025-09-23",
+  "notes": "Complex 102-node workflow to be simplified to ~10 nodes routing to MCP tools"
+}

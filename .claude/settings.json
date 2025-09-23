@@ -38,6 +38,66 @@
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [],
+  "hooks": {
+    "PreToolUse": [],
+    "PostToolUse": [],
+    "Notification": [],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/load-dynamic-requirements.ts"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/session-start-hook.ts"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/stop-hook.ts"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/subagent-stop-hook.ts"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/context-compression-hook.ts"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bash ${PAI_HOME:-~/tiffany-pai}/.claude/statusline-command.sh"
+  },
   "mcpServers": {
     "httpx": {
       "type": "http",
@@ -110,67 +170,8 @@
       "description": "Web scraping and automation tools via Apify platform"
     }
   },
-  "hooks": {
-    "PreToolUse": [],
-    "PostToolUse": [],
-    "Notification": [],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/load-dynamic-requirements.ts"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/session-start-hook.ts"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/stop-hook.ts"
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/subagent-stop-hook.ts"
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bun ${PAI_HOME:-~/tiffany-pai}/.claude/hooks/context-compression-hook.ts"
-          }
-        ]
-      }
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "source ~/tiffany-pai/.env 2>/dev/null || source ~/.env 2>/dev/null || true; bash ${PAI_HOME:-~/tiffany-pai}/.claude/statusline-command.sh"
-  },
   "feedbackSurveyState": {
     "lastShownTime": 1754071370324
-  }
+  },
+  "model": "opusplan"
 }
