@@ -22,8 +22,5 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241106.0",
     "wrangler": "^3.84.0"
-  },
-  "dependencies": {
-    "@cloudflare/workers-runtime": "^1.0.0"
   }
 }
