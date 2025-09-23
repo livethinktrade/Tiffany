@@ -48,7 +48,7 @@ async function main() {
     const data: HookInput = JSON.parse(input);
     
     // Read the markdown file with instructions from commands directory
-    const paiHome = process.env.PAI_HOME || '/Users/daniel';
+    const paiHome = process.env.PAI_HOME || process.env.HOME;
     const mdPath = `${paiHome}/.claude/commands/load-dynamic-requirements.md`;
     const mdContent = readFileSync(mdPath, 'utf-8');
     
