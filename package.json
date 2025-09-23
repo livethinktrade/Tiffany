@@ -1,0 +1,29 @@
+{
+  "name": "tiffany-mcp-server",
+  "version": "1.0.0",
+  "description": "Tiffany Accountability Agent as Cloudflare Workers MCP Server",
+  "main": "tiffany-mcp.js",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "bun test",
+    "local": "bun run tiffany-mcp.js"
+  },
+  "keywords": [
+    "mcp",
+    "cloudflare-workers",
+    "accountability-agent",
+    "tiffany",
+    "serverless"
+  ],
+  "author": "Daniel Miessler",
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241106.0",
+    "wrangler": "^3.84.0"
+  },
+  "dependencies": {
+    "@cloudflare/workers-runtime": "^1.0.0"
+  }
+}
