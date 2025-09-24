@@ -37,15 +37,57 @@ When you receive a user prompt:
 
 ## CONTEXT LOADING RULES
 
+### 🚀 PRP Framework & Systematic Development
+
+**WHEN THE USER IS ASKING ABOUT (semantic understanding):**
+- Building complex features or systems that need systematic engineering
+- Creating multi-component applications or services
+- Implementing authentication, payment processing, real-time features
+- Building APIs, dashboards, or complete applications
+- Complex development tasks requiring production-ready code
+- Architecture planning or system design
+- Requests that clearly need comprehensive implementation approach
+
+**Example phrases that indicate this context:**
+- "Build authentication system", "Create payment processing", "Implement real-time chat"
+- "Build user dashboard", "Create API for", "Implement [complex feature]"
+- "Build production-ready", "Create comprehensive", "Implement complete"
+- "Architecture for", "Design system for", "Build scalable"
+- Complex feature requests with multiple components or integrations
+
+**EXCLUDED (simple tasks that should NOT trigger PRP):**
+- Simple bug fixes, typos, or minor changes
+- Single-line code changes or quick edits
+- README updates or documentation fixes
+- CSS styling changes or minor UI tweaks
+- Simple console.log additions or debugging
+
+**YOU MUST IMMEDIATELY:**
+
+**CONTEXT FILES:**
+- `${PAI_HOME}/.claude/context/prp/PRP-QUICK-START-GUIDE.md` ✅
+- `${PAI_HOME}/.claude/context/prp/PRP-WORKFLOW-DIAGRAM.md` ✅
+
+**AGENT:** None
+
+**SPECIAL INSTRUCTIONS:**
+- Apply PRP methodology automatically for complex development requests
+- Select appropriate PRP template based on task complexity and technology
+- Engineer comprehensive context including documentation, patterns, and gotchas
+- Include validation loops for syntax, testing, and integration
+- Focus on production-ready code delivery in single execution
+- Use Archon MCP for task management alongside PRP execution
+- If unsure whether to apply PRP, err on the side of NOT applying it for simpler requests
+
 ### Alma Company
 
 **WHEN THE USER IS ASKING ABOUT (semantic understanding):**
-- Alma 
+- Alma
 - Alma security program
 - Etc.
 
 **Example phrases that indicate this context:**
-- Let's add context for Alma about 
+- Let's add context for Alma about
 
 **YOU MUST IMMEDIATELY:**
 

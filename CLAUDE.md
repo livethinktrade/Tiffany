@@ -344,6 +344,226 @@ archon:manage_task(
 - [ ] Basic functionality tested
 - [ ] Documentation updated if needed
 
+# 🚀 PRP Framework Integration
+
+## 🎯 PRP Methodology Overview
+
+**PRP = PRD + curated codebase intelligence + agent/runbook**
+
+The PRP (Product Requirement Prompt) Framework transforms development from iterative guessing to systematic engineering, enabling production-ready code on the first pass.
+
+### Core Benefits
+- **Context Engineering**: Load exact documentation, patterns, gotchas upfront
+- **Implementation Blueprint**: Step-by-step technical execution plan
+- **Validation Loops**: Built-in quality gates (syntax → tests → integration)
+- **One-Pass Success**: Production-ready code without iterations
+
+### PRP + Archon Integration
+
+**The frameworks work together seamlessly:**
+
+1. **Archon**: Manages tasks, knowledge base, and project organization
+2. **PRP**: Provides systematic methodology for executing individual tasks
+3. **Workflow**: Archon identifies the task → PRP engineers the perfect context → Execute with validation
+
+## 📂 Available PRP Resources
+
+### Templates (`.claude/context/prp/templates/`)
+- **prp_base.md**: Comprehensive template for complex features
+- **prp_base_typescript.md**: TypeScript-specific implementation template
+- **prp_task.md**: Simple task-focused template
+- **prp_planning.md**: Architecture and system design template
+- **prp_poc_react.md**: React proof-of-concept template
+- **prp_spec.md**: Technical specification template
+- **prp_integration.md**: System integration template
+
+### Commands (`.claude/commands/prp/`)
+- **Creation Commands**: Generate PRPs for specific needs
+- **Execution Commands**: Execute PRPs with validation loops
+- **Supporting Commands**: Code quality, git operations, rapid development
+
+### Documentation (`.claude/context/prp/ai_docs/`)
+- **16 curated guides** covering best practices and patterns
+- **Real-world examples** showing complete workflows
+- **Context engineering** examples for different scenarios
+
+## 🔄 PRP Workflow Integration
+
+### Archon + PRP Combined Workflow
+
+```bash
+# 1. Standard Archon task check
+archon:manage_task(action="list", filter_by="status", filter_value="todo")
+
+# 2. Get specific task details
+archon:manage_task(action="get", task_id="current_task_id")
+
+# 3. PRP Analysis & Template Selection
+# Claude automatically selects appropriate PRP template based on:
+# - Task complexity (simple → prp_task.md, complex → prp_base.md)
+# - Technology stack (TypeScript → prp_base_typescript.md)
+# - Task type (architecture → prp_planning.md, prototype → prp_poc_react.md)
+
+# 4. Context Engineering Phase
+# Claude fills PRP template with:
+# - Documentation URLs with specific sections
+# - Existing codebase patterns
+# - Security considerations and gotchas
+# - Validation requirements
+
+# 5. Implementation Execution
+# Follow PRP blueprint step-by-step with built-in validation loops
+
+# 6. Update Archon task status
+archon:manage_task(action="update", task_id="...", update_fields={"status": "review"})
+```
+
+### PRP Template Selection Logic
+
+**Claude automatically chooses the right template:**
+
+- **Simple bug fix** → `prp_task.md`
+- **TypeScript feature** → `prp_base_typescript.md`
+- **Complex multi-component** → `prp_base.md`
+- **Architecture planning** → `prp_planning.md`
+- **React prototype** → `prp_poc_react.md`
+- **Technical specification** → `prp_spec.md`
+
+## 🎯 How to Use PRP Framework
+
+### Option 1: Automatic PRP Application (Recommended)
+
+```bash
+# Simply make clear, specific requests
+User: "Build user authentication with JWT tokens"
+
+# Claude automatically:
+# 1. Analyzes complexity → Selects prp_base_typescript.md
+# 2. Engineers comprehensive context (JWT docs, security patterns, gotchas)
+# 3. Creates step-by-step implementation blueprint
+# 4. Executes with validation loops (syntax → tests → integration)
+# 5. Delivers production-ready code in one pass
+```
+
+### Option 2: Manual PRP Creation + Execution
+
+```bash
+# Create PRP document
+User: "Create a PRP for user authentication"
+Claude: [Generates complete PRP document with context, blueprint, validation]
+
+# Execute the PRP
+User: "Execute that PRP"
+Claude: [Implements following the PRP blueprint with validation loops]
+```
+
+### Option 3: Using PRP Commands (Advanced)
+
+```bash
+# TypeScript-specific PRP creation
+User: "/prp-ts-create user authentication with JWT"
+Claude: [Creates TypeScript-specific PRP]
+
+# Execute with TypeScript validations
+User: "/prp-ts-execute"
+Claude: [Executes PRP with TypeScript-specific validation loops]
+```
+
+## 🔬 Context Engineering Examples
+
+### PRP Template Structure
+```yaml
+## Goal Section:
+Feature Goal: "Real-time chat with typing indicators and message persistence"
+Success Definition: "Users can send/receive messages in real-time with typing indicators"
+
+## Context Section:
+Documentation & References:
+- url: "https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API"
+  why: "WebSocket implementation patterns and best practices"
+  critical: "Handle connection drops and reconnection logic"
+
+- file: "src/services/existing_websocket_service.ts"
+  why: "Follow established WebSocket service patterns"
+  pattern: "Connection management and message routing"
+
+Implementation Blueprint:
+Task 1: CREATE src/models/chat_models.ts
+  - Message, ChatRoom, TypingIndicator interfaces
+  - Validation schemas with Zod
+
+Task 2: CREATE src/services/chat_service.ts
+  - WebSocket connection management
+  - Message persistence to database
+  - Typing indicator logic
+
+Validation Loops:
+Level 1: ruff check src/ --fix && mypy src/
+Level 2: pytest src/tests/ -v
+Level 3: Integration tests with WebSocket connections
+```
+
+## ⚡ Validation Loops (Built-in Quality Gates)
+
+### Three-Level Validation System
+
+**Level 1: Syntax & Style**
+```bash
+# After each file creation
+ruff check src/ --fix
+mypy src/
+ruff format src/
+```
+
+**Level 2: Unit Tests**
+```bash
+# Component testing
+pytest src/services/test_feature.py
+pytest src/api/test_endpoints.py
+```
+
+**Level 3: Integration Tests**
+```bash
+# System testing
+curl -X POST api/endpoints
+WebSocket connection tests
+End-to-end functionality verification
+```
+
+## 🚀 Development Transformation
+
+### Before PRP Framework
+```
+Request → Implementation → Iteration 1 → Fix → Iteration 2 → Fix → Production
+Time: 2-3 hours, 4+ iterations, inconsistent quality
+```
+
+### After PRP Framework
+```
+Request → PRP Analysis → Context Engineering → Implementation → Validation → Production
+Time: 20-30 minutes, 1 execution, production-ready quality
+```
+
+## 📋 Best Practices
+
+### PRP + Archon Integration
+1. **Always check Archon tasks first** before applying PRP methodology
+2. **Use Archon research** (search_code_examples, perform_rag_query) to inform PRP context
+3. **Update Archon task status** as you progress through PRP execution
+4. **Document PRP outcomes** in Archon task descriptions for future reference
+
+### Context Engineering Excellence
+1. **Be specific with documentation URLs** - include section anchors when possible
+2. **Include existing codebase patterns** - reference actual files and their patterns
+3. **Add security considerations** - always include relevant security gotchas
+4. **Define clear validation criteria** - specify exactly what success looks like
+
+### Quality Assurance
+1. **Never skip validation loops** - they prevent integration problems
+2. **Test incrementally** - validate each component before moving to the next
+3. **Follow established patterns** - consistency across the codebase is critical
+4. **Document assumptions** - capture important decisions for future reference
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
