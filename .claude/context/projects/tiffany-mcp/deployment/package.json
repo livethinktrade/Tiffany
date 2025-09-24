@@ -1,25 +1,32 @@
 {
-	"name": "remote-mcp-server-authless",
-	"version": "0.0.0",
-	"private": true,
-	"scripts": {
-		"deploy": "wrangler deploy",
-		"dev": "wrangler dev",
-		"format": "biome format --write",
-		"lint:fix": "biome lint --fix",
-		"start": "wrangler dev",
-		"cf-typegen": "wrangler types",
-		"type-check": "tsc --noEmit"
-	},
-	"dependencies": {
-		"@modelcontextprotocol/sdk": "1.18.0",
-		"agents": "^0.1.3",
-		"zod": "^3.25.76"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "^2.2.4",
-		"@types/node": "^24.5.2",
-		"typescript": "5.9.2",
-		"wrangler": "^4.38.0"
-	}
+  "name": "tiffany-mcp-deployment",
+  "version": "3.0.0",
+  "description": "Tiffany Accountability Agent - 25 Tools MCP Server Implementation",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "bun test",
+    "validate": "tsc --noEmit",
+    "serve": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "dotenv": "^17.2.2",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "mcp",
+    "accountability-agent",
+    "tiffany",
+    "typescript",
+    "airtable"
+  ],
+  "author": "Daniel Miessler",
+  "license": "MIT"
 }

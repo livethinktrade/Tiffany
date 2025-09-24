@@ -1,27 +1,39 @@
 name = "tiffany-mcp-server"
+compatibility_date = "2024-11-01"
 main = "src/index.ts"
-compatibility_date = "2024-09-23"
 
-# Enable Node.js compatibility for MCP SDK
-compatibility_flags = ["nodejs_compat_v2"]
-
-# Allow access from all origins for MCP clients
 [env.production]
-# Production environment settings can be added here
+name = "tiffany-mcp-official"
 
-# Development environment
-[env.staging]
-# Staging environment settings can be added here
-
-# CORS configuration for MCP client access
+# Environment variables (will be set via Cloudflare dashboard or CLI)
 [vars]
-ENVIRONMENT = "production"
+# These will be populated from your .env file during deployment
 
-# Optional: Smart placement for optimal performance
-[placement]
-mode = "smart"
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# AIRTABLE_API_KEY - Set via CLI: wrangler secret put AIRTABLE_API_KEY
+# AIRTABLE_BASE_ID - Set via CLI: wrangler secret put AIRTABLE_BASE_ID  
+# OPENAI_API_KEY - Set via CLI: wrangler secret put OPENAI_API_KEY
+# OPENROUTER_API_KEY - Set via CLI: wrangler secret put OPENROUTER_API_KEY
+# TELEGRAM_BOT_TOKEN_TIFFANY - Set via CLI: wrangler secret put TELEGRAM_BOT_TOKEN_TIFFANY
 
-# Durable Objects configuration for MCP Agent
+# Durable Objects for persistent state
 [[durable_objects.bindings]]
-name = "MCP_OBJECT"
-class_name = "MyMCP"
+name = "TIFFANY_STATE"
+class_name = "TiffanyDurableObject"
+
+# KV for caching (optional)
+[[kv_namespaces]]
+binding = "TIFFANY_CACHE"
+id = "your_kv_namespace_id"
+preview_id = "your_preview_kv_namespace_id"
+
+# Node.js compatibility for MCP SDK and crypto operations
+node_compat = true
+
+# Build configuration
+[build]
+command = "npm run build"
+
+# Development configuration  
+[env.development]
+name = "tiffany-mcp-dev"

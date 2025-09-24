@@ -1,647 +1,608 @@
+// Tiffany MCP Server - Complete 25-tool implementation
+// Following PRP blueprint for systematic tool integration
+
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
-// Enhanced Tiffany Agent with AI Router logic from n8n workflow
-interface UserState {
-	id: string;
-	lastInteraction: string;
-	gainsCount: number;
-	currentStreak: number;
-	memoryContext: string[];
-}
+// Import Phase 1 data storage tools
+import storeGainsTool from './tools/data-storage/store-gains.js';
+import getUserMemoryTool from './tools/data-storage/get-user-memory.js';
+import storeUserStateTool from './tools/data-storage/store-user-state.js';
+import getRandomQuoteTool from './tools/data-storage/get-random-quote.js';
+import updateQuoteRecordTool from './tools/data-storage/update-quote-record.js';
+import addQuoteToDatabaseTool from './tools/data-storage/add-quote-to-database.js';
 
-interface RouterDecision {
-	action: 'telos_advice' | 'log_conversation' | 'quote_collection' | 'gains_tracking';
-	confidence: number;
-	reasoning: string;
-}
+// Import Phase 2 AI processing tools
+import processVoiceInputTool from './tools/ai-processing/process-voice-input.js';
+import extractInformationTool from './tools/ai-processing/extract-information.js';
+import generateCustomQuoteTool from './tools/ai-processing/generate-custom-quote.js';
+import analyzeConversationTool from './tools/ai-processing/analyze-conversation.js';
 
-class TiffanyAIRouter {
-	private memoryBuffer: string[] = [];
-	private maxMemorySize = 10;
+// Import utilities and services
+import { TiffanyAIRouter } from './utils/router.js';
+import { AirtableService } from './services/airtable-service.js';
+import { TiffanyUserState, ToolResponse } from './types/tiffany-types.js';
 
-	addToMemory(interaction: string) {
-		this.memoryBuffer.push(interaction);
-		if (this.memoryBuffer.length > this.maxMemorySize) {
-			this.memoryBuffer.shift();
-		}
-	}
-
-	getMemoryContext(): string {
-		return this.memoryBuffer.join(' ');
-	}
-
-	// Smart routing logic extracted from n8n AI Router Agent
-	route(userInput: string, userState: UserState): RouterDecision {
-		const input = userInput.toLowerCase();
-		const context = this.getMemoryContext();
-
-		// Path 0: TELOS file retrieval → Mentor advice
-		if (input.includes('advice') || input.includes('help') || input.includes('stuck') ||
-			input.includes('guidance') || input.includes('mentor')) {
-			return {
-				action: 'telos_advice',
-				confidence: 0.9,
-				reasoning: 'User explicitly requested advice or guidance'
-			};
-		}
-
-		// Path 3: Gains tracking with Airtable storage
-		if (input.includes('accomplished') || input.includes('achieved') || input.includes('win') ||
-			input.includes('progress') || input.includes('completed') || input.includes('finished') ||
-			input.includes('done') || input.includes('success')) {
-			return {
-				action: 'gains_tracking',
-				confidence: 0.85,
-				reasoning: 'User mentioned accomplishments or progress'
-			};
-		}
-
-		// Path 2: Quote collection and generation
-		if (input.includes('quote') || input.includes('inspiration') || input.includes('motivat') ||
-			input.includes('encourage') || input.includes('wisdom')) {
-			return {
-				action: 'quote_collection',
-				confidence: 0.8,
-				reasoning: 'User requested inspirational content'
-			};
-		}
-
-		// Path 1: Conversation logging (default)
-		return {
-			action: 'log_conversation',
-			confidence: 0.6,
-			reasoning: 'General conversation, logging for context'
-		};
-	}
-
-	// Information extraction logic from n8n workflow
-	extractGainInfo(userInput: string): {
-		description: string;
-		category: string;
-		impact: 'small' | 'medium' | 'large';
-	} {
-		const input = userInput.toLowerCase();
-
-		// Determine impact level based on keywords
-		let impact: 'small' | 'medium' | 'large' = 'medium';
-		if (input.includes('huge') || input.includes('major') || input.includes('breakthrough') ||
-			input.includes('massive') || input.includes('incredible')) {
-			impact = 'large';
-		} else if (input.includes('small') || input.includes('tiny') || input.includes('minor') ||
-				   input.includes('little')) {
-			impact = 'small';
-		}
-
-		// Determine category
-		let category = 'general';
-		if (input.includes('work') || input.includes('job') || input.includes('career') ||
-			input.includes('business') || input.includes('project')) {
-			category = 'work';
-		} else if (input.includes('health') || input.includes('fitness') || input.includes('exercise') ||
-				   input.includes('workout') || input.includes('diet')) {
-			category = 'health';
-		} else if (input.includes('learn') || input.includes('study') || input.includes('skill') ||
-				   input.includes('education') || input.includes('course')) {
-			category = 'learning';
-		} else if (input.includes('family') || input.includes('friend') || input.includes('relationship') ||
-				   input.includes('social')) {
-			category = 'personal';
-		}
-
-		return {
-			description: userInput.trim(),
-			category,
-			impact
-		};
-	}
-}
-
-// Enhanced Tiffany MCP server with AI Router logic from n8n workflow
+/**
+ * Enhanced Tiffany MCP Server v3.0
+ *
+ * Implements 25 tools in 4 phases:
+ * - Phase 1: Data Storage (6 tools) ✅
+ * - Phase 2: AI Processing (4 tools) ✅
+ * - Phase 3: TELOS Integration (3 tools) - Coming next
+ * - Phase 4: Communication & Memory (12 tools) - Coming next
+ *
+ * Based on original n8n workflow qNqFdwPIbfnsTQt5 (102 nodes → 25 tools)
+ */
 class TiffanyMCPServer {
-	public server: Server;
-	private router = new TiffanyAIRouter();
-	private userStates = new Map<string, UserState>();
+  public server: Server;
+  private router: TiffanyAIRouter;
+  private airtableService: AirtableService;
 
-	constructor() {
-		this.server = new Server({
-			name: "Tiffany Accountability Agent",
-			version: "2.0.0",
-		}, {
-			capabilities: {
-				tools: {},
-			},
-		});
-	}
+  constructor() {
+    this.server = new Server({
+      name: "Tiffany Accountability Agent",
+      version: "3.0.0",
+    }, {
+      capabilities: {
+        tools: {},
+      },
+    });
 
-	private getUserState(userId: string = 'default'): UserState {
-		if (!this.userStates.has(userId)) {
-			this.userStates.set(userId, {
-				id: userId,
-				lastInteraction: new Date().toISOString(),
-				gainsCount: 0,
-				currentStreak: 0,
-				memoryContext: []
-			});
-		}
-		return this.userStates.get(userId)!;
-	}
+    this.router = new TiffanyAIRouter();
+    this.airtableService = new AirtableService();
+  }
 
-	private updateUserState(userId: string, updates: Partial<UserState>) {
-		const state = this.getUserState(userId);
-		Object.assign(state, updates, { lastInteraction: new Date().toISOString() });
-		this.userStates.set(userId, state);
-	}
+  setupHandlers() {
+    // List all available tools
+    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
+      return {
+        tools: [
+          // Phase 1: Data Storage Tools (6 total) ✅
+          {
+            name: storeGainsTool.name,
+            description: storeGainsTool.description,
+            inputSchema: storeGainsTool.schema._def
+          },
+          {
+            name: getUserMemoryTool.name,
+            description: getUserMemoryTool.description,
+            inputSchema: getUserMemoryTool.schema._def
+          },
+          {
+            name: storeUserStateTool.name,
+            description: storeUserStateTool.description,
+            inputSchema: storeUserStateTool.schema._def
+          },
+          {
+            name: getRandomQuoteTool.name,
+            description: getRandomQuoteTool.description,
+            inputSchema: getRandomQuoteTool.schema._def
+          },
+          {
+            name: updateQuoteRecordTool.name,
+            description: updateQuoteRecordTool.description,
+            inputSchema: updateQuoteRecordTool.schema._def
+          },
+          {
+            name: addQuoteToDatabaseTool.name,
+            description: addQuoteToDatabaseTool.description,
+            inputSchema: addQuoteToDatabaseTool.schema._def
+          },
 
-	setupHandlers() {
-		// List available tools
-		this.server.setRequestHandler(ListToolsRequestSchema, async () => {
-			return {
-				tools: [
-					{
-						name: "fetch_n8n_workflow",
-						description: "Fetch workflow JSON from n8n for version control and modification",
-						inputSchema: {
-							type: "object",
-							properties: {
-								workflowId: { type: "string", description: "n8n workflow ID" },
-								minimal: { type: "boolean", description: "Return minimal structure only", default: false }
-							},
-							required: ["workflowId"]
-						}
-					},
-					{
-						name: "deploy_n8n_workflow",
-						description: "Deploy modified workflow JSON back to n8n",
-						inputSchema: {
-							type: "object",
-							properties: {
-								workflowId: { type: "string", description: "n8n workflow ID" },
-								workflowData: { type: "object", description: "Modified workflow JSON" },
-								validate: { type: "boolean", description: "Validate before deployment", default: true }
-							},
-							required: ["workflowId", "workflowData"]
-						}
-					},
-					{
-						name: "smart_route",
-						description: "AI routing with 4-path decision system from n8n workflow",
-						inputSchema: {
-							type: "object",
-							properties: {
-								userInput: { type: "string", description: "User's message or input to be routed" },
-								userId: { type: "string", description: "User identifier for context" }
-							},
-							required: ["userInput"]
-						}
-					},
-					{
-						name: "track_gain",
-						description: "Enhanced gains tracking with user state and streak counting",
-						inputSchema: {
-							type: "object",
-							properties: {
-								description: { type: "string", description: "Description of the accomplishment or gain" },
-								category: { type: "string", description: "Category of the gain (work, personal, health, etc.)" },
-								impact: { type: "string", enum: ["small", "medium", "large"], description: "Impact level of the gain" },
-								userId: { type: "string", description: "User identifier for tracking" }
-							},
-							required: ["description"]
-						}
-					},
-					{
-						name: "get_mentor_advice",
-						description: "TELOS-integrated strategic guidance with memory context",
-						inputSchema: {
-							type: "object",
-							properties: {
-								situation: { type: "string", description: "Current situation or challenge you're facing" },
-								focus_area: { type: "string", enum: ["productivity", "leadership", "decision-making", "growth", "strategy"], description: "Focus area for advice" },
-								userId: { type: "string", description: "User identifier for context" }
-							},
-							required: ["situation"]
-						}
-					},
-					{
-						name: "get_daily_quote",
-						description: "Personalized quotes with style and topic selection",
-						inputSchema: {
-							type: "object",
-							properties: {
-								topic: { type: "string", description: "Optional topic for the quote" },
-								style: { type: "string", enum: ["inspirational", "practical", "philosophical"], description: "Style of quote" },
-								userId: { type: "string", description: "User identifier for personalization" }
-							},
-							required: []
-						}
-					},
-					{
-						name: "accountability_checkin",
-						description: "Enhanced daily/weekly reviews with progress stats",
-						inputSchema: {
-							type: "object",
-							properties: {
-								timeframe: { type: "string", enum: ["daily", "weekly"], description: "Type of check-in" },
-								reflection: { type: "string", description: "Personal reflection on progress" },
-								userId: { type: "string", description: "User identifier for tracking" }
-							},
-							required: ["timeframe"]
-						}
-					},
-					{
-						name: "set_goal",
-						description: "Goal setting with deadline tracking and progress integration",
-						inputSchema: {
-							type: "object",
-							properties: {
-								goal: { type: "string", description: "The goal you want to set" },
-								deadline: { type: "string", description: "Target deadline (YYYY-MM-DD format)" },
-								priority: { type: "string", enum: ["low", "medium", "high", "critical"], description: "Goal priority level" },
-								userId: { type: "string", description: "User identifier for tracking" }
-							},
-							required: ["goal"]
-						}
-					}
-				]
-			};
-		});
+          // Phase 2: AI Processing Tools (4 total) ✅
+          {
+            name: processVoiceInputTool.name,
+            description: processVoiceInputTool.description,
+            inputSchema: processVoiceInputTool.schema._def
+          },
+          {
+            name: extractInformationTool.name,
+            description: extractInformationTool.description,
+            inputSchema: extractInformationTool.schema._def
+          },
+          {
+            name: generateCustomQuoteTool.name,
+            description: generateCustomQuoteTool.description,
+            inputSchema: generateCustomQuoteTool.schema._def
+          },
+          {
+            name: analyzeConversationTool.name,
+            description: analyzeConversationTool.description,
+            inputSchema: analyzeConversationTool.schema._def
+          },
 
-		// Handle tool calls
-		this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-			const { name, arguments: args } = request.params;
+          // Legacy tools (backward compatibility)
+          {
+            name: "track_gain",
+            description: "Enhanced gains tracking with impact scoring (legacy wrapper for store_gains)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                description: { type: "string", description: "Description of the accomplishment" },
+                category: { type: "string", description: "Category of the gain", default: "general" },
+                impact: { type: "string", enum: ["small", "medium", "large"], description: "Impact level", default: "medium" },
+                userId: { type: "string", description: "User identifier", default: "default" }
+              },
+              required: ["description"]
+            }
+          },
+          {
+            name: "get_daily_quote",
+            description: "Personalized motivation quotes (legacy wrapper for get_random_quote)",
+            inputSchema: {
+              type: "object",
+              properties: {
+                topic: { type: "string", description: "Optional topic for the quote" },
+                style: { type: "string", enum: ["inspirational", "practical", "philosophical"], description: "Quote style", default: "inspirational" },
+                userId: { type: "string", description: "User identifier", default: "default" }
+              },
+              required: []
+            }
+          },
+          {
+            name: "get_mentor_advice",
+            description: "Strategic guidance from mentor council",
+            inputSchema: {
+              type: "object",
+              properties: {
+                situation: { type: "string", description: "Current situation or challenge" },
+                focus_area: { type: "string", enum: ["productivity", "leadership", "decision-making", "growth", "strategy"], description: "Focus area", default: "growth" },
+                userId: { type: "string", description: "User identifier", default: "default" }
+              },
+              required: ["situation"]
+            }
+          },
+          {
+            name: "accountability_checkin",
+            description: "Daily/weekly review prompts with progress tracking",
+            inputSchema: {
+              type: "object",
+              properties: {
+                timeframe: { type: "string", enum: ["daily", "weekly"], description: "Check-in timeframe" },
+                reflection: { type: "string", description: "Personal reflection on progress" },
+                userId: { type: "string", description: "User identifier", default: "default" }
+              },
+              required: ["timeframe"]
+            }
+          },
+          {
+            name: "set_goal",
+            description: "Goal setting with deadline tracking",
+            inputSchema: {
+              type: "object",
+              properties: {
+                goal: { type: "string", description: "The goal to set" },
+                deadline: { type: "string", description: "Target deadline (YYYY-MM-DD)" },
+                priority: { type: "string", enum: ["low", "medium", "high", "critical"], description: "Goal priority", default: "medium" },
+                userId: { type: "string", description: "User identifier", default: "default" }
+              },
+              required: ["goal"]
+            }
+          }
+        ]
+      };
+    });
 
-			switch (name) {
-				case "fetch_n8n_workflow":
-					return this.handleFetchWorkflow(args as any);
-				case "deploy_n8n_workflow":
-					return this.handleDeployWorkflow(args as any);
-				case "smart_route":
-					return this.handleSmartRoute(args as any);
-				case "track_gain":
-					return this.handleTrackGain(args as any);
-				case "get_mentor_advice":
-					return this.handleMentorAdvice(args as any);
-				case "get_daily_quote":
-					return this.handleDailyQuote(args as any);
-				case "accountability_checkin":
-					return this.handleAccountabilityCheckin(args as any);
-				case "set_goal":
-					return this.handleSetGoal(args as any);
-				default:
-					throw new Error(`Unknown tool: ${name}`);
-			}
-		});
-	}
+    // Handle tool calls
+    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+      const { name, arguments: args } = request.params;
 
-	private async handleFetchWorkflow(args: { workflowId: string; minimal?: boolean }) {
-		const { workflowId, minimal = false } = args;
+      try {
+        switch (name) {
+          // Phase 1: Data Storage Tools ✅
+          case 'store_gains':
+            return await storeGainsTool.execute(args as any);
 
-		try {
-			// Use n8n MCP server to fetch workflow
-			// For now, return the structure we already have for qNqFdwPIbfnsTQt5
-			if (workflowId === "qNqFdwPIbfnsTQt5") {
-				const structure = {
-					id: "qNqFdwPIbfnsTQt5",
-					name: "Tiffany Accountability Agent",
-					active: true,
-					nodeCount: 102,
-					connectionCount: 81,
-					simplified_routing: {
-						description: "Current 102-node workflow to be simplified to ~10 nodes",
-						target_architecture: "Telegram → n8n Router → MCP Server Tool → Response",
-						key_routing_node: "Smart Routing (42d6de68-8921-4e4b-935e-b1c43fa15ab0)"
-					}
-				};
+          case 'get_user_memory':
+            return await getUserMemoryTool.execute(args as any);
 
-				return {
-					content: [{
-						type: "text" as const,
-						text: `✅ **Workflow Retrieved: ${structure.name}**\n\n**ID**: ${workflowId}\n**Status**: ${structure.active ? 'Active' : 'Inactive'}\n**Complexity**: ${structure.nodeCount} nodes, ${structure.connectionCount} connections\n\n**Simplification Target**: ${structure.simplified_routing.target_architecture}\n\n💡 Ready for simplification and version control!`,
-					}],
-				};
-			} else {
-				throw new Error(`Workflow ${workflowId} not found or not supported yet`);
-			}
-		} catch (error) {
-			return {
-				content: [{
-					type: "text" as const,
-					text: `❌ **Error fetching workflow**: ${error.message}`,
-				}],
-			};
-		}
-	}
+          case 'store_user_state':
+            return await storeUserStateTool.execute(args as any);
 
-	private async handleDeployWorkflow(args: { workflowId: string; workflowData: object; validate?: boolean }) {
-		const { workflowId, workflowData, validate = true } = args;
+          case 'get_random_quote':
+            return await getRandomQuoteTool.execute(args as any);
 
-		try {
-			// Validation step
-			if (validate) {
-				// TODO: Add proper workflow validation
-				if (!workflowData || typeof workflowData !== 'object') {
-					throw new Error('Invalid workflow data provided');
-				}
-			}
+          case 'update_quote_record':
+            return await updateQuoteRecordTool.execute(args as any);
 
-			// TODO: Implement actual n8n API deployment
-			// For now, simulate the deployment
-			const deployment = {
-				workflowId,
-				deployed: true,
-				timestamp: new Date().toISOString(),
-				nodesModified: "routing_simplified",
-				status: "success"
-			};
+          case 'add_quote_to_database':
+            return await addQuoteToDatabaseTool.execute(args as any);
 
-			return {
-				content: [{
-					type: "text" as const,
-					text: `🚀 **Workflow Deployed Successfully!**\n\n**ID**: ${workflowId}\n**Timestamp**: ${deployment.timestamp}\n**Changes**: ${deployment.nodesModified}\n\n✅ Version control workflow is now active!`,
-				}],
-			};
-		} catch (error) {
-			return {
-				content: [{
-					type: "text" as const,
-					text: `❌ **Deployment failed**: ${error.message}`,
-				}],
-			};
-		}
-	}
+          // Phase 2: AI Processing Tools ✅
+          case 'process_voice_input':
+            return await processVoiceInputTool.execute(args as any);
 
-	private async handleSmartRoute(args: { userInput: string; userId?: string }) {
-		const { userInput, userId = 'default' } = args;
-		const userState = this.getUserState(userId);
-		const decision = this.router.route(userInput, userState);
+          case 'extract_information':
+            return await extractInformationTool.execute(args as any);
 
-		// Add to memory context
-		this.router.addToMemory(`User said: ${userInput}`);
+          case 'generate_custom_quote':
+            return await generateCustomQuoteTool.execute(args as any);
 
-		let response = `🧠 **AI Router Decision**\n\n**Input**: ${userInput}\n**Recommended Action**: ${decision.action}\n**Confidence**: ${Math.round(decision.confidence * 100)}%\n**Reasoning**: ${decision.reasoning}\n\n---\n\n`;
+          case 'analyze_conversation':
+            return await analyzeConversationTool.execute(args as any);
 
-		// Execute the routed action
-		switch (decision.action) {
-			case 'telos_advice':
-				response += `🎯 **TELOS Mentor Mode Activated**\n\nI can see you're looking for strategic guidance. Use the \`get_mentor_advice\` tool with your specific situation for personalized TELOS-based counsel from your mentor council.`;
-				break;
+          // Legacy tool wrappers (backward compatibility)
+          case 'track_gain':
+            return await this.handleTrackGain(args as any);
 
-			case 'gains_tracking':
-				const extracted = this.router.extractGainInfo(userInput);
-				response += `🎆 **Gains Tracking Mode Activated**\n\nGreat! I detected an accomplishment. Here's what I extracted:\n• **Category**: ${extracted.category}\n• **Impact**: ${extracted.impact}\n\nUse the \`track_gain\` tool to officially log this win!`;
-				break;
+          case 'get_daily_quote':
+            return await this.handleGetDailyQuote(args as any);
 
-			case 'quote_collection':
-				response += `✨ **Inspiration Mode Activated**\n\nI sense you're seeking motivation or wisdom. Use the \`get_daily_quote\` tool to receive personalized inspiration, or I can generate a custom motivational message based on your current context.`;
-				break;
+          case 'get_mentor_advice':
+            return await this.handleMentorAdvice(args as any);
 
-			case 'log_conversation':
-			default:
-				response += `💬 **Conversation Mode**\n\nI'm here to listen and help. Your message has been logged for context. How can I best support you right now?\n\n**Available Actions:**\n• Track a recent win or accomplishment\n• Get strategic advice or guidance\n• Receive daily inspiration\n• Check in on your accountability goals`;
-				break;
-		}
+          case 'accountability_checkin':
+            return await this.handleAccountabilityCheckin(args as any);
 
-		return {
-			content: [{
-				type: "text" as const,
-				text: response,
-			}],
-		};
-	}
+          case 'set_goal':
+            return await this.handleSetGoal(args as any);
 
-	private async handleTrackGain(args: { description: string; category?: string; impact?: 'small' | 'medium' | 'large'; userId?: string }) {
-		const { description, category, impact, userId = 'default' } = args;
+          default:
+            throw new Error(`Unknown tool: ${name}. Available tools: ${this.getAvailableToolNames().join(', ')}`);
+        }
+      } catch (error) {
+        console.error(`Error executing tool ${name}:`, error);
 
-		// Use information extractor if category/impact not provided
-		const extracted = this.router.extractGainInfo(description);
-		const finalCategory = category || extracted.category;
-		const finalImpact = impact || extracted.impact;
+        return {
+          content: [{
+            type: "text" as const,
+            text: `❌ **Tool execution failed**: ${error.message}\n\nTool: \`${name}\`\nPlease check your parameters and try again.`
+          }],
+          isError: true,
+          metadata: {
+            toolName: name,
+            error: error.message,
+            timestamp: new Date().toISOString()
+          }
+        };
+      }
+    });
+  }
 
-		// Update user state
-		const userState = this.getUserState(userId);
-		const points = finalImpact === "large" ? 5 : finalImpact === "medium" ? 3 : 1;
+  // Legacy wrapper: track_gain → store_gains
+  private async handleTrackGain(args: {
+    description: string;
+    category?: string;
+    impact?: 'small' | 'medium' | 'large';
+    userId?: string;
+  }): Promise<ToolResponse> {
+    const { description, category = 'general', impact = 'medium', userId = 'default' } = args;
 
-		this.updateUserState(userId, {
-			gainsCount: userState.gainsCount + 1,
-			currentStreak: userState.currentStreak + 1
-		});
+    return await storeGainsTool.execute({
+      gain: {
+        description,
+        category,
+        impact,
+        userId
+      },
+      syncToAirtable: true
+    });
+  }
 
-		// Store gain with enhanced data
-		const gain = {
-			id: `gain_${Date.now()}`,
-			description,
-			category: finalCategory,
-			impact: finalImpact,
-			timestamp: new Date().toISOString(),
-			points,
-			userId,
-			totalGains: userState.gainsCount + 1,
-			currentStreak: userState.currentStreak + 1
-		};
+  // Legacy wrapper: get_daily_quote → get_random_quote
+  private async handleGetDailyQuote(args: {
+    topic?: string;
+    style?: 'inspirational' | 'practical' | 'philosophical';
+    userId?: string;
+  }): Promise<ToolResponse> {
+    const { topic, style = 'inspirational', userId = 'default' } = args;
 
-		// Add to memory context
-		this.router.addToMemory(`User achieved: ${description} (${finalCategory}, ${finalImpact} impact)`);
+    return await getRandomQuoteTool.execute({
+      category: topic,
+      style,
+      userId,
+      markAsUsed: true
+    });
+  }
 
-		return {
-			content: [{
-				type: "text" as const,
-				text: `🎉 **Gain #${gain.totalGains} Tracked Successfully!**\n\n**${description}**\n\nCategory: ${finalCategory}\nImpact: ${finalImpact}\nPoints earned: ${points}\nCurrent streak: ${gain.currentStreak} gains\n\n${finalImpact === 'large' ? '🚀 MAJOR WIN! ' : finalImpact === 'medium' ? '💪 Great progress! ' : '✨ Every step counts! '}Keep building momentum!`,
-			}],
-		};
-	}
+  // Mentor advice tool (Phase 3 preview)
+  private async handleMentorAdvice(args: {
+    situation: string;
+    focus_area?: string;
+    userId?: string;
+  }): Promise<ToolResponse> {
+    const { situation, focus_area = 'growth', userId = 'default' } = args;
 
-	private async handleMentorAdvice(args: { situation: string; focus_area?: string; userId?: string }) {
-		const { situation, focus_area = "growth", userId = 'default' } = args;
-		const userState = this.getUserState(userId);
-		const memoryContext = this.router.getMemoryContext();
+    // TODO: Replace with actual TELOS integration tool in Phase 3
+    const advice = this.generateMentorAdvice(situation, focus_area);
 
-		// Enhanced TELOS-based advice with user context
-		const advice = `**🎯 TELOS Mentor Council Response**\n\n**Situation**: ${situation}\n**Focus Area**: ${focus_area}\n**Your Progress**: ${userState.gainsCount} total gains, ${userState.currentStreak} current streak\n\n---\n\n🧠 **Strategic Analysis:**\nBased on your TELOS framework, recent progress, and this situation:\n\n**1. 🎯 TELOS Alignment Check**\n• How does solving this advance your core purpose?\n• What's the highest-leverage action you can take?\n\n**2. ⚡ Immediate Action Plan**\n• Break this into 3 concrete steps you can take today\n• Start with the smallest actionable item\n• Set a 25-minute focused work block\n\n**3. 🎮 Long-term Strategic View**\n• How does this connect to your bigger systems?\n• What pattern or process can you build here?\n• How will you measure success?\n\n**4. 🛠️ Resource Optimization**\n• What do you already have that applies here?\n• Who in your network could provide insight?\n• What's the minimum viable solution?\n\n---\n\n💡 **Mentor Wisdom**: ${focus_area === 'productivity' ? 'Systems beat motivation. Build the process, not just the outcome.' : focus_area === 'leadership' ? 'Lead by example. Your actions teach louder than words.' : focus_area === 'decision-making' ? 'Good decisions come from experience. Experience comes from bad decisions.' : focus_area === 'strategy' ? 'Strategy without execution is hallucination. Execution without strategy is chaos.' : 'Growth requires discomfort. Lean into the challenge.'}\n\n🎯 **Next Step**: Take one specific action in the next hour. Then use track_gain to log your progress.`;
+    return {
+      content: [{
+        type: 'text',
+        text: advice
+      }],
+      metadata: {
+        toolType: 'mentor_advice',
+        focusArea: focus_area,
+        userId,
+        isLegacyImplementation: true
+      }
+    };
+  }
 
-		// Add to memory context
-		this.router.addToMemory(`User sought advice about: ${situation} (${focus_area})`);
+  // Accountability check-in tool (Phase 4 preview)
+  private async handleAccountabilityCheckin(args: {
+    timeframe: 'daily' | 'weekly';
+    reflection?: string;
+    userId?: string;
+  }): Promise<ToolResponse> {
+    const { timeframe, reflection, userId = 'default' } = args;
 
-		return {
-			content: [{
-				type: "text" as const,
-				text: advice,
-			}],
-		};
-	}
+    // Get user memory for context
+    const memoryResponse = await getUserMemoryTool.execute({
+      userId,
+      type: 'all',
+      timeframe: timeframe === 'daily' ? 'day' : 'week',
+      limit: 10
+    });
 
-	private async handleDailyQuote(args: { topic?: string; style?: string; userId?: string }) {
-		const { topic, style = "inspirational", userId = 'default' } = args;
-		const userState = this.getUserState(userId);
+    const checkinPrompts = this.generateCheckinPrompts(timeframe, reflection);
 
-		// Enhanced quote collection with categorization
-		const quotes = {
-			inspirational: [
-				"The way to get started is to quit talking and begin doing. - Walt Disney",
-				"Don't be afraid to give up the good to go for the great. - John D. Rockefeller",
-				"Your limitation—it's only your imagination.",
-				"Push yourself, because no one else is going to do it for you.",
-				"Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill"
-			],
-			practical: [
-				"Plans are nothing; planning is everything. - Dwight D. Eisenhower",
-				"What gets measured gets managed. - Peter Drucker",
-				"Done is better than perfect. - Sheryl Sandberg",
-				"Focus on being productive instead of busy. - Tim Ferriss",
-				"You don't have to be great to get started, but you have to get started to be great. - Les Brown"
-			],
-			philosophical: [
-				"The unexamined life is not worth living. - Socrates",
-				"We are what we repeatedly do. Excellence, then, is not an act, but a habit. - Aristotle",
-				"Innovation distinguishes between a leader and a follower. - Steve Jobs",
-				"The best way to predict the future is to create it. - Peter Drucker",
-				"Yesterday is history, tomorrow is a mystery, today is a gift. - Eleanor Roosevelt"
-			]
-		};
+    return {
+      content: [{
+        type: 'text',
+        text: `${checkinPrompts}\n\n---\n\n${memoryResponse.content[0]?.text || ''}`
+      }],
+      metadata: {
+        toolType: 'accountability_checkin',
+        timeframe,
+        userId,
+        hasReflection: !!reflection
+      }
+    };
+  }
 
-		const selectedQuotes = quotes[style as keyof typeof quotes] || quotes.inspirational;
-		const selectedQuote = selectedQuotes[Math.floor(Math.random() * selectedQuotes.length)];
+  // Goal setting tool (Phase 4 preview)
+  private async handleSetGoal(args: {
+    goal: string;
+    deadline?: string;
+    priority?: string;
+    userId?: string;
+  }): Promise<ToolResponse> {
+    const { goal, deadline, priority = 'medium', userId = 'default' } = args;
 
-		// Personalized context based on user progress
-		let personalContext = "";
-		if (userState.gainsCount > 0) {
-			personalContext = `\n💪 **Your Progress**: ${userState.gainsCount} gains tracked, ${userState.currentStreak} current streak`;
-		}
+    // TODO: Replace with actual goal storage tool in Phase 4
+    const goalConfirmation = `🎯 **Goal Set Successfully!**
 
-		const customMessage = `🌟 **Your ${style.charAt(0).toUpperCase() + style.slice(1)} Daily Quote**\n\n"${selectedQuote}"\n${topic ? `\n🎯 **Focus**: ${topic}` : ""}${personalContext}\n\n✨ **Today's Challenge**: Take one action that moves you closer to your goals. Then use \`track_gain\` to celebrate your progress!`;
+**Goal**: ${goal}
+${deadline ? `**Deadline**: ${deadline}` : ''}
+**Priority**: ${priority}
+**User**: ${userId}
 
-		// Add to memory context
-		this.router.addToMemory(`Shared ${style} quote about ${topic || 'general motivation'}`);
+**Next Steps**:
+1. Break this goal into smaller milestones
+2. Use \`track_gain\` to log progress toward this goal
+3. Use \`get_mentor_advice\` for strategic guidance
+4. Schedule regular check-ins with \`accountability_checkin\`
 
-		return {
-			content: [{
-				type: "text" as const,
-				text: customMessage,
-			}],
-		};
-	}
+💡 **Tip**: Goals work best when combined with daily action tracking. Use the tools above to maintain momentum!`;
 
-	private async handleAccountabilityCheckin(args: { timeframe: string; reflection?: string; userId?: string }) {
-		const { timeframe, reflection, userId = 'default' } = args;
-		const userState = this.getUserState(userId);
+    return {
+      content: [{
+        type: 'text',
+        text: goalConfirmation
+      }],
+      metadata: {
+        toolType: 'set_goal',
+        goal,
+        deadline,
+        priority,
+        userId,
+        isLegacyImplementation: true
+      }
+    };
+  }
 
-		let checkinMessage = "";
+  // Helper methods
+  private getAvailableToolNames(): string[] {
+    return [
+      // Phase 1: Data Storage (6 tools)
+      'store_gains', 'get_user_memory', 'store_user_state',
+      'get_random_quote', 'update_quote_record', 'add_quote_to_database',
+      // Phase 2: AI Processing (4 tools)
+      'process_voice_input', 'extract_information', 'generate_custom_quote', 'analyze_conversation',
+      // Legacy tools (5 tools)
+      'track_gain', 'get_daily_quote', 'get_mentor_advice',
+      'accountability_checkin', 'set_goal'
+    ];
+  }
 
-		if (timeframe === "daily") {
-			checkinMessage = `📋 **Daily Accountability Check-in**\n\n📊 **Your Stats**: ${userState.gainsCount} total gains, ${userState.currentStreak} current streak\n\n**Daily Reflection Questions:**\n\n🎆 **Wins & Accomplishments**\n• What victories did you have today (big or small)?\n• What progress did you make on your goals?\n• What are you proud of from today?\n\n🚧 **Challenges & Lessons**\n• What obstacles did you encounter?\n• What would you do differently?\n• What did you learn about yourself?\n\n🎯 **Tomorrow's Focus**\n• What's your #1 priority for tomorrow?\n• What small action can you commit to?\n• How will you set yourself up for success?\n\n${reflection ? `**Your Reflection**: ${reflection}\n\n` : ""}📝 **Action Items:**\n• Use \`track_gain\` for any wins you haven't logged\n• Use \`get_mentor_advice\` if you're stuck on something\n• Use \`set_goal\` to clarify tomorrow's priorities`;
-		} else {
-			checkinMessage = `📊 **Weekly Accountability Review**\n\n📈 **Weekly Stats**: ${userState.gainsCount} total gains, ${userState.currentStreak} current streak\n\n**Weekly Deep Dive:**\n\n🎆 **Major Accomplishments**\n• What were your biggest wins this week?\n• Which goals did you advance significantly?\n• What systems or habits served you well?\n\n🧠 **Key Insights & Lessons**\n• What patterns do you notice in your productivity?\n• What strategies worked best for you?\n• What would you change about this week?\n\n🎯 **Next Week's Strategy**\n• What are your top 3 priorities for next week?\n• What potential obstacles can you prepare for?\n• How will you build on this week's momentum?\n\n🔄 **Systems Review**\n• Which habits/routines need adjustment?\n• What new processes could help you?\n• How can you optimize your time and energy?\n\n${reflection ? `**Your Weekly Reflection**: ${reflection}\n\n` : ""}📝 **Next Actions:**\n• Log all weekly wins with \`track_gain\`\n• Set next week's goals with \`set_goal\`\n• Get strategic guidance with \`get_mentor_advice\``;
-		}
+  private generateMentorAdvice(situation: string, focusArea: string): string {
+    const mentorWisdom = {
+      productivity: "Systems beat motivation. Build the process, not just the outcome.",
+      leadership: "Lead by example. Your actions teach louder than words.",
+      'decision-making': "Good decisions come from experience. Experience comes from bad decisions.",
+      strategy: "Strategy without execution is hallucination. Execution without strategy is chaos.",
+      growth: "Growth requires discomfort. Lean into the challenge."
+    };
 
-		// Add to memory context
-		this.router.addToMemory(`Completed ${timeframe} accountability check-in`);
+    return `🎯 **TELOS Mentor Council Response**
 
-		return {
-			content: [{
-				type: "text" as const,
-				text: checkinMessage,
-			}],
-		};
-	}
+**Situation**: ${situation}
+**Focus Area**: ${focusArea}
 
-	private async handleSetGoal(args: { goal: string; deadline?: string; priority?: string; userId?: string }) {
-		const { goal, deadline, priority = "medium", userId = 'default' } = args;
-		const userState = this.getUserState(userId);
+---
 
-		// Add to memory context
-		this.router.addToMemory(`User set goal: ${goal} (${priority} priority)`);
+🧠 **Strategic Analysis**:
+Based on your situation and the TELOS framework:
 
-		return {
-			content: [{
-				type: "text" as const,
-				text: `🎯 **Goal Set Successfully!**\n\n**Goal:** ${goal}\n${deadline ? `**Deadline:** ${deadline}\n` : ""}**Priority:** ${priority}\n**Your Stats:** ${userState.gainsCount} total gains, ${userState.currentStreak} current streak\n\n💪 **Next Steps:**\n1. Break this goal into smaller milestones\n2. Use \`track_gain\` to log progress\n3. Use \`get_mentor_advice\` for strategic guidance\n4. Use \`smart_route\` to get contextual support\n\nI'll help you stay accountable to this goal!`,
-			}],
-		};
-	}
+**1. 🎯 Purpose Alignment**
+• How does solving this advance your core mission?
+• What's the highest-leverage action you can take?
+
+**2. ⚡ Immediate Action Plan**
+• Break this into 3 concrete steps you can take today
+• Start with the smallest actionable item
+• Set a 25-minute focused work block
+
+**3. 🎮 Long-term Strategic View**
+• How does this connect to your bigger systems?
+• What pattern or process can you build here?
+• How will you measure success?
+
+**4. 🛠️ Resource Optimization**
+• What do you already have that applies here?
+• Who in your network could provide insight?
+• What's the minimum viable solution?
+
+---
+
+💡 **Mentor Wisdom**: ${mentorWisdom[focusArea as keyof typeof mentorWisdom] || mentorWisdom.growth}
+
+🎯 **Next Step**: Take one specific action in the next hour. Then use \`track_gain\` to log your progress.
+
+*Note: This is a preview implementation. Full TELOS integration coming in Phase 3.*`;
+  }
+
+  private generateCheckinPrompts(timeframe: 'daily' | 'weekly', reflection?: string): string {
+    if (timeframe === 'daily') {
+      return `📋 **Daily Accountability Check-in**
+
+**Daily Reflection Questions**:
+
+🎆 **Wins & Accomplishments**
+• What victories did you have today (big or small)?
+• What progress did you make on your goals?
+• What are you proud of from today?
+
+🚧 **Challenges & Lessons**
+• What obstacles did you encounter?
+• What would you do differently?
+• What did you learn about yourself?
+
+🎯 **Tomorrow's Focus**
+• What's your #1 priority for tomorrow?
+• What small action can you commit to?
+• How will you set yourself up for success?
+
+${reflection ? `**Your Reflection**: ${reflection}\n\n` : ''}📝 **Action Items**:
+• Use \`track_gain\` for any wins you haven't logged
+• Use \`get_mentor_advice\` if you're stuck on something
+• Use \`set_goal\` to clarify tomorrow's priorities`;
+    } else {
+      return `📊 **Weekly Accountability Review**
+
+**Weekly Deep Dive**:
+
+🎆 **Major Accomplishments**
+• What were your biggest wins this week?
+• Which goals did you advance significantly?
+• What systems or habits served you well?
+
+🧠 **Key Insights & Lessons**
+• What patterns do you notice in your productivity?
+• What strategies worked best for you?
+• What would you change about this week?
+
+🎯 **Next Week's Strategy**
+• What are your top 3 priorities for next week?
+• What potential obstacles can you prepare for?
+• How will you build on this week's momentum?
+
+🔄 **Systems Review**
+• Which habits/routines need adjustment?
+• What new processes could help you?
+• How can you optimize your time and energy?
+
+${reflection ? `**Your Weekly Reflection**: ${reflection}\n\n` : ''}📝 **Next Actions**:
+• Log all weekly wins with \`track_gain\`
+• Set next week's goals with \`set_goal\`
+• Get strategic guidance with \`get_mentor_advice\``;
+    }
+  }
 }
 
 // Cloudflare Workers compatibility
 export interface Env {
-	// Add any environment variables or bindings here if needed
+  // Add environment variables or bindings here
+  AIRTABLE_API_KEY?: string;
+  AIRTABLE_BASE_ID?: string;
 }
 
-// Create and run the server
+// Create and export the server
 const tiffanyServer = new TiffanyMCPServer();
 tiffanyServer.setupHandlers();
 
 export default {
-	async fetch(request: Request, env: Env, ctx: ExecutionContext) {
-		const url = new URL(request.url);
+  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+    const url = new URL(request.url);
 
-		// Health check endpoint
-		if (url.pathname === "/health") {
-			return new Response(
-				JSON.stringify({
-					status: "healthy",
-					service: "tiffany-mcp-enhanced",
-					version: "2.0.0",
-					description: "AI Accountability Agent with Smart Routing from n8n Workflow",
-					timestamp: new Date().toISOString(),
-					features: [
-						"Smart AI routing (4-path decision system)",
-						"Enhanced gains tracking with user state",
-						"TELOS-integrated mentor advice",
-						"Personalized daily quotes",
-						"Memory-aware accountability check-ins",
-						"Goal setting with progress tracking"
-					],
-					endpoints: {
-						"/sse": "MCP Server-Sent Events endpoint",
-						"/mcp": "MCP direct endpoint",
-						"/health": "Health check with feature details"
-					}
-				}),
-				{
-					headers: {
-						"Content-Type": "application/json",
-						"Access-Control-Allow-Origin": "*",
-					},
-				}
-			);
-		}
+    // Health check endpoint
+    if (url.pathname === "/health") {
+      return new Response(
+        JSON.stringify({
+          status: "healthy",
+          service: "tiffany-mcp-v3",
+          version: "3.0.0",
+          description: "Tiffany Accountability Agent - 25 Tools Implementation",
+          timestamp: new Date().toISOString(),
+          implementation: {
+            phase1: "Data Storage (6 tools) ✅",
+            phase2: "AI Processing (4 tools) ✅",
+            phase3: "TELOS Integration (3 tools) - Coming next",
+            phase4: "Communication & Memory (12 tools) - Coming next"
+          },
+          completedTools: [
+            "store_gains - Save accomplishments to Airtable",
+            "get_user_memory - Retrieve user context and history",
+            "store_user_state - Persist user conversation state",
+            "get_random_quote - Retrieve quotes with filtering",
+            "update_quote_record - Track quote usage and metadata",
+            "add_quote_to_database - Store new quotes with categorization",
+            "process_voice_input - Transcribe and analyze voice messages",
+            "extract_information - Parse and categorize user input",
+            "generate_custom_quote - AI-powered personalized quotes",
+            "analyze_conversation - Context analysis for smart routing"
+          ],
+          legacyCompatibility: [
+            "track_gain - Wrapper for store_gains",
+            "get_daily_quote - Wrapper for get_random_quote",
+            "get_mentor_advice - Preview implementation",
+            "accountability_checkin - Preview implementation",
+            "set_goal - Preview implementation"
+          ],
+          endpoints: {
+            "/sse": "MCP Server-Sent Events endpoint",
+            "/mcp": "MCP direct endpoint",
+            "/health": "Health check with implementation status"
+          },
+          originalWorkflow: "n8n qNqFdwPIbfnsTQt5 (102 nodes → 25 tools)"
+        }),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      );
+    }
 
-		// For MCP connections, we need to use STDIO transport in Cloudflare Workers context
-		// This is a simplified HTTP response for now
-		return new Response(
-			JSON.stringify({
-				service: "Tiffany Accountability Agent MCP Server v2.0",
-				version: "2.0.0",
-				description: "Enhanced AI accountability coaching with smart routing, memory management, and n8n workflow intelligence",
-				architecture: "Extracted from 102-node n8n workflow to code-based MCP server",
-				endpoints: {
-					"/sse": "Connect via MCP SSE for real-time interaction",
-					"/mcp": "Connect via MCP direct protocol",
-					"/health": "Health check with feature details"
-				},
-				tools: [
-					"smart_route - AI routing with 4-path decision system (NEW)",
-					"track_gain - Enhanced gains tracking with user state and streak counting",
-					"get_daily_quote - Personalized quotes with style and topic selection",
-					"get_mentor_advice - TELOS-integrated strategic guidance with memory context",
-					"accountability_checkin - Enhanced daily/weekly reviews with progress stats",
-					"set_goal - Goal setting with deadline tracking and progress integration"
-				],
-				n8nWorkflowId: "qNqFdwPIbfnsTQt5",
-				originalComplexity: "102 nodes, 81 connections",
-				enhancedFeatures: [
-					"AI Router Agent with smart decision making",
-					"Memory buffer with conversation context",
-					"Information extraction for automatic categorization",
-					"User state management with progress tracking",
-					"TELOS framework integration for strategic advice"
-				]
-			}),
-			{
-				headers: {
-					"Content-Type": "application/json",
-					"Access-Control-Allow-Origin": "*",
-				},
-			}
-		);
-	},
+    // Default MCP server response
+    return new Response(
+      JSON.stringify({
+        service: "Tiffany Accountability Agent MCP Server",
+        version: "3.0.0",
+        description: "25-tool implementation for comprehensive accountability coaching",
+        phase1Status: "✅ Complete - 6 data storage tools implemented",
+        phase2Status: "✅ Complete - 4 AI processing tools implemented",
+        nextPhase: "Phase 3 - TELOS Integration (3 tools)",
+        connect: "Use MCP client to connect via /sse or /mcp endpoints",
+        toolCount: "15 total tools (10 new + 5 legacy compatibility)"
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+  },
 };
+
+// Start the server for development
+if (import.meta.main) {
+  const transport = new StdioServerTransport();
+  tiffanyServer.server.connect(transport);
+}
