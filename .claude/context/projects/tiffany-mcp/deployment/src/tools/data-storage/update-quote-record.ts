@@ -1,5 +1,6 @@
 // Update Quote Record Tool - Track quote usage and modify quote data
 // Part of Phase 1 core tools implementation
+// SIMPLIFIED to work with actual Airtable schema: Quote, Author, Lesson Category, Used_Date
 
 import { z } from 'zod';
 import { ToolResponse } from '../../types/tiffany-types.js';
@@ -8,31 +9,28 @@ import { AirtableService } from '../../services/airtable-service.js';
 // Zod schema for input validation
 const UpdateQuoteRecordSchema = z.object({
   quoteId: z.string().min(1, 'Quote ID is required'),
-  action: z.enum(['mark_used', 'mark_unused', 'increment_usage', 'update_rating', 'add_tags', 'remove_tags']),
-  userId: z.string().optional().default('default'),
-  value: z.union([
-    z.number(), // For rating updates or usage increments
-    z.array(z.string()), // For tag updates
-    z.string() // For single values
-  ]).optional(),
-  notes: z.string().optional()
+  action: z.enum(['mark_used', 'mark_unused', 'get_info']),
+  userId: z.string().optional().default('default')
 });
 
 export const updateQuoteRecordTool = {
   name: 'update_quote_record',
-  description: 'Track quote usage, update ratings, and modify quote metadata',
+  description: 'Mark quotes as used/unused and retrieve quote information',
   schema: UpdateQuoteRecordSchema,
 
   async execute(args: z.infer<typeof UpdateQuoteRecordSchema>): Promise<ToolResponse> {
     try {
-      const { quoteId, action, userId, value, notes } = args;
+      const { quoteId, action, userId } = args;
 
       const airtableService = new AirtableService();
 
-      // Get current quote record
-      const quote = await airtableService.getQuoteById(quoteId);
+      // Get current quote record using existing makeRequest method
+      const quote = await airtableService.makeRequest(
+        'GET',
+        `Inspirational_Quotes/${quoteId}`
+      );
 
-      if (!quote) {
+      if (!quote || !quote.fields) {
         return {
           content: [{
             type: 'text',
@@ -47,67 +45,54 @@ export const updateQuoteRecordTool = {
         };
       }
 
-      let updateData: any = {};
       let actionDescription = '';
+      let updatedQuote = quote;
 
-      // Process different actions
+      // Process different actions based on actual Airtable schema
       switch (action) {
         case 'mark_used':
-          updateData = await this.markAsUsed(quote, userId);
+          // Use existing updateQuoteUsage method
+          await airtableService.updateQuoteUsage(quoteId, userId);
           actionDescription = 'marked as used';
+          // Get updated quote to show new Used_Date
+          updatedQuote = await airtableService.makeRequest(
+            'GET',
+            `Inspirational_Quotes/${quoteId}`
+          );
           break;
 
         case 'mark_unused':
-          updateData = await this.markAsUnused(quote, userId);
-          actionDescription = 'marked as unused';
+          // Clear the Used_Date field
+          await airtableService.makeRequest(
+            'PATCH',
+            `Inspirational_Quotes/${quoteId}`,
+            {
+              fields: {
+                'Used_Date': null
+              }
+            }
+          );
+          actionDescription = 'marked as unused (Used_Date cleared)';
+          updatedQuote = await airtableService.makeRequest(
+            'GET',
+            `Inspirational_Quotes/${quoteId}`
+          );
           break;
 
-        case 'increment_usage':
-          updateData = await this.incrementUsage(quote, value as number || 1);
-          actionDescription = `usage incremented by ${value || 1}`;
-          break;
-
-        case 'update_rating':
-          if (typeof value !== 'number' || value < 1 || value > 5) {
-            throw new Error('Rating must be a number between 1 and 5');
-          }
-          updateData = await this.updateRating(quote, value, userId);
-          actionDescription = `rating updated to ${value}/5`;
-          break;
-
-        case 'add_tags':
-          if (!Array.isArray(value)) {
-            throw new Error('Tags must be provided as an array');
-          }
-          updateData = await this.addTags(quote, value);
-          actionDescription = `tags added: ${value.join(', ')}`;
-          break;
-
-        case 'remove_tags':
-          if (!Array.isArray(value)) {
-            throw new Error('Tags must be provided as an array');
-          }
-          updateData = await this.removeTags(quote, value);
-          actionDescription = `tags removed: ${value.join(', ')}`;
+        case 'get_info':
+          actionDescription = 'information retrieved';
+          // updatedQuote is already set to current quote
           break;
 
         default:
           throw new Error(`Unknown action: ${action}`);
       }
 
-      // Add notes if provided
-      if (notes) {
-        updateData.lastModificationNote = notes;
-      }
-
-      // Update the quote record
-      const updatedQuote = await airtableService.updateQuote(quoteId, updateData);
-
-      // Format success response
+      // Format success response based on actual Airtable fields
       const formattedMessage = this.formatUpdateMessage(
-        updatedQuote,
-        actionDescription,
-        notes
+        updatedQuote.fields,
+        updatedQuote.id,
+        actionDescription
       );
 
       return {
@@ -120,16 +105,11 @@ export const updateQuoteRecordTool = {
           action,
           actionDescription,
           userId,
-          previousState: {
-            usageCount: quote.usageCount,
-            rating: quote.rating,
-            tags: quote.tags
-          },
-          newState: {
-            usageCount: updatedQuote.usageCount,
-            rating: updatedQuote.rating,
-            tags: updatedQuote.tags
-          }
+          previousUsedDate: quote.fields['Used_Date'] || null,
+          newUsedDate: updatedQuote.fields['Used_Date'] || null,
+          quote: updatedQuote.fields['Quote'],
+          author: updatedQuote.fields['Author'],
+          category: updatedQuote.fields['Lesson Category']
         }
       };
 
@@ -152,131 +132,51 @@ export const updateQuoteRecordTool = {
     }
   },
 
-  // Mark quote as used by specific user
-  async markAsUsed(quote: any, userId: string): Promise<any> {
-    const usedBy = quote.usedBy || [];
-    const usageHistory = quote.usageHistory || [];
+  // Format update confirmation message based on actual Airtable schema
+  formatUpdateMessage(quoteFields: any, quoteId: string, actionDescription: string): string {
+    const previewText = quoteFields.Quote && quoteFields.Quote.length > 100 ?
+      quoteFields.Quote.substring(0, 100) + '...' :
+      quoteFields.Quote;
 
-    const newUsageEntry = {
-      userId,
-      timestamp: new Date().toISOString(),
-      type: 'manual_mark'
-    };
+    const usedDateText = quoteFields['Used_Date'] ?
+      `\n**Used Date**: ${new Date(quoteFields['Used_Date']).toLocaleString('en-US', { timeZone: 'America/Chicago' })} (Central Time)` :
+      '\n**Used Date**: Never used';
 
-    return {
-      usedBy: [...new Set([...usedBy, userId])], // Avoid duplicates
-      usageHistory: [...usageHistory, newUsageEntry],
-      usageCount: (quote.usageCount || 0) + 1,
-      lastUsed: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-  },
-
-  // Mark quote as unused by removing user usage
-  async markAsUnused(quote: any, userId: string): Promise<any> {
-    const usedBy = (quote.usedBy || []).filter((id: string) => id !== userId);
-    const usageHistory = quote.usageHistory || [];
-
-    const newUsageEntry = {
-      userId,
-      timestamp: new Date().toISOString(),
-      type: 'manual_unmark'
-    };
-
-    return {
-      usedBy,
-      usageHistory: [...usageHistory, newUsageEntry],
-      usageCount: Math.max(0, (quote.usageCount || 0) - 1),
-      updatedAt: new Date().toISOString()
-    };
-  },
-
-  // Increment usage count
-  async incrementUsage(quote: any, increment: number): Promise<any> {
-    return {
-      usageCount: (quote.usageCount || 0) + increment,
-      updatedAt: new Date().toISOString()
-    };
-  },
-
-  // Update user rating
-  async updateRating(quote: any, rating: number, userId: string): Promise<any> {
-    const ratings = quote.ratings || {};
-    ratings[userId] = {
-      rating,
-      timestamp: new Date().toISOString()
-    };
-
-    // Calculate average rating
-    const allRatings = Object.values(ratings).map((r: any) => r.rating);
-    const averageRating = allRatings.reduce((sum, r) => sum + r, 0) / allRatings.length;
-
-    return {
-      ratings,
-      rating: Math.round(averageRating * 10) / 10, // Round to 1 decimal
-      ratingCount: allRatings.length,
-      updatedAt: new Date().toISOString()
-    };
-  },
-
-  // Add tags to quote
-  async addTags(quote: any, newTags: string[]): Promise<any> {
-    const currentTags = quote.tags || [];
-    const updatedTags = [...new Set([...currentTags, ...newTags])]; // Remove duplicates
-
-    return {
-      tags: updatedTags,
-      updatedAt: new Date().toISOString()
-    };
-  },
-
-  // Remove tags from quote
-  async removeTags(quote: any, tagsToRemove: string[]): Promise<any> {
-    const currentTags = quote.tags || [];
-    const updatedTags = currentTags.filter((tag: string) => !tagsToRemove.includes(tag));
-
-    return {
-      tags: updatedTags,
-      updatedAt: new Date().toISOString()
-    };
-  },
-
-  // Format update confirmation message
-  formatUpdateMessage(quote: any, actionDescription: string, notes?: string): string {
-    const previewText = quote.text.length > 100 ?
-      quote.text.substring(0, 100) + '...' :
-      quote.text;
-
-    const notesText = notes ? `\n**Notes**: ${notes}` : '';
-
-    const statsText = `
-**Usage Statistics**:
-• Usage count: ${quote.usageCount || 0}
-• Average rating: ${quote.rating ? `${quote.rating}/5` : 'Not rated'}
-• Total ratings: ${quote.ratingCount || 0}`;
-
-    const tagsText = quote.tags && quote.tags.length > 0 ?
-      `\n**Tags**: ${quote.tags.map((tag: string) => `#${tag}`).join(' ')}` : '';
+    const categoryEmoji = this.getCategoryEmoji(quoteFields['Lesson Category']);
 
     return `✅ **Quote Record Updated**
 
-**Quote**: "${previewText}"
-**Author**: ${quote.author || 'Anonymous'}
+${categoryEmoji} **Quote**: "${previewText}"
+**Author**: ${quoteFields.Author || 'Anonymous'}
+**Category**: ${quoteFields['Lesson Category'] || 'Uncategorized'}
 
 **Action**: ${actionDescription.charAt(0).toUpperCase() + actionDescription.slice(1)}
-**Timestamp**: ${new Date().toLocaleString()}${notesText}
-${statsText}${tagsText}
+**Timestamp**: ${new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' })} (Central Time)${usedDateText}
 
-**Quote ID**: \`${quote.id}\`
+**Quote ID**: \`${quoteId}\`
 
-Use \`get_random_quote\` to retrieve quotes or \`add_quote_to_database\` to add new ones!`;
+💡 Use \`get_random_quote\` to retrieve quotes or \`add_quote_to_database\` to add new ones!`;
   },
 
-  // Helper method for bulk updates
+  // Get emoji for quote category (same as get_random_quote tool)
+  getCategoryEmoji(category: string): string {
+    const emojiMap: Record<string, string> = {
+      'Focus': '🎯',
+      'Risk-Taking': '🎲',
+      'Patience': '⏳',
+      'Self-Awareness': '🪞',
+      'Persistence': '💪',
+      'Courage': '🦁',
+      'Integrity': '⚖️',
+      'Self-Direction': '🧭'
+    };
+    return emojiMap[category] || '💭';
+  },
+
+  // Helper method for bulk updates (simplified for actual schema)
   async bulkUpdateQuotes(
     quoteIds: string[],
-    action: string,
-    value?: any,
+    action: 'mark_used' | 'mark_unused' | 'get_info',
     userId: string = 'default'
   ): Promise<ToolResponse[]> {
     const results: ToolResponse[] = [];
@@ -285,8 +185,7 @@ Use \`get_random_quote\` to retrieve quotes or \`add_quote_to_database\` to add 
       try {
         const result = await this.execute({
           quoteId,
-          action: action as any,
-          value,
+          action,
           userId
         });
         results.push(result);

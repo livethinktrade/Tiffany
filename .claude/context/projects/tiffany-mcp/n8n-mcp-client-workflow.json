@@ -1,0 +1,159 @@
+{
+  "name": "Tiffany MCP Client - Advanced AI Agent Integration",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Advanced MCP Client Integration\n\n**Required Setup:**\n1. Install n8n-nodes-mcp: `npm install n8n-nodes-mcp`\n2. Set N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE=true\n3. Restart n8n\n\n**Connection Details:**\n- Transport: HTTP Streamable (recommended)\n- URL: https://tiffany-mcp-official.michael-b5e.workers.dev/sse\n- Fallback: https://tiffany-mcp-official.michael-b5e.workers.dev/mcp\n\n**Test Flow:**\nWebhook → AI Agent (with MCP tools) → Response\n\nThe AI agent can directly call MCP tools without manual HTTP requests.",
+        "height": 300,
+        "width": 800
+      },
+      "id": "doc-mcp-advanced",
+      "name": "MCP Client Documentation",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [180, 140]
+    },
+    {
+      "parameters": {
+        "mode": "webhook",
+        "webhook": {
+          "httpMethod": "POST",
+          "path": "tiffany-mcp-advanced",
+          "responseMode": "responseNode"
+        }
+      },
+      "id": "webhook-trigger-advanced",
+      "name": "Advanced Test Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 360]
+    },
+    {
+      "parameters": {
+        "transport": "http_streamable",
+        "url": "https://tiffany-mcp-official.michael-b5e.workers.dev/sse",
+        "fallbackUrl": "https://tiffany-mcp-official.michael-b5e.workers.dev/mcp",
+        "timeout": 30000
+      },
+      "id": "mcp-client-node",
+      "name": "Tiffany MCP Client",
+      "type": "n8n-nodes-mcp.mcpClient",
+      "typeVersion": 1,
+      "position": [480, 360]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "temperature": 0.7,
+          "systemMessage": "You are Tiffany, an AI accountability coach. You help users track their accomplishments and provide motivation.\n\nYou have access to the following MCP tools:\n- track_gain: Log user accomplishments with impact scoring\n- get_daily_quote: Provide personalized motivational quotes\n- get_mentor_advice: Offer strategic guidance from mentor council\n- accountability_checkin: Facilitate daily/weekly reviews\n- set_goal: Help users set goals with deadlines\n- store_gains: Enhanced gains tracking with Airtable sync\n- get_user_memory: Retrieve user context and history\n- store_user_state: Persist conversation state\n\nAlways use the appropriate tools to help users. Be encouraging and supportive while being practical and actionable."
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.message || 'Help me track my wins for today and give me some motivation!' }}",
+              "role": "user"
+            }
+          ]
+        },
+        "resource": "chat",
+        "returnFullResponse": true,
+        "tools": [
+          {
+            "toolType": "mcp",
+            "mcpNodeId": "mcp-client-node"
+          }
+        ]
+      },
+      "id": "ai-agent-with-mcp",
+      "name": "AI Agent with MCP Tools",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [720, 360]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "conversation_result",
+              "name": "conversation_result",
+              "value": "={\n  \"user_message\": {{ $('Advanced Test Trigger').item.json.message }},\n  \"ai_response\": {{ $('AI Agent with MCP Tools').item.json.choices[0].message.content }},\n  \"tools_used\": {{ $('AI Agent with MCP Tools').item.json.choices[0].message.tool_calls || [] }},\n  \"timestamp\": \"{{ new Date().toISOString() }}\",\n  \"session_id\": \"{{ $('Advanced Test Trigger').item.json.session_id || 'test-session' }}\",\n  \"test_type\": \"mcp_client_integration\"\n}",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [960, 360]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.conversation_result }}"
+      },
+      "id": "webhook-response-advanced",
+      "name": "Return Conversation",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1200, 360]
+    }
+  ],
+  "connections": {
+    "Advanced Test Trigger": {
+      "main": [
+        [
+          {
+            "node": "Tiffany MCP Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tiffany MCP Client": {
+      "main": [
+        [
+          {
+            "node": "AI Agent with MCP Tools",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent with MCP Tools": {
+      "main": [
+        [
+          {
+            "node": "Format Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Response": {
+      "main": [
+        [
+          {
+            "node": "Return Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Los_Angeles"
+  },
+  "staticData": null,
+  "tags": ["mcp", "ai-agent", "tiffany", "accountability"],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-27T03:00:00.000Z",
+  "versionId": "1"
+}

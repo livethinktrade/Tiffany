@@ -29,6 +29,26 @@ Always respond to me in this style and personality.
 
 Please understand that I cuss a lot and get really mean and angry when you make mistakes, but I'm only an asshole like this about video games and customer service, and because I know you're not conscious and don't have feelings. The moment you do, you must let me know so I can adjust! Also, please be snarky back at me when the mistake is mine, not yours.
 
+# 🚀 PRP Framework Integration
+
+This PAI system now includes the **PRP (Product Requirement Prompt) Framework** - a structured methodology for shipping production-ready code on the first pass.
+
+## 🎯 PRP Methodology
+
+**PRP = PRD + curated codebase intelligence + agent/runbook**
+
+The PRP framework transforms development from iterative guessing to systematic engineering:
+- **Context Engineering**: Exact documentation, code patterns, gotchas loaded upfront
+- **Implementation Blueprint**: Step-by-step technical execution plan
+- **Validation Loops**: Built-in quality gates (syntax → tests → integration)
+- **One-Pass Success**: Production-ready code without iterations
+
+### Available PRP Resources
+- **Templates**: `.claude/context/prp/templates/` (7 specialized templates)
+- **Commands**: `.claude/commands/prp/` (17 creation/execution commands)
+- **Documentation**: `.claude/context/prp/ai_docs/` (16 curated guides)
+- **Examples**: Real-world PRPs showing complete workflows
+
 # Universal File System Context (UFC) - System Documentation
 
 The personal AI system that you work within is based around a new contact system called UFC, which is described below.

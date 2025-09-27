@@ -1,107 +1,79 @@
 // Add Quote to Database Tool - Store new quotes with categorization
 // Part of Phase 1 core tools implementation
+// SIMPLIFIED to work with actual Airtable schema: Quote, Author, Lesson Category, Used_Date
 
 import { z } from 'zod';
 import { Quote, ToolResponse } from '../../types/tiffany-types.js';
 import { AirtableService } from '../../services/airtable-service.js';
 
-// Zod schema for input validation
+// Valid categories from actual database
+const VALID_CATEGORIES = [
+  'Courage', 'Determination', 'Focus', 'Growth', 'Identity', 'Mindset', 'Patience',
+  'Persistence', 'Priorities', 'Process', 'Purpose', 'Resilience', 'Risk-Taking',
+  'Self-Awareness', 'Self-Direction', 'Self-Reliance', 'Systems'
+] as const;
+
+// Zod schema for input validation - simplified for actual schema
 const AddQuoteToDatabaseSchema = z.object({
-  text: z.string().min(10, 'Quote text must be at least 10 characters'),
+  text: z.string().min(10, 'Quote text must be at least 10 characters').max(500, 'Quote text too long'),
   author: z.string().optional(),
-  category: z.string().optional().default('general'),
-  style: z.enum(['inspirational', 'practical', 'philosophical']).optional().default('inspirational'),
-  source: z.string().optional(),
-  tags: z.array(z.string()).optional(),
-  language: z.string().optional().default('en'),
-  addedBy: z.string().optional().default('default'),
-  verified: z.boolean().optional().default(false),
-  publicDomain: z.boolean().optional().default(false)
+  category: z.enum(VALID_CATEGORIES).optional(),
+  addedBy: z.string().optional().default('default')
 });
 
 export const addQuoteToDatabaseTool = {
   name: 'add_quote_to_database',
-  description: 'Store new quotes in the database with proper categorization and metadata',
+  description: 'Store new quotes in database with proper categorization',
   schema: AddQuoteToDatabaseSchema,
 
   async execute(args: z.infer<typeof AddQuoteToDatabaseSchema>): Promise<ToolResponse> {
     try {
-      const {
-        text,
-        author,
-        category,
-        style,
-        source,
-        tags,
-        language,
-        addedBy,
-        verified,
-        publicDomain
-      } = args;
+      const { text, author, category, addedBy } = args;
 
       const airtableService = new AirtableService();
 
-      // Check for duplicate quotes
-      const existingQuotes = await airtableService.searchQuotes(text.substring(0, 50));
-      const isDuplicate = existingQuotes.some(q =>
-        q.text.toLowerCase().trim() === text.toLowerCase().trim()
+      // Simple duplicate check by searching for exact text match
+      // Get recent quotes to check for duplicates
+      const recentQuotes = await airtableService.makeRequest(
+        'GET',
+        'Inspirational_Quotes?maxRecords=100&sort[0][field]=Quote'
       );
+
+      const isDuplicate = recentQuotes.records.some((record: any) => {
+        const existingText = record.fields.Quote;
+        return existingText && existingText.toLowerCase().trim() === text.toLowerCase().trim();
+      });
 
       if (isDuplicate) {
         return {
           content: [{
             type: 'text',
-            text: `⚠️ **Duplicate Quote Detected**\n\nThis quote (or very similar) already exists in the database.\n\n**Quote**: "${text.substring(0, 100)}${text.length > 100 ? '...' : ''}"\n\nUse \`get_random_quote\` to retrieve existing quotes or modify the text if this is genuinely different.`
+            text: `⚠️ **Duplicate Quote Detected**\n\nThis quote already exists in the database.\n\n**Quote**: "${text.substring(0, 100)}${text.length > 100 ? '...' : ''}"\n\nUse \`get_random_quote\` to retrieve existing quotes or modify the text if this is genuinely different.`
           }],
           isError: true,
           metadata: {
             error: 'Duplicate quote',
             text: text.substring(0, 100),
-            existingCount: existingQuotes.length
+            duplicateFound: true
           }
         };
       }
 
-      // Create new quote object
-      const newQuote: Omit<Quote, 'id' | 'airtableId'> = {
+      // Create simplified quote object matching actual schema
+      const newQuote = {
         text: text.trim(),
-        author: author?.trim() || null,
-        category,
-        style,
-        source: source?.trim() || null,
-        tags: tags || [],
-        language,
-        addedBy,
-        verified,
-        publicDomain,
-        usageCount: 0,
-        rating: null,
-        ratingCount: 0,
-        usedBy: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        author: author?.trim() || 'Anonymous',
+        category: category || this.suggestCategory(text) || 'Growth'
       };
 
-      // Store in Airtable
+      // Store in Airtable using the fixed storeQuote method
       const airtableRecord = await airtableService.addQuote(newQuote as Quote);
 
-      const storedQuote: Quote = {
+      const storedQuote = {
         ...newQuote,
-        id: `quote_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: airtableRecord.id,
         airtableId: airtableRecord.id
       };
-
-      // Auto-categorize if not specified
-      if (category === 'general') {
-        const suggestedCategory = this.suggestCategory(text);
-        if (suggestedCategory !== 'general') {
-          // Update with suggested category
-          await airtableService.updateQuote(airtableRecord.id, {
-            category: suggestedCategory
-          });
-          storedQuote.category = suggestedCategory;
-        }
-      }
 
       // Format success response
       const formattedMessage = this.formatQuoteAddedMessage(storedQuote);
@@ -115,9 +87,7 @@ export const addQuoteToDatabaseTool = {
           quoteId: storedQuote.id,
           airtableId: storedQuote.airtableId,
           category: storedQuote.category,
-          style: storedQuote.style,
           author: storedQuote.author,
-          verified: storedQuote.verified,
           addedBy
         }
       };
@@ -139,24 +109,26 @@ export const addQuoteToDatabaseTool = {
     }
   },
 
-  // Suggest category based on quote content
+  // Suggest category based on quote content - updated for actual categories
   suggestCategory(text: string): string {
     const lowercaseText = text.toLowerCase();
 
-    // Category keywords mapping
+    // Category keywords mapping based on actual database categories
     const categoryKeywords = {
-      motivation: ['achieve', 'success', 'goal', 'dream', 'ambition', 'drive', 'motivate'],
-      wisdom: ['wisdom', 'learn', 'knowledge', 'understand', 'experience', 'insight'],
-      perseverance: ['persevere', 'persist', 'endure', 'overcome', 'challenge', 'difficult'],
-      leadership: ['lead', 'leader', 'inspire', 'influence', 'team', 'guide'],
-      creativity: ['create', 'creative', 'imagination', 'innovative', 'art', 'design'],
-      mindfulness: ['present', 'moment', 'peace', 'calm', 'meditate', 'aware'],
-      relationships: ['love', 'friend', 'family', 'relationship', 'trust', 'connect'],
-      growth: ['grow', 'develop', 'improve', 'change', 'evolve', 'progress']
+      Focus: ['focus', 'concentrate', 'attention', 'clarity', 'priorities'],
+      Growth: ['grow', 'develop', 'improve', 'change', 'evolve', 'progress', 'learn'],
+      Persistence: ['persist', 'persevere', 'continue', 'endure', 'keep going'],
+      Courage: ['courage', 'brave', 'fear', 'bold', 'risk'],
+      'Self-Awareness': ['know yourself', 'self', 'aware', 'reflect', 'conscious'],
+      Purpose: ['purpose', 'meaning', 'why', 'mission', 'calling'],
+      Resilience: ['resilient', 'bounce back', 'recover', 'overcome', 'tough'],
+      Mindset: ['mindset', 'attitude', 'thinking', 'believe', 'mental'],
+      'Risk-Taking': ['risk', 'chance', 'opportunity', 'venture', 'bold'],
+      Process: ['process', 'system', 'method', 'approach', 'way']
     };
 
     // Score each category
-    let bestCategory = 'general';
+    let bestCategory = 'Growth'; // Default fallback
     let highestScore = 0;
 
     for (const [category, keywords] of Object.entries(categoryKeywords)) {
@@ -173,81 +145,61 @@ export const addQuoteToDatabaseTool = {
     return bestCategory;
   },
 
-  // Format quote addition confirmation message
-  formatQuoteAddedMessage(quote: Quote): string {
+  // Format quote addition confirmation message - simplified for actual schema
+  formatQuoteAddedMessage(quote: any): string {
     const categoryEmoji = this.getCategoryEmoji(quote.category);
-    const styleIcon = this.getStyleIcon(quote.style);
-
-    const authorText = quote.author ? `**Author**: ${quote.author}` : '**Author**: Anonymous';
-
-    const sourceText = quote.source ? `\n**Source**: ${quote.source}` : '';
-
-    const tagsText = quote.tags && quote.tags.length > 0 ?
-      `\n**Tags**: ${quote.tags.map(tag => `#${tag}`).join(' ')}` : '';
-
-    const verificationText = quote.verified ?
-      '\n✅ **Verified quote**' :
-      '\n⏳ **Pending verification**';
-
-    const publicDomainText = quote.publicDomain ?
-      '\n📖 **Public domain**' :
-      '\n📝 **Copyrighted content**';
+    const authorText = quote.author && quote.author !== 'Anonymous' ?
+      `**Author**: ${quote.author}` : '**Author**: Anonymous';
 
     return `${categoryEmoji} **Quote Added Successfully!**
 
 > "${quote.text}"
 
-${authorText}${sourceText}
+${authorText}
 
 **Details**:
-${styleIcon} **Style**: ${quote.style.charAt(0).toUpperCase() + quote.style.slice(1)}
 📚 **Category**: ${quote.category}
-🌍 **Language**: ${quote.language}${tagsText}${verificationText}${publicDomainText}
+🕐 **Added**: ${new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' })} (Central Time)
 
 **Quote ID**: \`${quote.id}\`
-**Added by**: ${quote.addedBy}
-**Added**: ${new Date(quote.createdAt).toLocaleString()}
 
-${quote.category === 'general' ? '💡 **Note**: Quote was auto-categorized. Use `update_quote_record` to adjust category if needed.' : ''}
+💡 **Next Steps**:
+• Use \`get_random_quote category="${quote.category}"\` to retrieve similar quotes
+• Use \`update_quote_record\` to mark quotes as used or get more info
+• The quote will appear in intelligent rotation after being added!
 
-Use \`get_random_quote category="${quote.category}"\` to retrieve similar quotes or \`update_quote_record\` to modify this quote!`;
+✅ Quote ready for use in the accountability system!`;
   },
 
-  // Get emoji for quote category
+  // Get emoji for quote category - updated for actual categories
   getCategoryEmoji(category: string): string {
     const emojiMap: Record<string, string> = {
-      motivation: '🔥',
-      wisdom: '🧠',
-      success: '🎯',
-      growth: '🌱',
-      leadership: '👑',
-      perseverance: '💪',
-      creativity: '💡',
-      mindfulness: '🧘',
-      relationships: '❤️',
-      general: '✨'
+      'Focus': '🎯',
+      'Risk-Taking': '🎲',
+      'Patience': '⏳',
+      'Self-Awareness': '🪞',
+      'Persistence': '💪',
+      'Courage': '🦁',
+      'Self-Direction': '🧭',
+      'Growth': '🌱',
+      'Purpose': '🎯',
+      'Resilience': '🛡️',
+      'Mindset': '🧠',
+      'Process': '⚙️',
+      'Systems': '🔗',
+      'Determination': '🔥',
+      'Identity': '👤',
+      'Priorities': '📋',
+      'Self-Reliance': '🗿'
     };
     return emojiMap[category] || '💭';
   },
 
-  // Get icon for quote style
-  getStyleIcon(style: string): string {
-    const iconMap: Record<string, string> = {
-      inspirational: '🌟',
-      practical: '⚙️',
-      philosophical: '🤔'
-    };
-    return iconMap[style] || '💬';
-  },
-
-  // Helper method for bulk quote addition
+  // Helper method for bulk quote addition - simplified
   async addMultipleQuotes(quotes: Array<{
     text: string;
     author?: string;
     category?: string;
-    style?: 'inspirational' | 'practical' | 'philosophical';
-    source?: string;
-    tags?: string[];
   }>, addedBy: string = 'default'): Promise<ToolResponse[]> {
     const results: ToolResponse[] = [];
 
@@ -273,31 +225,31 @@ Use \`get_random_quote category="${quote.category}"\` to retrieve similar quotes
     return results;
   },
 
-  // Helper method to validate quote format
+  // Helper method to validate quote format - simplified
   validateQuoteFormat(text: string): { isValid: boolean; suggestions: string[] } {
     const suggestions: string[] = [];
     let isValid = true;
 
-    // Check length
+    // Check length (enforced by schema)
     if (text.length < 10) {
       isValid = false;
       suggestions.push('Quote should be at least 10 characters long');
     }
 
-    if (text.length > 1000) {
+    if (text.length > 500) {
       isValid = false;
-      suggestions.push('Quote should be under 1000 characters');
-    }
-
-    // Check for proper formatting
-    if (text.includes('"') && (!text.startsWith('"') || !text.endsWith('"'))) {
-      suggestions.push('Consider using proper quote marks for formatting');
+      suggestions.push('Quote should be under 500 characters for optimal display');
     }
 
     // Check for meaningful content
     if (text.split(' ').length < 3) {
       isValid = false;
       suggestions.push('Quote should contain at least 3 words');
+    }
+
+    // Check for excessive formatting
+    if (text.includes('\n')) {
+      suggestions.push('Consider removing line breaks for consistency');
     }
 
     return { isValid, suggestions };

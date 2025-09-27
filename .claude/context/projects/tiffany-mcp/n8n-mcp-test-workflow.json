@@ -1,0 +1,269 @@
+{
+  "name": "Tiffany MCP Server - AI Agent Test MVP",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Test Tiffany MCP Server Connection\n\nThis workflow tests the AI agent connection to the Tiffany MCP server.\n\n**MCP Server Details:**\n- URL: https://tiffany-mcp-official.michael-b5e.workers.dev\n- Health: https://tiffany-mcp-official.michael-b5e.workers.dev/health\n- SSE Endpoint: https://tiffany-mcp-official.michael-b5e.workers.dev/sse\n- Direct Endpoint: https://tiffany-mcp-official.michael-b5e.workers.dev/mcp\n\n**Available Tools (15 total):**\n1. track_gain - Log accomplishments \n2. get_daily_quote - Get motivational quotes\n3. get_mentor_advice - Strategic guidance\n4. accountability_checkin - Daily/weekly reviews\n5. set_goal - Goal setting with deadlines\n6. store_gains - Enhanced gains tracking\n7. get_user_memory - Retrieve user context\n8. store_user_state - Persist conversation state\n9. get_random_quote - Quote database access\n10. update_quote_record - Track quote usage\n11. add_quote_to_database - Store new quotes\n12. process_voice_input - Voice transcription\n13. extract_information - Parse user input\n14. generate_custom_quote - AI quote generation\n15. analyze_conversation - Context analysis\n\n**Test Scenarios:**\n1. Health Check\n2. Simple Tool Call (track_gain)\n3. AI Agent Integration\n4. Full Conversation Flow",
+        "height": 464,
+        "width": 1150
+      },
+      "id": "c5f5c4b5-7a2e-4f9e-8b6a-1d2e3f4g5h6i",
+      "name": "Documentation",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [380, 240]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "url": "https://tiffany-mcp-official.michael-b5e.workers.dev/health",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "a1b2c3d4-5e6f-7890-abcd-ef1234567890",
+      "name": "Health Check",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [620, 360]
+    },
+    {
+      "parameters": {
+        "mode": "webhook",
+        "webhook": {
+          "httpMethod": "POST",
+          "path": "tiffany-test",
+          "responseMode": "responseNode"
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Test Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 360]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "https://tiffany-mcp-official.michael-b5e.workers.dev/mcp",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "jsonrpc",
+              "value": "2.0"
+            },
+            {
+              "name": "id",
+              "value": "1"
+            },
+            {
+              "name": "method",
+              "value": "tools/list"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "list-tools-test",
+      "name": "List MCP Tools",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [860, 280]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "https://tiffany-mcp-official.michael-b5e.workers.dev/mcp",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "jsonrpc",
+              "value": "2.0"
+            },
+            {
+              "name": "id",
+              "value": "2"
+            },
+            {
+              "name": "method",
+              "value": "tools/call"
+            },
+            {
+              "name": "params",
+              "value": "={{ {\n  \"name\": \"track_gain\",\n  \"arguments\": {\n    \"description\": \"Successfully tested MCP server connection from n8n workflow\",\n    \"category\": \"testing\",\n    \"impact\": \"medium\",\n    \"userId\": \"n8n-test-user\"\n  }\n} }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "call-tool-test",
+      "name": "Test Tool Call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1100, 280]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "options": {
+          "temperature": 0.7
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are Tiffany, an accountability coach. A user wants to track a gain. Use the available MCP tools to help them.\n\nUser message: \"{{ $json.query || 'I just completed a great workout and want to log it as a win!' }}\"\n\nYou have access to the Tiffany MCP server tools. Use track_gain to log this accomplishment and then provide encouragement.",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.query || 'I just completed a great workout and want to log it as a win!' }}",
+              "role": "user"
+            }
+          ]
+        },
+        "resource": "chat",
+        "returnFullResponse": true
+      },
+      "id": "ai-agent-test",
+      "name": "AI Agent Test",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [860, 460]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "results",
+              "name": "results",
+              "value": "={\n  \"health_check\": {{ $('Health Check').item.json }},\n  \"tools_list\": {{ $('List MCP Tools').item.json }},\n  \"tool_call_result\": {{ $('Test Tool Call').item.json }},\n  \"ai_response\": {{ $('AI Agent Test').item.json }},\n  \"timestamp\": \"{{ new Date().toISOString() }}\",\n  \"test_status\": \"completed\"\n}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "compile-results",
+      "name": "Compile Results",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [1340, 360]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json.results }}"
+      },
+      "id": "webhook-response",
+      "name": "Return Results",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1580, 360]
+    }
+  ],
+  "connections": {
+    "Test Trigger": {
+      "main": [
+        [
+          {
+            "node": "Health Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Health Check": {
+      "main": [
+        [
+          {
+            "node": "List MCP Tools",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Test",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List MCP Tools": {
+      "main": [
+        [
+          {
+            "node": "Test Tool Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test Tool Call": {
+      "main": [
+        [
+          {
+            "node": "Compile Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Test": {
+      "main": [
+        [
+          {
+            "node": "Compile Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compile Results": {
+      "main": [
+        [
+          {
+            "node": "Return Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/Los_Angeles"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2024-12-27T03:00:00.000Z",
+  "versionId": "1"
+}

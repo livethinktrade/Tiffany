@@ -199,21 +199,21 @@ export class AirtableService {
     }
   }
 
-  // Quote Management
+  // Quote Management - Updated to work with actual Airtable schema
   async storeQuote(quote: Quote): Promise<AirtableRecord> {
+    // Only use fields that actually exist in the Inspirational_Quotes table:
+    // - Quote (text content)
+    // - Author (who said it)
+    // - Lesson Category (the category)
+    // - Used_Date (when last used) - not set on creation
+
     const quoteRecord = {
       records: [{
         fields: {
-          'ID': quote.id,
-          'Text': quote.text,
-          'Author': quote.author,
-          'Category': quote.category,
-          'Style': quote.style,
-          'Used': quote.used,
-          'Usage Count': quote.usageCount,
-          'Last Used': quote.lastUsed || '',
-          'Tags': quote.tags?.join(', ') || '',
-          'Personalized For': quote.personalizedFor || ''
+          'Quote': quote.text,
+          'Author': quote.author || 'Anonymous',
+          'Lesson Category': quote.category || 'General'
+          // Used_Date is omitted - will be set when quote is first used
         }
       }]
     };
