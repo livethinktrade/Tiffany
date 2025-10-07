@@ -79,10 +79,12 @@ When you receive a user prompt:
 **CONTEXT FILES:**
 - `${PAI_HOME}/.claude/context/prp/PRP-QUICK-START-GUIDE.md` ✅
 - `${PAI_HOME}/.claude/context/prp/PRP-WORKFLOW-DIAGRAM.md` ✅
+- `${PAI_HOME}/.claude/context/prp/PRP-SYSTEM-PROMPT.md` ✅
 
 **AGENT:** None
 
 **SPECIAL INSTRUCTIONS:**
+- Load and apply the complete PRP system prompt methodology for comprehensive context engineering
 - Apply PRP methodology automatically for complex development requests
 - Select appropriate PRP template based on task complexity and technology
 - Engineer comprehensive context including documentation, patterns, and gotchas
