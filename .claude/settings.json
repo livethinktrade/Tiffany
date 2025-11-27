@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
     "PAI_DIR": "/home/michael/tiffany-pai/.claude",
-    "DA": "PAI",
-    "DA_VOICE_ID": "s3TPKV1kjDlVtZbl4Ksh",
+    "DA": "Tiffany",
+    "DA_VOICE_ID": "jqcCZkN6Knx8BJ5TBdYR",
     "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "64000"
   },
   "permissions": {
