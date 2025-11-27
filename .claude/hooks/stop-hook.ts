@@ -132,6 +132,7 @@ function setTerminalTabTitle(title: string): void {
 
 // Load voice configuration from voices.json
 interface VoiceConfig {
+  voice_id?: string;
   voice_name: string;
   rate_wpm: number;
   rate_multiplier: number;
@@ -473,17 +474,17 @@ async function main() {
 
   // FIRST: Send voice notification if we have a message
   if (message) {
-    // Send to voice server with both voice name and speech rate
+    // Send to voice server with voice ID and speech rate
     await fetch('http://localhost:8888/notify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message: message,
-        voice_name: voiceConfig.voice_name,
+        voice_id: voiceConfig.voice_id || process.env.ELEVENLABS_VOICE_ID || 's3TPKV1kjDlVtZbl4Ksh',
         rate: voiceConfig.rate_wpm
       })
     }).catch(() => {});
-    console.error(`🔊 Voice notification sent: "${message}" with voice: ${voiceConfig.voice_name} at ${voiceConfig.rate_wpm} wpm (${voiceConfig.rate_multiplier}x)`);
+    console.error(`🔊 Voice notification sent: "${message}" with voice: ${voiceConfig.voice_name} (${voiceConfig.voice_id || 'default'}) at ${voiceConfig.rate_wpm} wpm (${voiceConfig.rate_multiplier}x)`);
   }
 
   // ALWAYS set tab title to override any previous titles (like "dynamic requirements")

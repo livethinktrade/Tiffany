@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
-    "PAI_DIR": "/Users/YOURNAME/.claude",
+    "PAI_DIR": "/home/michael/tiffany-pai/.claude",
     "DA": "PAI",
+    "DA_VOICE_ID": "s3TPKV1kjDlVtZbl4Ksh",
     "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "64000"
   },
-  "_comment": "IMPORTANT: Change PAI_DIR above to your actual path (e.g., /Users/john/.claude or /home/john/.claude)",
   "permissions": {
     "allow": [
       "Bash",
@@ -185,6 +185,7 @@
   "enabledPlugins": {
     "browser-automation@browser-tools": true
   },
-  "alwaysThinkingEnabled": true,
+  "alwaysThinkingEnabled": false,
+  "_comment": "PAI_DIR points to the .claude directory in the tiffany-pai repo",
   "max_tokens": 4096
 }

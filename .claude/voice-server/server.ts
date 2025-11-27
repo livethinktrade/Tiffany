@@ -103,15 +103,30 @@ async function generateSpeech(text: string, voiceId: string): Promise<ArrayBuffe
   return await response.arrayBuffer();
 }
 
-// Play audio using afplay (macOS)
+// Play audio using platform-appropriate player
 async function playAudio(audioBuffer: ArrayBuffer): Promise<void> {
   const tempFile = `/tmp/voice-${Date.now()}.mp3`;
 
   // Write audio to temp file
   await Bun.write(tempFile, audioBuffer);
 
+  // Detect platform and use appropriate audio player
+  const platform = process.platform;
+  let audioPlayer: string;
+  let args: string[];
+
+  if (platform === 'darwin') {
+    // macOS - use afplay
+    audioPlayer = '/usr/bin/afplay';
+    args = [tempFile];
+  } else {
+    // Linux/WSL - use mpg123 with pulse output
+    audioPlayer = '/usr/bin/mpg123';
+    args = ['-o', 'pulse', '-q', tempFile]; // -o pulse for PulseAudio, -q for quiet mode
+  }
+
   return new Promise((resolve, reject) => {
-    const proc = spawn('/usr/bin/afplay', [tempFile]);
+    const proc = spawn(audioPlayer, args);
 
     proc.on('error', (error) => {
       console.error('Error playing audio:', error);
@@ -125,7 +140,7 @@ async function playAudio(audioBuffer: ArrayBuffer): Promise<void> {
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error(`afplay exited with code ${code}`));
+        reject(new Error(`Audio player exited with code ${code}`));
       }
     });
   });
@@ -187,12 +202,14 @@ async function sendNotification(
     }
   }
 
-  // Display macOS notification
-  try {
-    const script = `display notification "${safeMessage}" with title "${safeTitle}" sound name ""`;
-    await spawnSafe('/usr/bin/osascript', ['-e', script]);
-  } catch (error) {
-    console.error("Notification display error:", error);
+  // Display macOS notification (only on macOS)
+  if (process.platform === 'darwin') {
+    try {
+      const script = `display notification "${safeMessage}" with title "${safeTitle}" sound name ""`;
+      await spawnSafe('/usr/bin/osascript', ['-e', script]);
+    } catch (error) {
+      console.error("Notification display error:", error);
+    }
   }
 }
 
