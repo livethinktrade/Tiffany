@@ -7,10 +7,17 @@
  *
  * What it does:
  * - Checks if this is a subagent session (skips for subagents)
+ * - **Auto-starts voice server if not running** (eliminates manual debugging)
  * - Tests that stop-hook is properly configured
  * - Sets initial terminal tab title
- * - Sends voice notification that system is ready (if voice server is running)
+ * - Sends voice notification that system is ready
  * - Calls load-core-context.ts to inject PAI context into the session
+ *
+ * Voice Server Auto-Start:
+ * - Checks if voice server is responding on http://localhost:8888/health
+ * - If not, automatically runs ${PAI_DIR}/voice-server/start-voice-server.sh
+ * - Verifies successful startup before proceeding
+ * - Eliminates need for manual debugging and token waste
  *
  * Setup:
  * 1. Set environment variables in settings.json:
@@ -24,11 +31,13 @@
 import { existsSync, statSync, readFileSync, writeFileSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
+import { spawn } from 'child_process';
 import { PAI_DIR } from './lib/pai-paths';
 
 // Debounce duration in milliseconds (prevents duplicate SessionStart events)
 const DEBOUNCE_MS = 2000;
 const LOCKFILE = join(tmpdir(), 'pai-session-start.lock');
+const VOICE_SERVER_PID_FILE = '/tmp/pai-voice-server.pid';
 
 async function sendNotification(title: string, message: string, priority: string = 'normal') {
   try {
@@ -126,6 +135,60 @@ async function testStopHook() {
   }
 }
 
+/**
+ * Check if voice server is running and start it if not
+ */
+async function ensureVoiceServerRunning(): Promise<boolean> {
+  try {
+    // First check if server is responding
+    const healthCheck = await fetch('http://localhost:8888/health', {
+      signal: AbortSignal.timeout(1000)
+    }).catch(() => null);
+
+    if (healthCheck?.ok) {
+      console.error('✅ Voice server already running');
+      return true;
+    }
+
+    console.error('🔄 Voice server not responding, starting...');
+
+    // Voice server not running, start it
+    const voiceServerScript = join(PAI_DIR, 'voice-server/start-voice-server.sh');
+
+    if (!existsSync(voiceServerScript)) {
+      console.error('❌ Voice server start script not found:', voiceServerScript);
+      return false;
+    }
+
+    // Start the voice server in background
+    const child = spawn(voiceServerScript, [], {
+      detached: true,
+      stdio: 'ignore',
+      shell: true
+    });
+
+    child.unref();
+
+    // Wait briefly for server to start, then verify
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    const verifyCheck = await fetch('http://localhost:8888/health', {
+      signal: AbortSignal.timeout(1000)
+    }).catch(() => null);
+
+    if (verifyCheck?.ok) {
+      console.error('✅ Voice server started successfully');
+      return true;
+    } else {
+      console.error('⚠️ Voice server may still be starting...');
+      return false;
+    }
+  } catch (error) {
+    console.error('⚠️ Error checking/starting voice server:', error);
+    return false;
+  }
+}
+
 async function main() {
   try {
     // Check if this is a subagent session - if so, exit silently
@@ -145,6 +208,9 @@ async function main() {
       console.error('🔇 Debouncing duplicate SessionStart event');
       process.exit(0);
     }
+
+    // Ensure voice server is running BEFORE attempting notifications
+    await ensureVoiceServerRunning();
 
     // Test stop-hook first (only for main sessions)
     const stopHookOk = await testStopHook();
