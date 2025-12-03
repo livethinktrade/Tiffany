@@ -185,7 +185,7 @@
   "enabledPlugins": {
     "browser-automation@browser-tools": true
   },
-  "alwaysThinkingEnabled": false,
+  "alwaysThinkingEnabled": true,
   "_comment": "PAI_DIR points to the .claude directory in the tiffany-pai repo",
   "max_tokens": 4096
 }
