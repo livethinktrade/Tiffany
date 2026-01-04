@@ -158,6 +158,11 @@ description: |
   → **READ:** ${PAI_DIR}/skills/CORE/workflows/merge-conflict-resolution.md
   → **EXECUTE:** Use /plan mode with UltraThink for analysis and recommendation
 
+  **When user provides YouTube URL:**
+  Examples: YouTube URL (youtube.com/watch, youtu.be), "extract this video", "get transcript for [URL]"
+  → **READ:** ${PAI_DIR}/skills/CORE/workflows/youtube-transcript-workflow.md
+  → **EXECUTE:** Run yt-transcript script with pattern (ask user preference first time, remember for session)
+
   **For voice routing workflow reference:**
   → **READ:** ${PAI_DIR}/skills/CORE/workflows/voice-routing-full.md
   → Complete voice routing table and commands
