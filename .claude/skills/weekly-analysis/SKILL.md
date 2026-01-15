@@ -33,6 +33,11 @@ Examples: "MINS check", "check MINS progress", "how am I doing on MINS", "job se
 → **READ:** ${PAI_DIR}/skills/weekly-analysis/workflows/mins-tracking.md
 → **EXECUTE:** Evaluate progress toward job search goal by March 31, 2026
 
+**When user requests linking analysis to TELOS:**
+Examples: "link analysis to TELOS", "update TELOS with weekly links", "connect weekly analysis to TELOS", "add weekly links to history"
+→ **READ:** ${PAI_DIR}/skills/weekly-analysis/workflows/link-analysis-to-telos.md
+→ **EXECUTE:** Create bidirectional links between raw/analysis files and update TELOS History section
+
 ---
 
 ## When to Activate This Skill
@@ -48,6 +53,9 @@ Examples: "MINS check", "check MINS progress", "how am I doing on MINS", "job se
 - "add weekly links to daily notes"
 - "connect daily journals to weekly analysis"
 - "update daily note links"
+- "link analysis to TELOS"
+- "update TELOS with weekly links"
+- "connect weekly analysis to TELOS history"
 
 ### MINS & Goal Tracking
 - "MINS check", "MINS progress"
@@ -146,6 +154,13 @@ End-to-end weekly processing: link all daily notes, then generate any missing we
 
 ### mins-tracking.md
 Focused evaluation of job search progress toward March 31, 2026 deadline.
+
+### link-analysis-to-telos.md
+Creates bidirectional Obsidian links for complete knowledge graph:
+- Links raw combined files → analysis files (`**Analysis:**` link)
+- Backlinks analysis files → raw combined files (`**Source:**` link)
+- Updates TELOS History section with wikilinks to all analysis files
+- Uses compact Option B format for History entries
 
 ---
 
