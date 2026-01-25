@@ -1,0 +1,75 @@
+root@srv816737:~# clawdbot status
+
+🦞 Clawdbot 2026.1.24-3 (885167d) — Turning "I'll reply later" into "my bot replied instantly".
+
+│
+gateway connect failed: Error: unauthorized: gateway token mismatch (set gateway.remote.token to match gateway.auth.token)
+◇
+│
+◇
+Clawdbot status
+
+Overview
+┌─────────────────┬─────────────────────────────────────────────────────────────────────────────────┐
+│ Item            │ Value                                                                           │
+├─────────────────┼─────────────────────────────────────────────────────────────────────────────────┤
+│ Dashboard       │ http://127.0.0.1:18789/                                                         │
+│ OS              │ linux 6.8.0-86-generic (x64) · node 22.22.0                                     │
+│ Tailscale       │ off                                                                             │
+│ Channel         │ stable (default)                                                                │
+│ Update          │ pnpm · npm latest 2026.1.24-3                                                   │
+│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 26ms · auth token ·   │
+│                 │ srv816737 (167.88.42.12) app unknown linux 6.8.0-86-generic                     │
+│ Gateway service │ systemd installed · enabled · running (pid 1560096, state active)               │
+│ Node service    │ systemd not installed                                                           │
+│ Agents          │ 1 · no bootstraps · sessions 0 · default main active unknown                    │
+│ Memory          │ 0 files · 0 chunks · dirty · sources memory · plugin memory-core · vector       │
+│                 │ ready · fts ready · cache on (0)                                                │
+│ Probes          │ skipped (use --deep)                                                            │
+│ Events          │ none                                                                            │
+│ Heartbeat       │ 30m (main)                                                                      │
+│ Sessions        │ 0 active · default claude-opus-4-5 (200k ctx) · ~/.clawdbot/agents/main/        │
+│                 │ sessions/sessions.json                                                          │
+└─────────────────┴─────────────────────────────────────────────────────────────────────────────────┘
+
+Security audit
+Summary: 0 critical · 1 warn · 1 info
+  WARN Reverse proxy headers are not trusted
+    gateway.bind is loopback and gateway.trustedProxies is empty. If you expose the Control UI through a reverse proxy, configure trusted proxies so local-client c…
+    Fix: Set gateway.trustedProxies to your proxy IPs or keep the Control UI local-only.
+Full report: clawdbot security audit
+Deep probe: clawdbot security audit --deep
+
+Channels
+┌──────────┬─────────┬────────┬─────────────────────────────────────────────────────────────────────┐
+│ Channel  │ Enabled │ State  │ Detail                                                              │
+├──────────┼─────────┼────────┼─────────────────────────────────────────────────────────────────────┤
+│ Telegram │ ON      │ OK     │ token config (8161…Oo-g · len 46) · accounts 1/1                    │
+│ WhatsApp │ ON      │ WARN   │ missing file (~/.clawdbot/credentials/whatsapp/default)             │
+└──────────┴─────────┴────────┴─────────────────────────────────────────────────────────────────────┘
+
+Sessions
+┌──────────────────────────────────────────────────┬──────┬─────────┬──────────────┬────────────────┐
+│ Key                                              │ Kind │ Age     │ Model        │ Tokens         │
+├──────────────────────────────────────────────────┼──────┼─────────┼──────────────┼────────────────┤
+│ no sessions yet                                  │      │         │              │                │
+└──────────────────────────────────────────────────┴──────┴─────────┴──────────────┴────────────────┘
+
+FAQ: https://docs.clawd.bot/faq
+Troubleshooting: https://docs.clawd.bot/troubleshooting
+
+Next steps:
+  Need to share?      clawdbot status --all
+  Need to debug live? clawdbot logs --follow
+  Need to test channels? clawdbot status --deep
+root@srv816737:~# clawdbot health
+
+🦞 Clawdbot 2026.1.24-3 (885167d) — Automation with claws: minimal fuss, maximal pinch.
+
+│
+◇
+Telegram: ok (@tiffany_eabot) (521ms) - webhook https://n8n.srv816737.hstgr.cloud/webhook/tiffany-webhook-id/webhook
+WhatsApp: not linked
+Agents: main (default)
+Heartbeat interval: 30m (main)
+Session store (main): /root/.clawdbot/agents/main/sessions/sessions.json (0 entries)

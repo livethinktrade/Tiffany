@@ -1,0 +1,9 @@
+{
+  "id": "6",
+  "subject": "Run verification tests",
+  "description": "Test: ClawdBot status, Telegram webhook registration, Obsidian read/write, NocoDB connectivity, end-to-end message flow",
+  "activeForm": "Running verification tests",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

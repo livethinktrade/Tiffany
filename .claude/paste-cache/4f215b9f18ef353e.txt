@@ -1,0 +1,62 @@
+🦞 Clawdbot 2026.1.24-3 (885167d) — Turning "I'll reply later" into "my bot replied instantly".
+
+Restarted systemd service: clawdbot-gateway.service
+root@srv816737:~# clawdbot channels --help
+
+🦞 Clawdbot 2026.1.24-3 (885167d)
+   I speak fluent bash, mild sarcasm, and aggressive tab-completion energy.
+
+Usage: clawdbot channels [options] [command]
+
+Manage chat channel accounts
+
+Options:
+  -h, --help    display help for command
+
+Commands:
+  list          List configured channels + auth profiles
+  status        Show gateway channel status (use status --deep for local)
+  capabilities  Show provider capabilities (intents/scopes + supported features)
+  resolve       Resolve channel/user names to IDs
+  logs          Show recent channel logs from the gateway log file
+  add           Add or update a channel account
+  remove        Disable or delete a channel account
+  login         Link a channel account (if supported)
+  logout        Log out of a channel session (if supported)
+  help          display help for command
+
+Docs: docs.clawd.bot/cli/channels
+
+root@srv816737:~# clawdbot channels add
+
+🦞 Clawdbot 2026.1.24-3 (885167d)
+   WhatsApp automation without the "please accept our new privacy policy".
+
+┌  Channel setup
+│
+◇  Channel status ────────────────────────────╮
+│                                             │
+│  Telegram: not configured                   │
+│  WhatsApp: not configured                   │
+│  Discord: not configured                    │
+│  Google Chat: not configured                │
+│  Slack: not configured                      │
+│  Signal: not configured                     │
+│  iMessage: not configured                   │
+│  Google Chat: install plugin to enable      │
+│  Nostr: install plugin to enable            │
+│  Microsoft Teams: install plugin to enable  │
+│  Mattermost: install plugin to enable       │
+│  Nextcloud Talk: install plugin to enable   │
+│  Matrix: install plugin to enable           │
+│  BlueBubbles: install plugin to enable      │
+│  LINE: install plugin to enable             │
+│  Zalo: install plugin to enable             │
+│  Zalo Personal: install plugin to enable    │
+│  Tlon: install plugin to enable             │
+│                                             │
+├─────────────────────────────────────────────╯
+│
+◆  Configure chat channels now?
+│  ● Yes / ○ No
+└

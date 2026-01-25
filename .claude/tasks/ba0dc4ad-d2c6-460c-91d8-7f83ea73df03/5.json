@@ -1,0 +1,9 @@
+{
+  "id": "5",
+  "subject": "Configure Telegram integration for Tiffany bot",
+  "description": "Configure ClawdBot with Telegram token 8161323254:AAFnWrxVwdQris3IpYg1YMVZ0evzCL6Oo-g, enable webhook, set system prompt for Tiffany personality",
+  "activeForm": "Configuring Telegram integration",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

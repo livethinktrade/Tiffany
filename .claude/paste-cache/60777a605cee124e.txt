@@ -1,0 +1,296 @@
+root@srv816737:~# npm install -g clawdbot@latest
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'clawdbot@2026.1.24-3',
+npm WARN EBADENGINE   required: { node: '>=22.12.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/client-bedrock@3.975.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@line/bot-sdk@10.6.0',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@mariozechner/pi-agent-core@0.49.3',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@mariozechner/pi-ai@0.49.3',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@mariozechner/pi-coding-agent@0.49.3',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@mariozechner/pi-tui@0.49.3',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@whiskeysockets/baileys@7.0.0-rc.9',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'chokidar@5.0.0',
+npm WARN EBADENGINE   required: { node: '>= 20.19.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'commander@14.0.2',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'file-type@21.3.0',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'osc-progress@0.3.0',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'pdfjs-dist@5.4.530',
+npm WARN EBADENGINE   required: { node: '>=20.16.0 || >=22.3.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'undici@7.19.1',
+npm WARN EBADENGINE   required: { node: '>=20.18.1' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/core@3.973.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/credential-provider-node@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/middleware-host-header@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/middleware-logger@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/middleware-recursion-detection@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/middleware-user-agent@3.972.2',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/region-config-resolver@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/token-providers@3.975.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/types@3.973.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/util-endpoints@3.972.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/util-user-agent-node@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/util-locate-window@3.965.3',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/xml-builder@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/credential-provider-env@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/credential-provider-http@3.972.2',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/credential-provider-ini@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/credential-provider-process@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/credential-provider-sso@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/credential-provider-web-identity@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/credential-provider-login@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/nested-clients@3.974.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/client-sso@3.974.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/token-providers@3.974.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/nested-clients@3.975.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/types@3.972.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/client-bedrock-runtime@3.975.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@google/genai@1.34.0',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/eventstream-handler-node@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/middleware-eventstream@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@aws-sdk/util-format-url@3.972.1',
+npm WARN EBADENGINE   required: { node: '>=20.0.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'glob@11.1.0',
+npm WARN EBADENGINE   required: { node: '20 || >=22' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'minimatch@10.1.1',
+npm WARN EBADENGINE   required: { node: '20 || >=22' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'lru-cache@11.2.4',
+npm WARN EBADENGINE   required: { node: '20 || >=22' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'p-queue@9.1.0',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'qified@0.6.0',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'hashery@1.4.0',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'readdirp@5.0.0',
+npm WARN EBADENGINE   required: { node: '>= 20.19.0' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'jackspeak@4.1.1',
+npm WARN EBADENGINE   required: { node: '20 || >=22' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'path-scurry@2.0.1',
+npm WARN EBADENGINE   required: { node: '20 || >=22' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@isaacs/brace-expansion@5.0.0',
+npm WARN EBADENGINE   required: { node: '20 || >=22' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@isaacs/balanced-match@4.0.1',
+npm WARN EBADENGINE   required: { node: '20 || >=22' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: 'p-timeout@7.0.1',
+npm WARN EBADENGINE   required: { node: '>=20' },
+npm WARN EBADENGINE   current: { node: 'v18.19.1', npm: '9.2.0' }
+npm WARN EBADENGINE }
+npm WARN deprecated npmlog@6.0.2: This package is no longer supported.
+npm WARN deprecated are-we-there-yet@3.0.1: This package is no longer supported.
+npm WARN deprecated gauge@4.0.4: This package is no longer supported.
+npm WARN deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+npm WARN deprecated tar@6.2.1: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
+npm ERR! code 1
+npm ERR! path /usr/local/lib/node_modules/clawdbot/node_modules/@whiskeysockets/baileys
+npm ERR! command failed
+npm ERR! command sh -c node ./engine-requirements.js
+npm ERR! ❌ This package requires Node.js 20+ to run reliably.
+npm ERR!    You are using Node.js 18.19.1.
+npm ERR!    Please upgrade to Node.js 20+ to proceed.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /root/.npm/_logs/2026-01-25T20_51_07_888Z-debug-0.log

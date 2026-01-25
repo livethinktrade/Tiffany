@@ -1,0 +1,9 @@
+{
+  "id": "4",
+  "subject": "Install ClawdBot on VPS",
+  "description": "Run ClawdBot one-line installer: curl -sSL https://claw.bot/install | bash",
+  "activeForm": "Installing ClawdBot",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

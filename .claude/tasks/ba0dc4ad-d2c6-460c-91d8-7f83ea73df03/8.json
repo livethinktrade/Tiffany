@@ -1,0 +1,9 @@
+{
+  "id": "8",
+  "subject": "Configure OpenRouter API key for ClawdBot agent",
+  "description": "Add OpenRouter API authentication so ClawdBot can call Claude and other models through OpenRouter API",
+  "activeForm": "Configuring Anthropic API authentication",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

@@ -1,0 +1,7 @@
+Yes, so a lot of the stuff that we're doing deployments in is we would submit an ITSM ticket, and everybody submits their scripts in, and we would deploy it out. Now, at that time, we're doing it manually, but eventually, what we ended up doing is we migrated to Azure DevOps, and that was automatically deployed.
+
+But during the time when we're doing things manually, one thing that I saw was sometimes when they deployed, and they actually were using Click Compose (Click Compose is a SQL generator), and they would do a couple of changes within the compose system, it would mess up the query optimization.
+
+For example, they would do that, and then we're trying to rebuild the data marts, it would cause a massive query execution issue which ultimately messes up the SLA times for delivery of 7 am or 6 am delivery time.
+
+So sometimes when we do that, I would have to go in and say, "Hey, make the call of this is like me to reverse these changes." Now, we try our best to do a zero-copy clone of the data in QA, however sometimes it's just different, it just performed differently. 

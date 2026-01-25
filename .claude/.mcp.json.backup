@@ -77,6 +77,16 @@
         "--extension"
       ],
       "description": "Browser automation and testing using Playwright for visual debugging and web interaction"
+    },
+    "NocoDB Base - Tiffany-PAI": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://nocodb.legacysearchers.agency/mcp/ncj9g4qbapgac8k3",
+        "--header",
+        "xc-mcp-token: bHiI6hCKntsM-KY6cXhEMgYo5H36AxpO"
+      ],
+      "description": "Personal NocoDB database for life gamification, dance practice tracking, and data migration from Airtable"
     }
   }
 }

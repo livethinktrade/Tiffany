@@ -1,0 +1,65 @@
+root@srv816737:~# journalctl -u clawdbot -n 100 --no-pager
+Jan 25 15:15:24 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:15:26 srv816737 clawdbot[1556924]: error: unknown command 'start'
+Jan 25 15:15:26 srv816737 clawdbot[1556924]: (Did you mean status?)
+Jan 25 15:15:26 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:15:26 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:15:26 srv816737 systemd[1]: clawdbot.service: Consumed 2.772s CPU time.
+Jan 25 15:15:36 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 1.
+Jan 25 15:15:36 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:15:38 srv816737 clawdbot[1556948]: error: unknown command 'start'
+Jan 25 15:15:38 srv816737 clawdbot[1556948]: (Did you mean status?)
+Jan 25 15:15:38 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:15:38 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:15:38 srv816737 systemd[1]: clawdbot.service: Consumed 2.843s CPU time.
+Jan 25 15:15:49 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 2.
+Jan 25 15:15:49 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:15:51 srv816737 clawdbot[1556988]: error: unknown command 'start'
+Jan 25 15:15:51 srv816737 clawdbot[1556988]: (Did you mean status?)
+Jan 25 15:15:51 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:15:51 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:15:51 srv816737 systemd[1]: clawdbot.service: Consumed 2.791s CPU time.
+Jan 25 15:16:01 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 3.
+Jan 25 15:16:01 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:16:03 srv816737 clawdbot[1557010]: error: unknown command 'start'
+Jan 25 15:16:03 srv816737 clawdbot[1557010]: (Did you mean status?)
+Jan 25 15:16:03 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:16:03 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:16:03 srv816737 systemd[1]: clawdbot.service: Consumed 3.083s CPU time.
+Jan 25 15:16:13 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 4.
+Jan 25 15:16:13 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:16:15 srv816737 clawdbot[1557030]: error: unknown command 'start'
+Jan 25 15:16:15 srv816737 clawdbot[1557030]: (Did you mean status?)
+Jan 25 15:16:16 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:16:16 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:16:16 srv816737 systemd[1]: clawdbot.service: Consumed 2.786s CPU time.
+Jan 25 15:16:26 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 5.
+Jan 25 15:16:26 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:16:28 srv816737 clawdbot[1557069]: error: unknown command 'start'
+Jan 25 15:16:28 srv816737 clawdbot[1557069]: (Did you mean status?)
+Jan 25 15:16:28 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:16:28 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:16:28 srv816737 systemd[1]: clawdbot.service: Consumed 2.867s CPU time.
+Jan 25 15:16:38 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 6.
+Jan 25 15:16:38 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:16:40 srv816737 clawdbot[1557089]: error: unknown command 'start'
+Jan 25 15:16:40 srv816737 clawdbot[1557089]: (Did you mean status?)
+Jan 25 15:16:40 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:16:40 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:16:40 srv816737 systemd[1]: clawdbot.service: Consumed 2.962s CPU time.
+Jan 25 15:16:51 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 7.
+Jan 25 15:16:51 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:16:53 srv816737 clawdbot[1557128]: error: unknown command 'start'
+Jan 25 15:16:53 srv816737 clawdbot[1557128]: (Did you mean status?)
+Jan 25 15:16:53 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:16:53 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:16:53 srv816737 systemd[1]: clawdbot.service: Consumed 2.951s CPU time.
+Jan 25 15:17:03 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 8.
+Jan 25 15:17:03 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.
+Jan 25 15:17:05 srv816737 clawdbot[1557152]: error: unknown command 'start'
+Jan 25 15:17:05 srv816737 clawdbot[1557152]: (Did you mean status?)
+Jan 25 15:17:05 srv816737 systemd[1]: clawdbot.service: Main process exited, code=exited, status=1/FAILURE
+Jan 25 15:17:05 srv816737 systemd[1]: clawdbot.service: Failed with result 'exit-code'.
+Jan 25 15:17:05 srv816737 systemd[1]: clawdbot.service: Consumed 3.008s CPU time.
+Jan 25 15:17:16 srv816737 systemd[1]: clawdbot.service: Scheduled restart job, restart counter is at 9.
+Jan 25 15:17:16 srv816737 systemd[1]: Started clawdbot.service - ClawdBot - Tiffany AI Assistant.

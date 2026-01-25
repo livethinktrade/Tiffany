@@ -1,0 +1,34 @@
+Background:
+Analyzing user engagement within Facebook groups during the first half of 2023 provides key insights beneficial to group administrators and the platform. Your role as a data analyst is to extract these valuable metrics surrounding user activity in these groups.
+
+Question: 
+Write a query to calculate the percentage of posts that received at least one reaction within the first 3 days of being posted for each group during the first half of 2023. Only consider groups with more than 15 posts. Order the groups based on this percentage in descending order.
+
+Tables: postsingroups, reactionsingroups, groups_fb
+
+Table names are CASE SENSITIVE
+
+Table Structure:
+
+Table: postsingroups
+ColumnName        Datatype
+post_id         INT
+user_id         INT
+group_id         INT
+content         TEXT
+post_date         DATE
+
+Table: reactionsingroups
+ColumnName        Datatype
+reaction_id     INT
+post_id         INT
+user_id         INT
+type             VARCHAR
+reaction_date     DATE
+
+Table: groups_fb
+ColumnName        Datatype
+group_id         INT
+group_name         VARCHAR
+creation_date     DATE
+admin_id         INT

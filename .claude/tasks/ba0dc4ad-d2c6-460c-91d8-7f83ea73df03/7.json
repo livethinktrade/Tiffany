@@ -1,0 +1,9 @@
+{
+  "id": "7",
+  "subject": "Run ClawdBot onboard wizard",
+  "description": "Execute `clawdbot onboard` to properly configure gateway, workspace, Telegram integration, and skills",
+  "activeForm": "Running ClawdBot onboard wizard",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

@@ -1,0 +1,9 @@
+{
+  "id": "2",
+  "subject": "Setup Obsidian vault access",
+  "description": "Configure ClawdBot to access Obsidian vault at /root/obsidian_vault/ with paths: telos/, daily_notes/, projects/, coaching_insights/",
+  "activeForm": "Setting up Obsidian access",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

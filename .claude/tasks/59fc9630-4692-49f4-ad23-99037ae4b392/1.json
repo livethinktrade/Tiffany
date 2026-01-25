@@ -1,0 +1,9 @@
+{
+  "id": "1",
+  "subject": "Extract ClawdBot features from YouTube transcripts",
+  "description": "Read all 4 YouTube transcript .txt files, identify cool ClawdBot capabilities and workflows mentioned, compile into bulleted markdown list for implementation ideas",
+  "activeForm": "Extracting ClawdBot capabilities from transcripts",
+  "status": "in_progress",
+  "blocks": [],
+  "blockedBy": []
+}

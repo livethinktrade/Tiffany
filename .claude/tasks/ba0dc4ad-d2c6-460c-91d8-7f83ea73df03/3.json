@@ -1,0 +1,9 @@
+{
+  "id": "3",
+  "subject": "Create dedicated clawdbot user with security hardening",
+  "description": "Create non-root user 'clawdbot' with proper permissions, home directory structure, and limited sudo access for service management only",
+  "activeForm": "Creating dedicated clawdbot user",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}
