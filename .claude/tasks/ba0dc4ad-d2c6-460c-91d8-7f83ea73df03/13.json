@@ -1,0 +1,9 @@
+{
+  "id": "13",
+  "subject": "Update Tiffany_Gains_Schedule workflow",
+  "description": "Replace Telegram Send Message node with HTTP Request node. Workflow ID: wk3JEQDGqaMvBkIk",
+  "activeForm": "Updating gains schedule workflow",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

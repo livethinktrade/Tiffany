@@ -1,0 +1,9 @@
+{
+  "id": "14",
+  "subject": "Update Tiffany_DailyQuote_Schedule workflow",
+  "description": "Replace Telegram Send Message node with HTTP Request node to call Telegram Bot API directly. Workflow ID: BVYWx2gzdQeuFevb",
+  "activeForm": "Updating daily quote workflow",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

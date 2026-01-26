@@ -1,0 +1,9 @@
+{
+  "id": "9",
+  "subject": "Backup and delete Tiffany_AccountabilityAgent workflow",
+  "description": "Export old 85-node Tiffany_AccountabilityAgent workflow (ID: qNqFdwPIbfnsTQt5) as backup, then delete from N8N since ClawdBot replaced it",
+  "activeForm": "Backing up and deleting old workflow",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}
