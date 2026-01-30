@@ -1,0 +1,9 @@
+{
+  "voiceProvider": "elevenlabs",
+  "elevenlabs": {
+    "voiceId": "jqcCZkN6Knx8BJ5TBdYR"
+  },
+  "macos": {
+    "voice": "Reed"
+  }
+}

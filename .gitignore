@@ -66,3 +66,24 @@ credentials/
 .claude/pai_updates/
 .claude/pai_backups/
 .claude/.pai-sync-history
+
+# PAI Runtime/Session Data (not for version control)
+.claude/cache/
+.claude/debug/
+.claude/file-history/
+.claude/projects/
+.claude/shell-snapshots/
+.claude/todos/
+.claude/session-env/
+.claude/stats-cache.json
+.claude/paste-cache/
+.claude/plans/
+.claude/telemetry/
+.claude/tasks/
+
+# Backup directories
+.claude-partial-backup-*/
+
+# Python cache
+__pycache__/
+*.pyc
