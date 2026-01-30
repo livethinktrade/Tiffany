@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "NocoDB Base - Tiffany-PAI": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://nocodb.legacysearchers.agency/mcp/ncj9g4qbapgac8k3",
+        "--header",
+        "xc-mcp-token: bHiI6hCKntsM-KY6cXhEMgYo5H36AxpO"
+      ],
+      "description": "Personal NocoDB database for life gamification, dance practice tracking, and data migration from Airtable"
+    },
+    "NocoDB Base - Dance-Practice": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://nocodb.legacysearchers.agency/mcp/ncyctd6u3opeax37",
+        "--header",
+        "xc-mcp-token: -zjDseeqcxaRx79Mm8JADm0L589QKhqm"
+      ],
+      "description": "Dance Practice System - Hybrid NocoDB + Obsidian architecture for structured move tracking and bot queries"
+    },
+    "N8N": {
+      "command": "npx",
+      "args": [
+        "n8n-mcp"
+      ],
+      "env": {
+        "N8N_BASE_URL": "https://n8n.srv816737.hstgr.cloud",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5YTljYjZhYS0xYzZhLTRhNzAtYjdjOC04ZGQ1MmFiOGNmYjciLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzY5MzMwMjMyLCJleHAiOjE3NzE5MTI4MDB9.NSMv0WFUdop0O33C7QYZ6wTXe6QgiDzrxjLztuG44Y0"
+      },
+      "description": "N8N workflow automation for Dance Practice System bot integration"
+    }
+  }
+}
