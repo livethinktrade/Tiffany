@@ -1,0 +1,9 @@
+{
+  "id": "3",
+  "subject": "Modify server.ts for local TTS engine support",
+  "description": "Add TTS_ENGINE env var, generateSpeechLocal() function, playAudioFile() for WAV, update sendNotification() branching, update /health endpoint",
+  "activeForm": "Modifying server.ts for local TTS",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

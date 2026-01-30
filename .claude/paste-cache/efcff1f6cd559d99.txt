@@ -1,0 +1,43 @@
+17:50:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=62c10f4a-d017-4706-90f3-bce057022294 tool= toolCallId=call_4a82df8041d147f6b8f25945
+17:50:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=62c10f4a-d017-4706-90f3-bce057022294 tool= toolCallId=call_4a82df8041d147f6b8f25945
+17:50:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=62c10f4a-d017-4706-90f3-bce057022294 tool= toolCallId=call_f4440dbf64da4458ab9aecef
+17:50:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=62c10f4a-d017-4706-90f3-bce057022294 tool= toolCallId=call_f4440dbf64da4458ab9aecef
+17:50:38 info gateway/reload {"subsystem":"gateway/reload"} config change detected; evaluating reload (meta.lastTouchedAt, wizard.lastRunAt, agents.defaults.model.primary, agents.defaults.model.fallbacks, agents.defaults.models.openrouter/auto, agents.defaults.models.openrouter/google/gemini-2.5-flash-lite, agents.defaults.models.openrouter/google/gemma-3-27b-it:free, agents.defaults.models.openrouter/openai/gpt-5-nano, agents.defaults.models.openrouter/openai/gpt-5-mini, agents.defaults.models.openrouter/openai/gpt-4.1-mini, agents.defaults.models.openrouter/x-ai/grok-4.1-fast, agents.defaults.models.openrouter/minimax/minimax-m2, agents.defaults.models.openrouter/anthropic/claude-opus-4.5, agents.defaults.models.openrouter/anthropic/claude-haiku-4.5, agents.defaults.models.openrouter/deepseek/deepseek-v3.2, agents.defaults.models.openrouter/google/gemini-2.5-pro, agents.defaults.contextPruning, agents.defaults.heartbeat)
+17:50:38 warn gateway/reload {"subsystem":"gateway/reload"} config change requires gateway restart (meta.lastTouchedAt)
+17:50:38 info gateway {"subsystem":"gateway"} signal SIGUSR1 received
+17:50:38 info gateway {"subsystem":"gateway"} received SIGUSR1; restarting
+17:50:38 info gmail-watcher {"subsystem":"gmail-watcher"} gmail watcher stopped
+17:50:39 error [clawdbot] Unhandled promise rejection: AbortError: This operation was aborted
+    at node:internal/deps/undici/undici:14902:13
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+17:50:50 info gateway/canvas {"subsystem":"gateway/canvas"} canvas host mounted at http://127.0.0.1:18789/__clawdbot__/canvas/ (root /root/clawd/canvas)
+17:50:50 info gateway/heartbeat {"subsystem":"gateway/heartbeat"} {"intervalMs":3600000} heartbeat: started
+17:50:50 info gateway {"subsystem":"gateway"} agent model: openrouter/auto
+17:50:50 info gateway {"subsystem":"gateway"} listening on ws://127.0.0.1:18789 (PID 59056)
+17:50:50 info gateway {"subsystem":"gateway"} listening on ws://[::1]:18789
+17:50:50 info gateway {"subsystem":"gateway"} log file: /tmp/clawdbot/clawdbot-2026-01-26.log
+17:50:50 info browser/server {"subsystem":"browser/server"} Browser control listening on http://127.0.0.1:18791/
+17:50:50 info cron {"module":"cron","storePath":"/root/.clawdbot/cron/jobs.json"} {"enabled":true,"jobs":0,"nextWakeAtMs":null} cron: started
+17:50:50 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} [default] starting provider (@tiffany_eabot)
+17:50:50 debug skills {"subsystem":"skills"} {"rawName":"openai-image-gen","sanitized":"/openai_image_gen"} Sanitized skill command name "openai-image-gen" to "/openai_image_gen".
+17:50:50 debug skills {"subsystem":"skills"} {"rawName":"openai-whisper","sanitized":"/openai_whisper"} Sanitized skill command name "openai-whisper" to "/openai_whisper".
+17:50:50 debug skills {"subsystem":"skills"} {"rawName":"openai-whisper-api","sanitized":"/openai_whisper_api"} Sanitized skill command name "openai-whisper-api" to "/openai_whisper_api".
+17:50:50 debug skills {"subsystem":"skills"} {"rawName":"skill-creator","sanitized":"/skill_creator"} Sanitized skill command name "skill-creator" to "/skill_creator".
+17:50:50 debug skills {"subsystem":"skills"} {"rawName":"video-frames","sanitized":"/video_frames"} Sanitized skill command name "video-frames" to "/video_frames".
+17:50:51 info bonjour: advertised gateway fqdn=srv816737 (Clawdbot)._clawdbot-gw._tcp.local. host=srv816737.local. port=18789 state=announcing
+17:51:09 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+17:51:09 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=8 queueSize=0
+17:51:09 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+17:51:09 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+17:51:09 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=1 error="Error: Unknown model: openrouter/auto"
+17:51:09 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=5 error="Error: Unknown model: openrouter/auto"
+17:51:09 error Embedded agent failed before reply: Unknown model: openrouter/auto
+17:55:09 error Error: Config validation failed: <root>: Unrecognized key: "routing"
+17:59:49 info gateway/reload {"subsystem":"gateway/reload"} config change detected; evaluating reload (agents.defaults.model.primary, agents.defaults.contextPruning, agents.defaults.heartbeat)
+17:59:49 info gateway/reload {"subsystem":"gateway/reload"} config hot reload applied (agents.defaults.heartbeat)
+18:00:08 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+18:00:08 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=13 queueSize=0
+18:00:08 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+18:00:08 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+18:00:08 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=1 error="Error: Unknown model: openrouter/auto"
+18:00:08 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=7 error="Error: Unknown model: openrouter/auto"

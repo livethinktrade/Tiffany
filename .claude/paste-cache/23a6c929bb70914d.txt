@@ -1,0 +1,346 @@
+root@srv816737:~#  clawdbot status
+
+🦞 Clawdbot 2026.1.24-3 (885167d)
+   Type the command with confidence—nature will provide the stack trace if needed.
+
+│
+◇
+│
+◇
+Clawdbot status
+
+Overview
+┌─────────────────┬────────────────────────────────────────────────────┐
+│ Item            │ Value                                              │
+├─────────────────┼────────────────────────────────────────────────────┤
+│ Dashboard       │ http://127.0.0.1:18789/                            │
+│ OS              │ linux 6.8.0-86-generic (x64) · node 22.22.0        │
+│ Tailscale       │ off                                                │
+│ Channel         │ stable (default)                                   │
+│ Update          │ pnpm · npm latest 2026.1.24-3                      │
+│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) ·    │
+│                 │ reachable 38ms · auth token · srv816737 (167.88.   │
+│                 │ 42.12) app unknown linux 6.8.0-86-generic          │
+│ Gateway service │ systemd installed · enabled · running (pid         │
+│                 │ 1580691, state active)                             │
+│ Node service    │ systemd not installed                              │
+│ Agents          │ 1 · 1 bootstrapping · sessions 1 · default main    │
+│                 │ active 4m ago                                      │
+│ Memory          │ 0 files · 0 chunks · dirty · sources memory ·      │
+│                 │ plugin memory-core · vector ready · fts ready ·    │
+│                 │ cache on (0)                                       │
+│ Probes          │ skipped (use --deep)                               │
+│ Events          │ none                                               │
+│ Heartbeat       │ 30m (main)                                         │
+│ Sessions        │ 1 active · default minimax/minimax-m2.1 (197k      │
+│                 │ ctx) · ~/.clawdbot/agents/main/sessions/sessions.  │
+│                 │ json                                               │
+└─────────────────┴────────────────────────────────────────────────────┘
+
+Security audit
+Summary: 0 critical · 2 warn · 1 info
+  WARN Reverse proxy headers are not trusted
+    gateway.bind is loopback and gateway.trustedProxies is empty. If you expose the Control UI through a reverse proxy, configure trusted proxies so local-client c…
+    Fix: Set gateway.trustedProxies to your proxy IPs or keep the Control UI local-only.
+  WARN Some configured models are below recommended tiers
+    Smaller/older models are generally more susceptible to prompt injection and tool misuse. - openrouter/anthropic/claude-haiku-4.5 (Haiku tier (smaller model)) @…
+    Fix: Use the latest, top-tier model for any bot with tools or untrusted inboxes. Avoid Haiku tiers; prefer GPT-5+ and Claude 4.5+.
+Full report: clawdbot security audit
+Deep probe: clawdbot security audit --deep
+
+Channels
+┌──────────┬─────────┬────────┬────────────────────────────────────────┐
+│ Channel  │ Enabled │ State  │ Detail                                 │
+├──────────┼─────────┼────────┼────────────────────────────────────────┤
+│ Telegram │ ON      │ OK     │ token config (8161…Oo-g · len 46) ·    │
+│          │         │        │ accounts 1/1                           │
+│ WhatsApp │ ON      │ WARN   │ missing file (~/.clawdbot/credentials/ │
+│          │         │        │ whatsapp/default) · gateway: Not       │
+│          │         │        │ linked (no WhatsApp Web session).      │
+└──────────┴─────────┴────────┴────────────────────────────────────────┘
+
+Sessions
+┌───────────┬────────┬─────────┬──────────────────────┬────────────────┐
+│ Key       │ Kind   │ Age     │ Model                │ Tokens         │
+├───────────┼────────┼─────────┼──────────────────────┼────────────────┤
+│ agent:mai │ direct │ 4m ago  │ minimax/minimax-m2.1 │ 69k/197k (35%) │
+│ n:main    │        │         │                      │                │
+└───────────┴────────┴─────────┴──────────────────────┴────────────────┘
+
+FAQ: https://docs.clawd.bot/faq
+Troubleshooting: https://docs.clawd.bot/troubleshooting
+
+Next steps:
+  Need to share?      clawdbot status --all
+  Need to debug live? clawdbot logs --follow
+  Need to test channels? clawdbot status --deep
+root@srv816737:~# clawdbot healt
+error: unknown command 'healt'
+(Did you mean health?)
+root@srv816737:~# clawdbot health
+
+🦞 Clawdbot 2026.1.24-3 (885167d)
+   I'll butter your workflow like a lobster roll: messy, delicious, effective.
+
+│
+◇
+Telegram: ok (@tiffany_eabot) (167ms)
+WhatsApp: not linked
+Agents: main (default)
+Heartbeat interval: 30m (main)
+Session store (main): /root/.clawdbot/agents/main/sessions/sessions.json (1 entries)
+- agent:main:main (5m ago)
+root@srv816737:~# clawdbot models status
+
+🦞 Clawdbot 2026.1.24-3 (885167d)
+   Chat automation for people who peaked at IRC.
+
+Config        : ~/.clawdbot/clawdbot.json
+Agent dir     : ~/.clawdbot/agents/main/agent
+Default       : openrouter/minimax/minimax-m2.1
+Fallbacks (9) : openrouter/anthropic/claude-haiku-4.5, openrouter/anthropic/claude-opus-4.5, openrouter/deepseek/deepseek-v3.2, openrouter/google/gemini-2.5-flash, openrouter/google/gemini-2.5-pro, openrouter/minimax/minimax-m2.1, openrouter/x-ai/grok-code-fast-1, openrouter/deepseek/deepseek-chat-v3-0324, openrouter/x-ai/grok-4.1-fast
+Image model   : -
+Image fallbacks (0): -
+Aliases (1)   : OpenRouter -> openrouter/auto
+Configured models (10): openrouter/auto, openrouter/anthropic/claude-haiku-4.5, openrouter/anthropic/claude-opus-4.5, openrouter/deepseek/deepseek-v3.2, openrouter/google/gemini-2.5-flash, openrouter/google/gemini-2.5-pro, openrouter/minimax/minimax-m2.1, openrouter/x-ai/grok-code-fast-1, openrouter/deepseek/deepseek-chat-v3-0324, openrouter/x-ai/grok-4.1-fast
+
+Auth overview
+Auth store    : ~/.clawdbot/agents/main/agent/auth-profiles.json
+Shell env     : off
+Providers w/ OAuth/tokens (0): -
+- openai effective=env:sk-or-v1...5a868b3e | env=sk-or-v1...5a868b3e | source=env: OPENAI_API_KEY
+- openrouter effective=profiles:~/.clawdbot/agents/main/agent/auth-profiles.json | profiles=1 (oauth=0, token=0, api_key=1) | openrouter:default=sk-or-v1...279e630b
+
+OAuth/token status
+- none
+root@srv816737:~# systemctl --user status clawdbot-gateway
+● clawdbot-gateway.service - Clawdbot Gateway (v2026.1.24-3)
+     Loaded: loaded (/root/.config/systemd/user/clawdbot-gateway.service>
+     Active: active (running) since Sun 2026-01-25 22:13:31 CST; 8min ago
+   Main PID: 1580691 (clawdbot)
+      Tasks: 20 (limit: 9485)
+     Memory: 336.4M (peak: 381.3M)
+        CPU: 14.184s
+     CGroup: /user.slice/user-0.slice/user@0.service/app.slice/clawdbot->
+             ├─1580691 clawdbot
+             └─1580715 clawdbot-gateway
+
+Jan 25 22:13:31 srv816737 systemd[1580678]: Started clawdbot-gateway.ser>
+Jan 25 22:13:40 srv816737 node[1580715]: 2026-01-26T04:13:40.564Z [canva>
+Jan 25 22:13:40 srv816737 node[1580715]: 2026-01-26T04:13:40.784Z [heart>
+Jan 25 22:13:40 srv816737 node[1580715]: 2026-01-26T04:13:40.793Z [gatew>
+Jan 25 22:13:40 srv816737 node[1580715]: 2026-01-26T04:13:40.796Z [gatew>
+Jan 25 22:13:40 srv816737 node[1580715]: 2026-01-26T04:13:40.797Z [gatew>
+Jan 25 22:13:40 srv816737 node[1580715]: 2026-01-26T04:13:40.799Z [gatew>
+Jan 25 22:13:40 srv816737 node[1580715]: 2026-01-26T04:13:40.857Z [brows>
+Jan 25 22:13:41 srv816737 node[1580715]: 2026-01-26T04:13:41.657Z [teleg>
+lines 1-20/20 (END)
+
+root@srv816737:~#
+root@srv816737:~#
+root@srv816737:~# clawdbot logs --follow
+
+🦞 Clawdbot 2026.1.24-3 (885167d) — Meta wishes they shipped this fast.
+
+Log file: /tmp/clawdbot/clawdbot-2026-01-25.log
+00:04:58 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb tool=read toolCallId=call_c8a1d39f56dd4e58a291c17d
+00:05:00 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb tool=memory_search toolCallId=call_05fd9d9b52384b47832f83d7
+00:05:01 debug memory {"subsystem":"memory"} {"provider":"openai","timeoutMs":60000} memory embeddings: query start
+00:05:01 debug memory {"subsystem":"memory"} {"files":0,"needsFullReindex":true,"batch":true,"concurrency":2} memory sync: indexing memory files
+00:05:01 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb tool=memory_search toolCallId=call_05fd9d9b52384b47832f83d7
+00:05:03 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb tool=read toolCallId=call_85ed124b83ef4af699cdecb9
+00:05:03 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb tool=read toolCallId=call_85ed124b83ef4af699cdecb9
+00:05:06 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb tool=exec toolCallId=call_df08de39a0d94397993d1040
+00:05:13 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb tool=exec toolCallId=call_df08de39a0d94397993d1040
+00:05:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb
+00:05:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=22785
+00:05:16 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+00:05:16 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+00:05:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=83b29284-a3c5-4880-9d82-3d9edd9690cb sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=22812 aborted=false
+00:05:16 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=22820 active=0 queued=0
+00:05:16 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=22822 active=0 queued=0
+00:05:25 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+00:05:25 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=9 queueSize=0
+00:05:25 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+00:05:25 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+00:05:25 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=a3fac5bf-2727-418f-963f-6e56c9897bda sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=minimax/minimax-m2.1 thinking=low messageChannel=telegram
+00:05:25 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+00:05:25 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+00:05:25 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=a3fac5bf-2727-418f-963f-6e56c9897bda sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+00:05:25 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=a3fac5bf-2727-418f-963f-6e56c9897bda
+00:05:27 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=a3fac5bf-2727-418f-963f-6e56c9897bda tool=exec toolCallId=call_393555199b664eb19f59e6ca
+00:05:29 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=a3fac5bf-2727-418f-963f-6e56c9897bda tool=exec toolCallId=call_393555199b664eb19f59e6ca
+00:05:31 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=a3fac5bf-2727-418f-963f-6e56c9897bda
+00:05:31 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=a3fac5bf-2727-418f-963f-6e56c9897bda sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=5772
+00:05:31 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+00:05:31 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+00:05:31 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=a3fac5bf-2727-418f-963f-6e56c9897bda sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=5807 aborted=false
+00:05:31 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=5811 active=0 queued=0
+00:05:31 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=5815 active=0 queued=0
+00:10:41 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+00:10:41 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=7 queueSize=0
+00:10:41 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+00:10:41 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=0 queueSize=0
+00:10:41 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=minimax/minimax-m2.1 thinking=low messageChannel=telegram
+00:10:41 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+00:10:41 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+00:10:41 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+00:10:41 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57
+00:10:48 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=read toolCallId=call_dQNcR9opFIs9oYpeMYVjeCB5
+00:10:48 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=read toolCallId=call_dQNcR9opFIs9oYpeMYVjeCB5
+00:10:48 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=read toolCallId=call_RMi4DZ8JuRShoAqJJCczegF7
+00:10:48 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=read toolCallId=call_RMi4DZ8JuRShoAqJJCczegF7
+00:10:48 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=read toolCallId=call_9jkWSaIYqEvT9LoJylZJzUk5
+00:10:48 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=read toolCallId=call_9jkWSaIYqEvT9LoJylZJzUk5
+00:11:00 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_33600e4bf9de487d92e35d68
+00:11:00 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_33600e4bf9de487d92e35d68
+00:11:00 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_9590cbeae3ff4758961665fc
+00:11:00 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_9590cbeae3ff4758961665fc
+00:11:00 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=read toolCallId=call_ee8b6d72010c4a90ac6fe9b9
+00:11:00 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=read toolCallId=call_ee8b6d72010c4a90ac6fe9b9
+00:11:09 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_1c19d2c216dc454a88c1aa5d
+00:11:09 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_1c19d2c216dc454a88c1aa5d
+00:11:09 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_fb32dff88b8a4f45a8b85796
+00:11:09 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_fb32dff88b8a4f45a8b85796
+00:11:09 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_e7cedd67577343b097b68fa3
+00:11:09 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_e7cedd67577343b097b68fa3
+00:11:09 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_2be8e87f070144c196a21d93
+00:11:09 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_2be8e87f070144c196a21d93
+00:11:12 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_a4618d25525d4ef29c0f6601
+00:11:12 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_a4618d25525d4ef29c0f6601
+00:11:12 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_49ccd6c1471c42ff9a61a5f4
+00:11:12 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_49ccd6c1471c42ff9a61a5f4
+00:11:12 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_e71f02f1069849059d536406
+00:11:12 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_e71f02f1069849059d536406
+00:11:12 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_7e39a49af349447c9d2494ef
+00:11:12 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_7e39a49af349447c9d2494ef
+00:11:13 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_897a18520b2d44b0bdb14e89
+00:11:13 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool=exec toolCallId=call_897a18520b2d44b0bdb14e89
+00:11:13 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_0c3860b88f9f46aeb0466074
+00:11:13 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 tool= toolCallId=call_0c3860b88f9f46aeb0466074
+00:11:22 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57
+00:11:22 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=40870
+00:11:22 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+00:11:22 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+00:11:22 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=fa550fde-7d52-4ade-b5e6-f5d2ac2c4b57 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=40897 aborted=false
+00:11:22 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=40902 active=0 queued=0
+00:11:22 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=40904 active=0 queued=0
+01:56:53 info gateway {"subsystem":"gateway"} signal SIGTERM received
+01:56:53 info gateway {"subsystem":"gateway"} received SIGTERM; shutting down
+01:56:53 info gmail-watcher {"subsystem":"gmail-watcher"} gmail watcher stopped
+02:15:40 info gateway/canvas {"subsystem":"gateway/canvas"} canvas host mounted at http://127.0.0.1:18789/__clawdbot__/canvas/ (root /root/clawd/canvas)
+02:15:40 info gateway/heartbeat {"subsystem":"gateway/heartbeat"} {"intervalMs":1800000} heartbeat: started
+02:15:40 info gateway {"subsystem":"gateway"} agent model: openrouter/minimax/minimax-m2.1
+02:15:40 info gateway {"subsystem":"gateway"} listening on ws://127.0.0.1:18789 (PID 1574870)
+02:15:40 info gateway {"subsystem":"gateway"} listening on ws://[::1]:18789
+02:15:40 info gateway {"subsystem":"gateway"} log file: /tmp/clawdbot/clawdbot-2026-01-25.log
+02:15:40 info browser/server {"subsystem":"browser/server"} Browser control listening on http://127.0.0.1:18791/
+02:15:40 info cron {"module":"cron","storePath":"/root/.clawdbot/cron/jobs.json"} {"enabled":true,"jobs":0,"nextWakeAtMs":null} cron: started
+02:15:40 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} [default] starting provider (@tiffany_eabot)
+02:15:41 debug skills {"subsystem":"skills"} {"rawName":"openai-image-gen","sanitized":"/openai_image_gen"} Sanitized skill command name "openai-image-gen" to "/openai_image_gen".
+02:15:41 debug skills {"subsystem":"skills"} {"rawName":"openai-whisper-api","sanitized":"/openai_whisper_api"} Sanitized skill command name "openai-whisper-api" to "/openai_whisper_api".
+02:15:41 debug skills {"subsystem":"skills"} {"rawName":"skill-creator","sanitized":"/skill_creator"} Sanitized skill command name "skill-creator" to "/skill_creator".
+02:15:41 info bonjour: advertised gateway fqdn=srv816737 (Clawdbot)._clawdbot-gw._tcp.local. host=srv816737.local. port=18789 state=announcing
+02:15:42 info gateway {"subsystem":"gateway"} signal SIGTERM received
+02:15:42 info gateway {"subsystem":"gateway"} received SIGTERM; shutting down
+02:15:42 info gmail-watcher {"subsystem":"gmail-watcher"} gmail watcher stopped
+04:13:40 info gateway/canvas {"subsystem":"gateway/canvas"} canvas host mounted at http://127.0.0.1:18789/__clawdbot__/canvas/ (root /root/clawd/canvas)
+04:13:40 info gateway/heartbeat {"subsystem":"gateway/heartbeat"} {"intervalMs":1800000} heartbeat: started
+04:13:40 info gateway {"subsystem":"gateway"} agent model: openrouter/minimax/minimax-m2.1
+04:13:40 info gateway {"subsystem":"gateway"} listening on ws://127.0.0.1:18789 (PID 1580715)
+04:13:40 info gateway {"subsystem":"gateway"} listening on ws://[::1]:18789
+04:13:40 info gateway {"subsystem":"gateway"} log file: /tmp/clawdbot/clawdbot-2026-01-25.log
+04:13:40 info browser/server {"subsystem":"browser/server"} Browser control listening on http://127.0.0.1:18791/
+04:13:40 info cron {"module":"cron","storePath":"/root/.clawdbot/cron/jobs.json"} {"enabled":true,"jobs":0,"nextWakeAtMs":null} cron: started
+04:13:41 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} [default] starting provider (@tiffany_eabot)
+04:13:41 debug skills {"subsystem":"skills"} {"rawName":"openai-image-gen","sanitized":"/openai_image_gen"} Sanitized skill command name "openai-image-gen" to "/openai_image_gen".
+04:13:41 debug skills {"subsystem":"skills"} {"rawName":"openai-whisper-api","sanitized":"/openai_whisper_api"} Sanitized skill command name "openai-whisper-api" to "/openai_whisper_api".
+04:13:41 debug skills {"subsystem":"skills"} {"rawName":"skill-creator","sanitized":"/skill_creator"} Sanitized skill command name "skill-creator" to "/skill_creator".
+04:13:41 info bonjour: advertised gateway fqdn=srv816737 (Clawdbot)._clawdbot-gw._tcp.local. host=srv816737.local. port=18789 state=announcing
+04:13:44 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+04:13:44 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=16 queueSize=0
+04:13:44 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+04:13:44 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+04:13:44 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=minimax/minimax-m2.1 thinking=low messageChannel=telegram
+04:13:44 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+04:13:44 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+04:13:44 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+04:13:44 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad
+04:13:57 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad tool=read toolCallId=call_e537590dd9164a4096d299b4
+04:13:57 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad tool=read toolCallId=call_e537590dd9164a4096d299b4
+04:14:03 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad tool=exec toolCallId=call_806cb20c7563499f9a8f4795
+04:14:03 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad tool=exec toolCallId=call_806cb20c7563499f9a8f4795
+04:14:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad
+04:14:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=39151
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+04:14:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=3ddd0a3e-e1e1-470a-94f7-050a0f1112ad sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=39376 aborted=false
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=39382 active=0 queued=0
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=39392 active=0 queued=0
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=5 queueSize=0
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+04:14:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=ad9cabca-b469-46dd-9d2c-a00ca986118c sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=minimax/minimax-m2.1 thinking=low messageChannel=telegram
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+04:14:23 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+04:14:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=ad9cabca-b469-46dd-9d2c-a00ca986118c sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+04:14:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=ad9cabca-b469-46dd-9d2c-a00ca986118c
+04:14:29 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=ad9cabca-b469-46dd-9d2c-a00ca986118c
+04:14:29 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=ad9cabca-b469-46dd-9d2c-a00ca986118c sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=5880
+04:14:29 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+04:14:29 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+04:14:29 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=ad9cabca-b469-46dd-9d2c-a00ca986118c sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=5903 aborted=false
+04:14:29 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=5906 active=0 queued=0
+04:14:29 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=5907 active=0 queued=0
+04:14:32 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+04:14:32 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=7 queueSize=0
+04:14:32 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+04:14:32 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=0 queueSize=0
+04:14:32 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=8d64a8be-c594-4c87-97b9-8f340b6985a5 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=minimax/minimax-m2.1 thinking=low messageChannel=telegram
+04:14:32 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+04:14:32 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+04:14:32 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=8d64a8be-c594-4c87-97b9-8f340b6985a5 sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+04:14:32 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=8d64a8be-c594-4c87-97b9-8f340b6985a5
+04:14:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=8d64a8be-c594-4c87-97b9-8f340b6985a5
+04:14:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=8d64a8be-c594-4c87-97b9-8f340b6985a5 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=5118
+04:14:37 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+04:14:37 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+04:14:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=8d64a8be-c594-4c87-97b9-8f340b6985a5 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=5147 aborted=false
+04:14:37 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=5152 active=0 queued=0
+04:14:37 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=5154 active=0 queued=0
+04:16:22 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+04:16:22 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=8 queueSize=0
+04:16:22 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+04:16:22 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+04:16:22 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=623fd1de-b5ae-4ef5-9196-1520d4123d9d sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=minimax/minimax-m2.1 thinking=low messageChannel=telegram
+04:16:22 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+04:16:22 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+04:16:22 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=623fd1de-b5ae-4ef5-9196-1520d4123d9d sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+04:16:22 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=623fd1de-b5ae-4ef5-9196-1520d4123d9d
+04:16:33 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=623fd1de-b5ae-4ef5-9196-1520d4123d9d
+04:16:33 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=623fd1de-b5ae-4ef5-9196-1520d4123d9d sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=10110
+04:16:33 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+04:16:33 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+04:16:33 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=623fd1de-b5ae-4ef5-9196-1520d4123d9d sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=10147 aborted=false
+04:16:33 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=10151 active=0 queued=0
+04:16:33 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=10153 active=0 queued=0
+04:21:39 info Config        : ~/.clawdbot/clawdbot.json
+04:21:39 info Agent dir     : ~/.clawdbot/agents/main/agent
+04:21:39 info Default       : openrouter/minimax/minimax-m2.1
+04:21:39 info Fallbacks (9) : openrouter/anthropic/claude-haiku-4.5, openrouter/anthropic/claude-opus-4.5, openrouter/deepseek/deepseek-v3.2, openrouter/google/gemini-2.5-flash, openrouter/google/gemini-2.5-pro, openrouter/minimax/minimax-m2.1, openrouter/x-ai/grok-code-fast-1, openrouter/deepseek/deepseek-chat-v3-0324, openrouter/x-ai/grok-4.1-fast
+04:21:39 info Image model   : -
+04:21:39 info Image fallbacks (0): -
+04:21:39 info Aliases (1)   : OpenRouter -> openrouter/auto
+04:21:39 info Configured models (10): openrouter/auto, openrouter/anthropic/claude-haiku-4.5, openrouter/anthropic/claude-opus-4.5, openrouter/deepseek/deepseek-v3.2, openrouter/google/gemini-2.5-flash, openrouter/google/gemini-2.5-pro, openrouter/minimax/minimax-m2.1, openrouter/x-ai/grok-code-fast-1, openrouter/deepseek/deepseek-chat-v3-0324, openrouter/x-ai/grok-4.1-fast
+04:21:39 info {"0":"","_meta":{"runtime":"node","runtimeVersion":"22.22.0","hostname":"unknown","name":"clawdbot","date":"2026-01-26T04:21:39.994Z","logLevelId":3,"logLevelName":"INFO","path":{"fullFilePath":"file:///usr/lib/node_modules/clawdbot/dist/logging/console.js:181:32","fileName":"console.js","fileNameWithLine":"console.js:181","fileColumn":"32","fileLine":"181","filePath":"/usr/lib/node_modules/clawdbot/dist/logging/console.js","filePathWithLine":"/usr/lib/node_modules/clawdbot/dist/logging/console.js:181","method":"console.log"}},"time":"2026-01-26T04:21:39.994Z"}
+04:21:39 info Auth overview
+04:21:39 info Auth store    : ~/.clawdbot/agents/main/agent/auth-profiles.json
+04:21:39 info Shell env     : off
+04:21:39 info Providers w/ OAuth/tokens (0): -
+04:21:39 info - openai effective=env:sk-or-v1...5a868b3e | env=sk-or-v1...5a868b3e | source=env: OPENAI_API_KEY
+04:21:39 info - openrouter effective=profiles:~/.clawdbot/agents/main/agent/auth-profiles.json | profiles=1 (oauth=0, token=0, api_key=1) | openrouter:default=sk-or-v1...279e630b
+04:21:39 info {"0":"","_meta":{"runtime":"node","runtimeVersion":"22.22.0","hostname":"unknown","name":"clawdbot","date":"2026-01-26T04:21:39.997Z","logLevelId":3,"logLevelName":"INFO","path":{"fullFilePath":"file:///usr/lib/node_modules/clawdbot/dist/logging/console.js:181:32","fileName":"console.js","fileNameWithLine":"console.js:181","fileColumn":"32","fileLine":"181","filePath":"/usr/lib/node_modules/clawdbot/dist/logging/console.js","filePathWithLine":"/usr/lib/node_modules/clawdbot/dist/logging/console.js:181","method":"console.log"}},"time":"2026-01-26T04:21:39.997Z"}
+04:21:39 info OAuth/token status
+04:21:39 info - none
+Log tail truncated (increase --max-bytes).

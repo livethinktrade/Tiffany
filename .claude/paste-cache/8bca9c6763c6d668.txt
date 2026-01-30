@@ -1,0 +1,139 @@
+Secure Solution: N8N as the Secure Gateway
+
+ Since N8N is already:
+ - Running in Docker with Traefik (port 443 exposed)
+ - Has built-in authentication
+ - Already has Telegram integration
+
+ Use N8N as the Telegram webhook receiver → N8N forwards to Clawdbot via authenticated channel
+
+ ### Implementation
+
+ Step 1: Delete the insecure tunnel
+
+ ```bash
+   sudo systemctl stop clawdbot-webhook-tunnel 2>/dev/null
+   sudo rm /etc/systemd/system/clawdbot-webhook-tunnel.service 2>/dev/null
+   pkill -f "ssh.*localhost.run" 2>/dev/null
+ ```
+
+ Step 2: Configure N8N Webhook
+
+ In N8N:
+ 1. Create new workflow: HTTP Request → HTTP Request (to Clawdbot)
+ 2. Webhook URL: https://your-n8n-domain.com/webhook/telegram
+ 3. Authentication: Basic Auth or Header Auth
+ 4. Forward to: http://localhost:18789/webhook/telegram
+
+ Step 3: Set Telegram Webhook
+
+ ```bash
+   curl -F "url=https://your-n8n-domain.com/webhook/telegram" \
+     "https://api.telegram.org/bot8161323254:AAFnWrxVwdQris3IpYg1YMVZ0evzCL6Oo-g/setWebhook"
+ ```
+
+ ────────────────────────────────────────────────────────────────────────────────
+
+ If You Must Expose Clawdbot Directly
+
+ At minimum, enable Clawdbot authentication:
+
+ ```bash
+   # Enable authentication in Clawdbot
+   clawdbot gateway configure --set gateway.auth.mode=password
+   clawdbot gateway restart
+ ```
+
+ Then use the webhook with auth:
+
+ ```bash
+   # Webhook with basic auth
+   curl -F "url=http://user:password@localhost:18789/webhook/telegram" \
+     "https://api.telegram.org/botYOUR_TOKEN/setWebhook"
+ ```
+
+ ────────────────────────────────────────────────────────────────────────────────
+
+ My Recommendation
+
+ Option A (Most Secure): Use N8N as webhook → forward to Clawdbot
+ - N8N already exposed via Traefik with HTTPS
+ - N8N has authentication built-in
+ - Clawdbot stays local
+
+ Option B (Secure): Enable Clawdbot auth + secure tunnel
+ - Add password auth to gateway
+ - Limit tunnel to webhook path only
+ - Use proper host key checking
+
+ Which option do you prefer?
+
+
+ Give me the problem and give context so I can give it to a different AI to double-check what's going on. We need to
+ understand the problem.
+
+
+ Problem Statement
+
+ ────────────────────────────────────────────────────────────────────────────────
+
+ ### Current State
+
+ ┌──────────────────────┬─────────────────────────────────────────────────────────────────────────┐
+ │ Component            │ Status                                                                  │
+ ├──────────────────────┼─────────────────────────────────────────────────────────────────────────┤
+ │ Clawdbot Gateway     │ Running on localhost:18789 (local only)                                 │
+ │ Telegram Webhook URL │ Empty ("url": "")                                                       │
+ │ Telegram Bot Token   │ Configured (8161323254:AAFnWrxVwdQris3IpYg1YMVZ0evzCL6Oo-g)             │
+ │ N8N                  │ Running in Docker, exposed via Traefik on port 443                      │
+ │ Sessions             │ Active session shows from: "telegram:7286534686" but origin via webchat │
+ └──────────────────────┴─────────────────────────────────────────────────────────────────────────┘
+
+ ────────────────────────────────────────────────────────────────────────────────
+
+ ### The Problem
+
+ Telegram cannot deliver messages to Clawdbot because:
+
+ ```
+   Telegram → Needs public URL → None exists → Messages lost
+ ```
+
+ Why messages "sometimes work":
+ Unclear - may be CLI testing or session anomalies. Actual Telegram webhook is not configured.
+
+ ────────────────────────────────────────────────────────────────────────────────
+
+ ### The Gap
+
+ ┌─────────────────────────────┬──────────────────────────┐
+ │ Path                        │ Status                   │
+ ├─────────────────────────────┼──────────────────────────┤
+ │ You → Telegram App          │ ✅ Works                 │
+ │ Telegram → Telegram Servers │ ✅ Works                 │
+ │ Telegram Servers → Clawdbot │ ❌ No webhook configured │
+ │ Clawdbot → localhost:18789  │ ✅ Works (local)         │
+ └─────────────────────────────┴──────────────────────────┘
+
+ ────────────────────────────────────────────────────────────────────────────────
+
+ ### Requirements
+
+ 1. Telegram → Clawdbot delivery must work reliably
+ 2. Security must be maintained (no public admin panel exposure)
+ 3. N8N is available as a secure gateway option
+
+ ────────────────────────────────────────────────────────────────────────────────
+
+ ### Question for Verification
+
+ Should N8N act as the Telegram webhook receiver and forward to Clawdbot via localhost?
+
+ Pros:
+ - N8N already has HTTPS via Traefik
+ - N8N has authentication
+ - Clawdbot stays private
+
+ Cons:
+ - Additional complexity
+ - N8N must be running for Telegram to work

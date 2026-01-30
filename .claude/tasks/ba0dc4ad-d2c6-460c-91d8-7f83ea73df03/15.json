@@ -1,0 +1,9 @@
+{
+  "id": "15",
+  "subject": "Migrate Tiffany_Transcribe_Audio workflow",
+  "description": "Migrate Tiffany_Transcribe_Audio workflow from Telegram nodes to HTTP Request nodes for ClawdBot integration",
+  "activeForm": "Migrating Tiffany_Transcribe_Audio workflow",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

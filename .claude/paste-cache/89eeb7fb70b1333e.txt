@@ -1,0 +1,227 @@
+
+import argparse
+import json
+import os
+import re
+import sys
+import time
+from datetime import datetime
+from pathlib import Path
+from typing import Optional, Tuple
+
+# Configuration
+OBSIDIAN_VAULT = Path("/root/obsidian_vault")
+CLAWDBOT_SESSIONS = Path.home() / ".clawdbot" / "agents" / "main" / "sessions"
+TIMEZONE = "America/Chicago"
+
+def get_current_obsidian_path() -> Path:
+    """Return today's Obsidian daily note path in format W{week}-YYYY-MM-DD.md"""
+    now = datetime.now()
+    week_num = now.isocalendar()[1]  # ISO week number
+    week_str = f"W{week_num:02d}"
+    date_str = now.strftime("%Y-%m-%d")
+    return OBSIDIAN_VAULT / "daily_notes" / f"{week_str}-{date_str}.md"
+
+def parse_telegram_message(raw_text: str) -> Tuple[Optional[str], Optional[str], Optional[str]]:
+    """
+    Parse Telegram message format:
+    [Telegram Michael id:7286534686 +2m 2026-01-25 17:20 CST] message
+
+    Returns: (name, local_time, message) or (None, None, None) if not a Telegram message
+    """
+    pattern = r'^\[Telegram\s+(\w+)\s+id:\d+\s+(?:\+\d+m\s+)?(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2})\s+\w+\]\s+(.*)$'
+    match = re.match(pattern, raw_text.strip())
+    if match:
+        name, timestamp, message = match.groups()
+        # Convert UTC timestamp to local time (simplified - assumes timestamp is already CST)
+        try:
+            # Parse the timestamp (assuming format: "2026-01-25 17:20")
+            dt = datetime.strptime(timestamp, "%Y-%m-%d %H:%M")
+            local_time = dt.strftime("%H:%M")
+        except ValueError:
+            local_time = timestamp.split()[1] if " " in timestamp else "00:00"
+        return name, local_time, message
+    return None, None, None
+
+def format_entry(time_str: str, name: str, message: str) -> str:
+    """Format as **HH:MM** - Name: message"""
+    return f"**{time_str}** - {name}: {message}\n"
+
+def process_session_file(session_path: Path, obsidian_path: Path, last_position: dict) -> dict:
+    """
+    Process new lines in session JSONL file.
+    Returns updated last_position dict.
+    """
+    if not session_path.exists():
+        print(f"Session file not found: {session_path}")
+        return last_position
+
+    # Initialize position tracking for this file
+    file_key = str(session_path)
+    current_position = last_position.get(file_key, 0)
+
+    try:
+        # Get current file size
+        file_size = session_path.stat().st_size
+
+        # If file has been rotated or reset
+        if current_position > file_size:
+            current_position = 0
+
+        # If no new content
+        if current_position >= file_size:
+            return last_position
+
+        entries = []
+
+        with open(session_path, 'r', encoding='utf-8') as f:
+            # Skip already processed lines
+            f.seek(current_position)
+
+            for line_num, line in enumerate(f):
+                line = line.strip()
+                if not line:
+                    continue
+
+                try:
+                    data = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+
+                # Process messages
+                if data.get("type") == "message":
+                    message_data = data.get("message", {})
+                    role = message_data.get("role")
+                    content = message_data.get("content", [])
+
+                    if not content or role not in ["user", "assistant"]:
+                        continue
+
+                    # Extract text from content
+                    text_content = ""
+                    for item in content:
+                        if isinstance(item, dict) and item.get("type") == "text":
+                            text_content = item.get("text", "")
+                            break
+                        elif isinstance(item, str):
+                            text_content = item
+
+                    if not text_content:
+                        continue
+
+                    # Determine name and time
+                    name = "Tiffany" if role == "assistant" else "Michael"
+
+                    if role == "user":
+                        # Try to parse Telegram format
+                        parsed_name, parsed_time, parsed_msg = parse_telegram_message(text_content)
+                        if parsed_name and parsed_time and parsed_msg:
+                            name = parsed_name
+                            time_str = parsed_time
+                            message = parsed_msg
+                        else:
+                            # Fallback: use current time
+                            time_str = datetime.now().strftime("%H:%M")
+                            message = text_content
+                    else:
+                        # Assistant messages: use current time
+                        time_str = datetime.now().strftime("%H:%M")
+                        message = text_content
+
+                    # Clean up message (remove thinking blocks if present)
+                    if "**Thinking:**" in message or "thinkingSignature" in message:
+                        continue  # Skip thinking blocks
+
+                    entries.append((time_str, name, message))
+
+        # Append to Obsidian file
+        if entries:
+            print(f"Appending {len(entries)} new entries to {obsidian_path.name}")
+            with open(obsidian_path, 'a', encoding='utf-8') as obs_file:
+                for time_str, name, message in entries:
+                    entry = format_entry(time_str, name, message)
+                    obs_file.write(entry)
+                    print(f"  Added: {time_str} - {name}: {message[:50]}...")
+
+        # Update position
+        last_position[file_key] = file_size
+        return last_position
+
+    except Exception as e:
+        print(f"Error processing {session_path}: {e}")
+        return last_position
+
+def find_latest_session() -> Optional[Path]:
+    """Find the most recent session JSONL file."""
+    if not CLAWDBOT_SESSIONS.exists():
+        return None
+
+    jsonl_files = list(CLAWDBOT_SESSIONS.glob("*.jsonl"))
+    if not jsonl_files:
+        return None
+
+    # Return the file with latest modification time
+    return max(jsonl_files, key=lambda p: p.stat().st_mtime)
+
+def ensure_obsidian_note(obsidian_path: Path):
+    """Create Obsidian note if it doesn't exist."""
+    if not obsidian_path.exists():
+        print(f"Creating new Obsidian note: {obsidian_path}")
+        obsidian_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(obsidian_path, 'w', encoding='utf-8') as f:
+            f.write(f"# Daily Note - {obsidian_path.stem}\n\n")
+            f.write(f"*Created: {datetime.now().strftime('%Y-%m-%d %H:%M')}*\n\n")
+
+def main():
+    parser = argparse.ArgumentParser(description="Sync Clawdbot conversations to Obsidian")
+    parser.add_argument("--watch", action="store_true", help="Watch for new messages continuously")
+    parser.add_argument("--interval", type=float, default=5.0, help="Polling interval in seconds (default: 5)")
+    args = parser.parse_args()
+
+    # Ensure Obsidian directory exists
+    obsidian_notes_dir = OBSIDIAN_VAULT / "daily_notes"
+    obsidian_notes_dir.mkdir(parents=True, exist_ok=True)
+
+    # Get today's Obsidian file
+    obsidian_path = get_current_obsidian_path()
+    ensure_obsidian_note(obsidian_path)
+    print(f"Obsidian daily note: {obsidian_path}")
+
+    # Find latest session
+    session_path = find_latest_session()
+    if not session_path:
+        print("No session files found. Is Clawdbot running?")
+        sys.exit(1)
+
+    print(f"Monitoring session: {session_path.name}")
+
+    # Initial sync
+    last_position = {}
+    last_position = process_session_file(session_path, obsidian_path, last_position)
+
+    if not args.watch:
+        print("One-time sync complete.")
+        return
+
+    # Continuous monitoring
+    print(f"Watching for new messages (interval: {args.interval}s)...")
+    try:
+        while True:
+            time.sleep(args.interval)
+
+            # Check if session file changed
+            current_session = find_latest_session()
+            if current_session != session_path:
+                print(f"Switched to new session: {current_session.name}")
+                session_path = current_session
+                last_position = {}  # Reset position for new file
+
+            last_position = process_session_file(session_path, obsidian_path, last_position)
+
+    except KeyboardInterrupt:
+        print("\nStopped by user.")
+    except Exception as e:
+        print(f"Error in watch mode: {e}")
+
+if __name__ == "__main__":
+    main()

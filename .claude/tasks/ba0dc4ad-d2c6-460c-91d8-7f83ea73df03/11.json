@@ -3,7 +3,7 @@
   "subject": "Update Tiffany_Obsidian_Schedule workflow",
   "description": "Replace Telegram Send Message node with HTTP Request node. Workflow ID: W0Q5EZNOiDQZtKYp",
   "activeForm": "Updating Obsidian schedule workflow",
-  "status": "pending",
+  "status": "completed",
   "blocks": [],
   "blockedBy": []
 }

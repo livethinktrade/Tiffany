@@ -1,0 +1,9 @@
+{
+  "id": "2",
+  "subject": "Create tts-local.py Python TTS script",
+  "description": "Create CLI Python script that takes text and output path args, loads Kokoro pipeline, generates WAV audio using af_heart voice",
+  "activeForm": "Creating local TTS Python script",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

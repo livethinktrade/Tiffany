@@ -1,0 +1,104 @@
+Michael, [1/26/2026 9:31 PM]
+What is an agent skill? Currently my previous Tiffany system I would have a cron message that sends out a Telegram link. I would then fill out that Telegram form and it tracks certain data or KPIs and then gets stored in a self hosted nocodb. Now obviously when I integrated Clawdbot, that completely broke the system and I'm wanting to build that back up.
+
+So a cool thing about this is that I found out that Nocodb is able to do this cool functionality where I create its own form and then I can share the form link aka this link. https://nocodb.legacysearchers.agency/dashboard/#/nc/form/de6f861f-29ed-408d-97c2-6f2b14a83e88 now typically after the submission of that form, I then get a progress update something along the lines of this: "The code is ran in n8n and the output looks like this 📊 POWER GOALS SCORECARD
+📅 Tue, Jan 27, 2026
+────────────────────────────────────
+
+🔴 study_unit [Business]
+ 👤 Michael
+[██████████░░░░░░░░░░] 57/112
+50.9% · ▲ +2 this week · Off Track
+
+📈 Weekly Trend: ▇██▄▆▁ ↘️
+  2025-W51: 12
+  2025-W52: 13
+  2026-W01: 13
+  2026-W02: 7
+  2026-W03: 10
+  2026-W04: 2
+
+────────────────────────────────────
+📋 WEEKLY REVIEW
+• This week: 2/21
+• Avg: 9.5/wk | Need: 27.5/wk
+• 55 remaining over 2 weeks
+• ⚠️ Need 27.5/wk (goal is 21/wk) can you help me build this with you?
+
+Tiffany Accountability, [1/26/2026 9:31 PM]
+I understand you want to rebuild your Tiffany system integrated with Clawdbot, using NocoDB forms for KPI tracking, and automate progress updates through n8n, all while harnessing Clawdbot’s capabilities.
+
+To clarify your question about Agent Skills in Clawdbot:
+
+• Agent Skills are modular capabilities or integrations that enable Clawdbot to perform specific automated tasks or workflows.
+• Skills can handle interactions, data processing, API calls, automations, and more.
+• You can think of them as plugins or apps built into Clawdbot to extend its functionality easily.
+For your system:
+
+1. You have a NocoDB form that collects KPI data.
+2. After form submission, n8n triggers a workflow to process and output progress updates.
+3. You want Clawdbot to integrate smoothly with this flow to handle messages, updates, and data management.
+I can help you:
+
+• Create or extend a Clawdbot Agent Skill to manage your workflow: listen for NocoDB events, query or submit data, and handle Telegram update messages.
+• Automate sending message updates into Telegram with nicely formatted live KPI progress.
+• Integrate cron jobs or event triggers within Clawdbot to run or poll your system.
+• Help coordinate the full loop: form submission → data update → KPI calculation → Telegram messaging.
+Shall we start by mapping your existing workflow? I can then guide you to design or build the Agent Skill that fits this automation.
+
+Michael, [1/26/2026 9:34 PM]
+yeah let's begin. I'm not even sure if clawdbot can listen to nocodb events. nocodb does have an mcp though
+
+Tiffany Accountability, [1/26/2026 9:34 PM]
+Great! Since NocoDB supports an MCP (which I assume means a webhook or some event callback mechanism), we can use that as the trigger for Clawdbot to listen for events.
+
+Here’s a high-level plan to start:
+
+1. Confirm NocoDB Event Mechanism:  • Verify how NocoDB emits events (webhooks, polling, API callbacks).
+  • Get details on the data sent in those events (payload, format).
+
+2. Clawdbot Listener Setup:  • Build a Clawdbot Agent Skill or webhook handler that can receive or poll NocoDB events.
+  • If webhook-based, Clawdbot will expose an endpoint to receive POST requests.
+  • If polling, periodically check NocoDB API for new submissions.
+
+3. Data Processing & Storage:  • Extract KPI data from NocoDB event payload.
+  • Store or update local or external state as needed.
+
+4. Trigger Updates:  • Use Clawdbot to send formatted messages to Telegram with progress updates.
+  • Schedule regular cron tasks if needed to summarize or check status.
+
+5. Integration with n8n (optional):  • Coordinate with n8n as needed for other workflows or processing.
+
+To begin, please share the details or docs you have about NocoDB’s MCP event mechanism, including example events or webhook payloads if available. Then I can help create a listening skill or appropriate integration approach.Hey Michael! Ready to rebuild your Tiffany KPI tracking system with Clawdbot integration? We’ll use NocoDB forms for data input, Clawdbot to listen and process the events, and then send those KPI updates to Telegram.
+
+First, we need to understand how NocoDB emits events via its MCP (webhook or callback). Can you share how NocoDB’s event mechanism works—especially the format of the data sent on submissions? Once I have that, I’ll help you build a Clawdbot skill that listens to those events, processes the KPIs, and sends formatted progress messages back to Telegram.
+
+Sound good?
+
+Michael, [1/26/2026 9:40 PM]
+Write me a system prompt of what my use case is, the questions you have, and then I will provide you the plan. I will have an external AI do the research for you
+
+Tiffany Accountability, [1/26/2026 9:40 PM]
+Here's a system prompt you can use to explain your use case and questions for the external AI doing the research:
+
+
+System Prompt:
+
+I am integrating Clawdbot with my existing KPI tracking system that uses NocoDB forms for data input. The workflow is:
+
+1. Users submit KPI data via a NocoDB form.
+2. NocoDB emits events (via its MCP/event mechanism) upon form submission.
+3. Clawdbot should listen to these events to process the data.
+4. Clawdbot will then send formatted progress updates to Telegram based on the KPI data.
+5. The current system also utilizes n8n for further workflow automation and output formatting.
+My questions for you to research:
+
+• How does NocoDB’s MCP event system work? What event types and data formats does it support?
+• What are the best practices to set up Clawdbot as a listener or poller for NocoDB events?
+• How can Clawdbot be configured to process incoming event data and trigger Telegram messages?
+• Any considerations for integrating Clawdbot with n8n in this workflow?
+• Examples or templates for building agent skills or webhook receivers in Clawdbot for similar use cases.
+Please provide a plan outlining the steps to implement this integration smoothly and reliably.
+
+
+Would you like me to help refine or customize this before you send it off?

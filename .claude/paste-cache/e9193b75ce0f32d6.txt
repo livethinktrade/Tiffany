@@ -1,0 +1,53 @@
+root@srv816737:~# clawdbot configure
+
+🦞 Clawdbot 2026.1.24-3 (885167d) — WhatsApp automation without the "please accept our new privacy policy".
+
+░████░█░░░░░█████░█░░░█░███░░████░░████░░▀█▀
+█░░░░░█░░░░░█░░░█░█░█░█░█░░█░█░░░█░█░░░█░░█░
+█░░░░░█░░░░░█████░█░█░█░█░░█░████░░█░░░█░░█░
+█░░░░░█░░░░░█░░░█░█░█░█░█░░█░█░░█░░█░░░█░░█░
+░████░█████░█░░░█░░█░█░░███░░████░░░███░░░█░
+              🦞 FRESH DAILY 🦞
+┌  Clawdbot configure
+│
+◇  Existing config detected ─────────────────────╮
+│                                                │
+│  workspace: ~/clawd                            │
+│  model: openrouter/anthropic/claude-haiku-4.5  │
+│  gateway.mode: local                           │
+│                                                │
+├────────────────────────────────────────────────╯
+│
+◇  Where will the Gateway run?
+│  Local (this machine)
+│
+◇  Select sections to configure
+│  Channels
+│
+◇  Channel status ────────────────────────────╮
+│                                             │
+│  Telegram: configured (plugin disabled)     │
+│  WhatsApp: configured (plugin disabled)     │
+│  Discord: not configured                    │
+│  Google Chat: not configured                │
+│  Slack: not configured                      │
+│  Signal: not configured                     │
+│  iMessage: not configured                   │
+│  Google Chat: install plugin to enable      │
+│  Nostr: install plugin to enable            │
+│  Microsoft Teams: install plugin to enable  │
+│  Mattermost: install plugin to enable       │
+│  Nextcloud Talk: install plugin to enable   │
+│  Matrix: install plugin to enable           │
+│  BlueBubbles: install plugin to enable      │
+│  LINE: install plugin to enable             │
+│  Zalo: install plugin to enable             │
+│  Zalo Personal: install plugin to enable    │
+│  Tlon: install plugin to enable             │
+│                                             │
+├─────────────────────────────────────────────╯
+│
+◆  Channels
+│  ● Configure/link (Add/update channels; disable unselected accounts)
+│  ○ Remove channel config
+└

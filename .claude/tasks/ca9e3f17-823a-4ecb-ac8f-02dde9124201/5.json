@@ -1,0 +1,9 @@
+{
+  "id": "5",
+  "subject": "Test the local TTS integration end-to-end",
+  "description": "Test Python script standalone, restart voice server, test via curl, verify audio playback",
+  "activeForm": "Testing local TTS integration",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

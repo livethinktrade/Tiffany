@@ -1,0 +1,67 @@
+Security-Hardened Setup
+
+ ### Step 1: Install autossh
+
+ ```bash
+   sudo apt update && sudo apt install autossh -y
+ ```
+
+ ### Step 2: Create Systemd Service (Security Hardened)
+
+ ```bash
+   sudo tee /etc/systemd/system/clawdbot-webhook-tunnel.service > /dev/null << 'EOF'
+   [Unit]
+   Description=Clawdbot Webhook SSH Tunnel
+   After=network.target
+
+   [Service]
+   Type=simple
+   User=root
+   ExecStart=/usr/bin/autossh -M 0 \
+       -o StrictHostKeyChecking=no \
+       -o UserKnownHostsFile=/dev/null \
+       -o ServerAliveInterval=60 \
+       -o ServerAliveCountMax=3 \
+       -o BatchMode=yes \
+       -N \
+       -R 80:localhost:18789 \
+       nokey@localhost.run
+   Restart=always
+   RestartSec=10
+   NoNewPrivileges=true
+   ProtectSystem=strict
+   ProtectHome=true
+   ReadWritePaths=/tmp
+
+   [Install]
+   WantedBy=multi-user.target
+   EOF
+ ```
+
+ ### Step 3: Enable and Start
+
+ ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable clawdbot-webhook-tunnel
+   sudo systemctl start clawdbot-webhook-tunnel
+   sudo systemctl status clawdbot-webhook-tunnel
+ ```
+
+ ### Step 4: Verify Webhook
+
+ ```bash
+   curl -s "https://api.telegram.org/bot8161323254:AAFnWrxVwdQris3IpYg1YMVZ0evzCL6Oo-g/getWebhookInfo"
+ ```
+
+ ### Step 5: Add Firewall Rules (Optional)
+
+ ```bash
+   # Allow only Telegram IPs
+   sudo ufw allow from 149.154.160.0/20 to any port 18789
+   sudo ufw enable
+ ```
+
+ ### Step 6: Monitor Logs
+
+ ```bash
+   journalctl -u clawdbot-webhook-tunnel -f

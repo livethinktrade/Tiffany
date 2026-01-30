@@ -1,0 +1,209 @@
+root@srv816737:~# clawdbot logs --follow
+
+🦞 Clawdbot 2026.1.24-3 (885167d) — Because texting yourself reminders is so 2024.
+
+Log file: /tmp/clawdbot/clawdbot-2026-01-25.log
+05:30:17 info gateway {"subsystem":"gateway"} listening on ws://127.0.0.1:18789 (PID 1585292)
+05:30:17 info gateway {"subsystem":"gateway"} listening on ws://[::1]:18789
+05:30:17 info gateway {"subsystem":"gateway"} log file: /tmp/clawdbot/clawdbot-2026-01-25.log
+05:30:17 info browser/server {"subsystem":"browser/server"} Browser control listening on http://127.0.0.1:18791/
+05:30:17 info cron {"module":"cron","storePath":"/root/.clawdbot/cron/jobs.json"} {"enabled":true,"jobs":0,"nextWakeAtMs":null} cron: started
+05:30:17 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} [default] starting provider (@tiffany_eabot)
+05:30:17 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 2.35s.
+05:30:18 info bonjour: advertised gateway fqdn=srv816737 (Clawdbot)._clawdbot-gw._tcp.local. host=srv816737.local. port=18789 state=announcing
+05:30:23 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 4.17s.
+05:30:28 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 7.45s.
+05:30:35 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 13.75s.
+05:30:49 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 25.65s.
+05:31:12 info gateway {"subsystem":"gateway"} signal SIGTERM received
+05:31:12 info gateway {"subsystem":"gateway"} received SIGTERM; shutting down
+05:31:12 info gmail-watcher {"subsystem":"gmail-watcher"} gmail watcher stopped
+05:31:16 info gateway/canvas {"subsystem":"gateway/canvas"} canvas host mounted at http://127.0.0.1:18789/__clawdbot__/canvas/ (root /root/clawd/canvas)
+05:31:16 info gateway/heartbeat {"subsystem":"gateway/heartbeat"} {"intervalMs":1800000} heartbeat: started
+05:31:16 info gateway {"subsystem":"gateway"} agent model: openrouter/anthropic/claude-haiku-4.5
+05:31:16 info gateway {"subsystem":"gateway"} listening on ws://127.0.0.1:18789 (PID 1586237)
+05:31:16 info gateway {"subsystem":"gateway"} listening on ws://[::1]:18789
+05:31:16 info gateway {"subsystem":"gateway"} log file: /tmp/clawdbot/clawdbot-2026-01-25.log
+05:31:16 info browser/server {"subsystem":"browser/server"} Browser control listening on http://127.0.0.1:18791/
+05:31:16 info cron {"module":"cron","storePath":"/root/.clawdbot/cron/jobs.json"} {"enabled":true,"jobs":0,"nextWakeAtMs":null} cron: started
+05:31:17 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} [default] starting provider (@tiffany_eabot)
+05:31:17 debug skills {"subsystem":"skills"} {"rawName":"openai-image-gen","sanitized":"/openai_image_gen"} Sanitized skill command name "openai-image-gen" to "/openai_image_gen".
+05:31:17 debug skills {"subsystem":"skills"} {"rawName":"openai-whisper-api","sanitized":"/openai_whisper_api"} Sanitized skill command name "openai-whisper-api" to "/openai_whisper_api".
+05:31:17 debug skills {"subsystem":"skills"} {"rawName":"skill-creator","sanitized":"/skill_creator"} Sanitized skill command name "skill-creator" to "/skill_creator".
+05:31:17 info bonjour: advertised gateway fqdn=srv816737 (Clawdbot)._clawdbot-gw._tcp.local. host=srv816737.local. port=18789 state=announcing
+05:31:17 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 2.08s.
+05:31:22 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 4.07s.
+05:31:27 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 7.28s.
+05:31:35 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 14.02s.
+05:31:49 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 23.64s.
+05:32:13 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:32:44 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:33:14 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:33:45 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:34:15 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:34:46 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:35:16 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:35:47 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:36:17 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:36:37 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:37 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=8 queueSize=0
+05:36:37 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:37 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:36:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=03514fcc-213a-4b2d-a58e-91829e71b062 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=anthropic/claude-haiku-4.5 thinking=low messageChannel=webchat
+05:36:37 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+05:36:37 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+05:36:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=03514fcc-213a-4b2d-a58e-91829e71b062 sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+05:36:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=03514fcc-213a-4b2d-a58e-91829e71b062
+05:36:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=03514fcc-213a-4b2d-a58e-91829e71b062
+05:36:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run compaction start: runId=03514fcc-213a-4b2d-a58e-91829e71b062
+05:36:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=03514fcc-213a-4b2d-a58e-91829e71b062 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=445
+05:36:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run compaction retry: runId=03514fcc-213a-4b2d-a58e-91829e71b062
+05:36:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=03514fcc-213a-4b2d-a58e-91829e71b062
+05:36:39 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=03514fcc-213a-4b2d-a58e-91829e71b062
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+05:36:39 warn agent/embedded {"subsystem":"agent/embedded"} Profile openrouter:default hit Cloud Code Assist format error. Tool calls will be sanitized on retry.
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=2136 error="FailoverError: LLM request rejected: messages.22.content.1: unexpected `tool_use_id` found in `tool_result` blocks: call_416aed7b2f26471f96359748. Each `tool_result` block must have a corresponding `tool_use` block in the previous message."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=2139 error="FailoverError: LLM request rejected: messages.22.content.1: unexpected `tool_use_id` found in `tool_result` blocks: call_416aed7b2f26471f96359748. Each `tool_result` block must have a corresponding `tool_use` block in the previous message."
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=1 queueSize=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=1 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=4 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=3 queueSize=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=1 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=2 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=1 queueSize=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=0 queueSize=0
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=1 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=2 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=1 queueSize=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=1 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=3 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=1 queueSize=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=0 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=3 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=1 queueSize=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=1 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=3 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=0 queueSize=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=1 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=8 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=1 queueSize=0
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:36:39 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=main durationMs=0 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error diagnostic {"subsystem":"diagnostic"} lane task error: lane=session:agent:main:main durationMs=3 error="FailoverError: No available auth profile for openrouter (all in cooldown or unavailable)."
+05:36:39 error Embedded agent failed before reply: All models failed (9): openrouter/anthropic/claude-haiku-4.5: LLM request rejected: messages.22.content.1: unexpected `tool_use_id` found in `tool_result` blocks: call_416aed7b2f26471f96359748. Each `tool_result` block must have a corresponding `tool_use` block in the previous message. (format) | openrouter/anthropic/claude-opus-4.5: No available auth profile for openrouter (all in cooldown or unavailable). (rate_limit) | openrouter/deepseek/deepseek-v3.2: No available auth profile for openrouter (all in cooldown or unavailable). (rate_limit) | openrouter/google/gemini-2.5-flash: No available auth profile for openrouter (all in cooldown or unavailable). (rate_limit) | openrouter/google/gemini-2.5-pro: No available auth profile for openrouter (all in cooldown or unavailable). (rate_limit) | openrouter/minimax/minimax-m2.1: No available auth profile for openrouter (all in cooldown or unavailable). (rate_limit) | openrouter/x-ai/grok-code-fast-1: No available auth profile for openrouter (all in cooldown or unavailable). (rate_limit) | openrouter/deepseek/deepseek-chat-v3-0324: No available auth profile for openrouter (all in cooldown or unavailable). (rate_limit) | openrouter/x-ai/grok-4.1-fast: No available auth profile for openrouter (all in cooldown or unavailable). (rate_limit)
+05:36:48 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:37:18 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:37:48 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:38:18 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:38:49 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:39:08 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:39:08 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=6 queueSize=0
+05:39:08 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:39:08 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:39:08 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=deepseek/deepseek-v3.2 thinking=low messageChannel=webchat
+05:39:08 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+05:39:08 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+05:39:08 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+05:39:08 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c
+05:39:19 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:39:26 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c tool=exec toolCallId=call_00_6HfIcXxUyZtgZ6ADlAFtzuQd
+05:39:26 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c tool=exec toolCallId=call_00_6HfIcXxUyZtgZ6ADlAFtzuQd
+05:39:50 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:40:11 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c tool=exec toolCallId=call_e635491c8b8b4105987b3da0
+05:40:11 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c tool=exec toolCallId=call_e635491c8b8b4105987b3da0
+05:40:20 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:40:22 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c tool=write toolCallId=call_e1aa00832a7445de98d9cc30
+05:40:22 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c tool=write toolCallId=call_e1aa00832a7445de98d9cc30
+05:40:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c
+05:40:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=75233
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+05:40:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=865aa0ea-23c2-42ed-bb2e-a721703e553c sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=75280 aborted=false
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=75283 active=0 queued=0
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=75286 active=0 queued=0
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=1 queueSize=0
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:40:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=deepseek/deepseek-v3.2 thinking=low messageChannel=webchat
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+05:40:23 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+05:40:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+05:40:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb
+05:40:50 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:40:57 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb tool=exec toolCallId=call_00_lpYxF0oYocGiYVSt8eCHIVgF
+05:40:58 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb tool=exec toolCallId=call_00_lpYxF0oYocGiYVSt8eCHIVgF
+05:41:20 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:41:31 debug diagnostic {"subsystem":"diagnostic"} run active check: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 active=true
+05:41:51 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb tool=exec toolCallId=call_b1bc65008c164a43b7aefb61
+05:41:51 error [tools] exec failed: Command exited with code 1
+05:41:51 error [tools] exec failed: Command exited with code 1
+05:41:51 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb tool=exec toolCallId=call_b1bc65008c164a43b7aefb61
+05:41:51 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:42:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb
+05:42:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=112836
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+05:42:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=cd5051bc-d966-4247-8326-fb0b4ec84adb sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=112876 aborted=false
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=112879 active=0 queued=0
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=112881 active=0 queued=0
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=session:agent:main:main queueSize=1
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=session:agent:main:main waitMs=1 queueSize=0
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} lane enqueue: lane=main queueSize=1
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} lane dequeue: lane=main waitMs=1 queueSize=0
+05:42:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run start: runId=767fcf0d-bbca-4f72-9f44-b7e4e58a4b85 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 provider=openrouter model=deepseek/deepseek-v3.2 thinking=low messageChannel=webchat
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=idle new=processing reason="run_started" queueDepth=0
+05:42:16 debug diagnostic {"subsystem":"diagnostic"} run registered: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=1
+05:42:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt start: runId=767fcf0d-bbca-4f72-9f44-b7e4e58a4b85 sessionId=75d77d84-c158-4991-8928-94c5acc45c57
+05:42:16 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent start: runId=767fcf0d-bbca-4f72-9f44-b7e4e58a4b85
+05:42:21 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:42:23 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool start: runId=767fcf0d-bbca-4f72-9f44-b7e4e58a4b85 tool=exec toolCallId=call_1ef81ea96b834248a1392692
+05:42:24 debug agent/embedded {"subsystem":"agent/embedded"} embedded run tool end: runId=767fcf0d-bbca-4f72-9f44-b7e4e58a4b85 tool=exec toolCallId=call_1ef81ea96b834248a1392692
+05:42:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run agent end: runId=767fcf0d-bbca-4f72-9f44-b7e4e58a4b85
+05:42:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run prompt end: runId=767fcf0d-bbca-4f72-9f44-b7e4e58a4b85 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=20141
+05:42:37 debug diagnostic {"subsystem":"diagnostic"} session state: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 sessionKey=unknown prev=processing new=idle reason="run_completed" queueDepth=0
+05:42:37 debug diagnostic {"subsystem":"diagnostic"} run cleared: sessionId=75d77d84-c158-4991-8928-94c5acc45c57 totalActive=0
+05:42:37 debug agent/embedded {"subsystem":"agent/embedded"} embedded run done: runId=767fcf0d-bbca-4f72-9f44-b7e4e58a4b85 sessionId=75d77d84-c158-4991-8928-94c5acc45c57 durationMs=20180 aborted=false
+05:42:37 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=main durationMs=20184 active=0 queued=0
+05:42:37 debug diagnostic {"subsystem":"diagnostic"} lane task done: lane=session:agent:main:main durationMs=20187 active=0 queued=0
+05:42:51 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:43:22 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:43:52 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:44:23 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:44:53 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:45:24 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:45:54 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:46:25 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:46:55 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:47:25 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:47:56 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:48:26 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:48:57 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:49:27 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+Log tail truncated (increase --max-bytes).
+05:49:58 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:50:28 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.
+05:50:58 info gateway/channels/telegram {"subsystem":"gateway/channels/telegram"} Telegram getUpdates conflict; retrying in 30s.

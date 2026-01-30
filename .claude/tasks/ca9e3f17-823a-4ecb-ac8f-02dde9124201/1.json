@@ -1,0 +1,9 @@
+{
+  "id": "1",
+  "subject": "Install Python dependencies for Kokoro TTS",
+  "description": "Manual installation by Daniel - guide created at voice-server/MANUAL_INSTALL.md. Waiting for Daniel to complete pip install kokoro soundfile",
+  "activeForm": "Installing Kokoro TTS dependencies",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

@@ -1,0 +1,9 @@
+{
+  "id": "4",
+  "subject": "Update ~/.env with TTS_ENGINE=local",
+  "description": "Add TTS_ENGINE=local to the env file",
+  "activeForm": "Updating environment config",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

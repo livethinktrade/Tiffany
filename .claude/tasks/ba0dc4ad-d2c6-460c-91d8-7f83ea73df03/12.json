@@ -3,7 +3,7 @@
   "subject": "Update TIFFANY_DefinatePurpose_Schedule workflow",
   "description": "Replace Telegram Send Message node with HTTP Request node. Workflow ID: q9Yc59fCV6nt0E5l",
   "activeForm": "Updating definite purpose workflow",
-  "status": "pending",
+  "status": "completed",
   "blocks": [],
   "blockedBy": []
 }

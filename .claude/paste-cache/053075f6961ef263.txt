@@ -1,0 +1,91 @@
+// ═══════════════════════════════════════════════════════════
+// POWER GOALS PROGRESS BAR GENERATOR (FIXED)
+// Now handles raw KPI records + goal record from merged input
+// ═══════════════════════════════════════════════════════════
+
+const BAR_WIDTH = 20;
+const FILLED = '█';
+const EMPTY = '░';
+
+// ─────────────────────────────────────────────────────────────
+// HELPER FUNCTIONS
+// ─────────────────────────────────────────────────────────────
+
+const progressBar = (curr, tgt) => {
+  if (!tgt || tgt <= 0) return `[${EMPTY.repeat(BAR_WIDTH)}] 0/0`;
+  const pct = Math.min(curr / tgt, 1);
+  const filled = Math.round(pct * BAR_WIDTH);
+  return `[${FILLED.repeat(filled)}${EMPTY.repeat(BAR_WIDTH - filled)}] ${curr}/${tgt}`;
+};
+
+const percentage = (curr, tgt) => {
+  if (!tgt || tgt <= 0) return '0%';
+  return `${((curr / tgt) * 100).toFixed(1)}%`;
+};
+
+const delta = (curr, lastWeek) => {
+  const diff = curr - lastWeek;
+  if (diff > 0) return `▲ +${diff}`;
+  if (diff < 0) return `▼ ${diff}`;
+  return `─ 0`;
+};
+
+const formatGoal = (name, curr, tgt, lastWeek) => {
+  return `<b>:${name}</b>
+${progressBar(curr, tgt)}
+${percentage(curr, tgt)} complete | ${delta(curr, lastWeek)} this week`;
+};
+
+// ─────────────────────────────────────────────────────────────
+// PROCESS RAW DATA FROM MERGED INPUT
+// ─────────────────────────────────────────────────────────────
+
+const items = $input.all();
+const today = new Date();
+const sevenDaysAgo = new Date(today);
+sevenDaysAgo.setDate(today.getDate() - 7);
+
+let totalValue = 0;
+let lastWeekValue = 0;
+let yearlyGoal = 0;
+let weeklyGoal = 0;
+
+for (const item of items) {
+  const data = item.json;
+
+  // Check if this is a KPI record (has Value and Date)
+  if (data.Value !== undefined && data.Date) {
+    totalValue += Number(data.Value) || 0;
+
+    // Check if record is from before 7 days ago (for delta calculation)
+    const recordDate = new Date(data.Date);
+    if (recordDate < sevenDaysAgo) {
+      lastWeekValue += Number(data.Value) || 0;
+    }
+  }
+
+  // Check if this is a Goal record (has "Yearly Goal" or Goal_Name)
+  if (data['Yearly Goal'] !== undefined || data.Goal_Name) {
+    yearlyGoal = Number(data['Yearly Goal']) || 0;
+    weeklyGoal = Number(data['Weekly Goal']) || 0;
+  }
+}
+
+// Use yearly goal, fallback to weekly
+const target = yearlyGoal > 0 ? yearlyGoal : weeklyGoal;
+
+// Calculate this week's progress (total minus what existed before this week)
+const thisWeekProgress = totalValue - lastWeekValue;
+
+// ─────────────────────────────────────────────────────────────
+// BUILD OUTPUT
+// ─────────────────────────────────────────────────────────────
+
+const goal1 = formatGoal('PG1 Study Units', totalValue, target, lastWeekValue);
+
+const message = `📊 **POWER GOALS**
+📅 ${new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+
+${goal1}`;
+
+return [{ json: { message } }];

@@ -1,0 +1,9 @@
+{
+  "id": "16",
+  "subject": "Commit ClawdBot workflow migration to git",
+  "description": "Commit all n8n-workflows and ClawdBot implementation files to git repository with comprehensive commit message",
+  "activeForm": "Committing ClawdBot migration to git",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}
