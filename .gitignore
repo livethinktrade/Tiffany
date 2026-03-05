@@ -67,6 +67,10 @@ credentials/
 .claude/pai_backups/
 .claude/.pai-sync-history
 
+# PAI Credentials & Secrets (NEVER commit)
+.claude/.credentials.json
+.claude/statsig/
+
 # PAI Runtime/Session Data (not for version control)
 .claude/cache/
 .claude/debug/
@@ -80,6 +84,17 @@ credentials/
 .claude/plans/
 .claude/telemetry/
 .claude/tasks/
+.claude/history.jsonl
+.claude/bun.lock
+
+# PAI Memory System (local runtime state)
+.claude/MEMORY/
+
+# PAI Local Data (not for version control)
+.claude/backups/
+.claude/plugins/
+.claude/package.json
+.claude/mcp-needs-auth-cache.json
 
 # Backup directories
 .claude-partial-backup-*/
