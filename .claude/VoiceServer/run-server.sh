@@ -9,5 +9,5 @@ export PORT=8888
 # Use PAI_DIR for the PAI configuration directory
 PAI_DIR="${PAI_DIR:-$HOME/.claude}"
 
-cd "${PAI_DIR}/Voice-In-The-Cloud"
+cd "${PAI_DIR}/VoiceServer"
 exec "$HOME/.bun/bin/bun" run server.ts

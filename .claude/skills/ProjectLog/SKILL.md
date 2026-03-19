@@ -82,72 +82,52 @@ Understand the existing structure before modifying.
 
 ---
 
-## Step 4: Add Entry to "Recent Session History"
+## Step 4: Create Session Log File (REQUIRED)
 
-**Location:** Add at TOP of `## Recent Session History` section (before existing entries)
+**Location:** `session-logs/` directory in the project
 
-**Full Template:**
+**Naming:** `YYYYMMDD_HHMMSS_short-slug.md` (use `120000` when time unknown)
+
+**Template:**
 ```markdown
-### YYYY-MM-DD: [Title — Optional Subtitle]
+# Session Log: [Title]
 
-**What changed**: [1-2 sentence high-level summary of what this session accomplished]
-
-**[Category 1]:**
-- [Specific bullet with paths, IDs, commands]
-- [Another bullet]
-
-**[Category 2]:**
-- [Bullet]
-
-**Files Created/Modified:**
-- `[/full/path/to/file.ext]` — [what it does]
-- `[/another/file.md]` — [brief description]
-
-**Verification:**
-- [Check performed] ✅
-- [Another check] ✅
-
-**Pending:**
-- [Unfinished item for future session]
+**Date**: YYYY-MM-DD
+**Agent**: [Agent name] ([Model])
+**Triggered By**: [What prompted this work]
 
 ---
+
+## Problem / Request
+
+[What was the user's request or the problem being solved]
+
+## What Was Done
+
+- [Action 1]
+- [Action 2]
+
+## Files Modified
+
+| File | Change |
+|------|--------|
+| `/path/to/file` | [What changed] |
+
+## Verification
+
+- [Check performed] ✅
+
+## Pending / Follow-up
+
+- [ ] [Unfinished item]
 ```
 
-### Available Categories (use what's relevant)
-
-| Category | When to Use |
-|----------|-------------|
-| `**Root Cause Analysis:**` | Debugging session — what was discovered |
-| `**Fix Applied:**` | Bug fixes — numbered steps |
-| `**Infrastructure Changes:**` | Docker, services, configs |
-| `**Configuration Changes:**` | Config file updates |
-| `**Files Created/Modified:**` | ALWAYS include if files changed |
-| `**Verification:**` | ALWAYS include — what was confirmed |
-| `**Pending:**` | Include if work is incomplete |
-| `**Backlog Created:**` | New tickets created |
-| `**Session Log:**` | Link to detailed session log if created |
-
-### Formatting Rules
-
-1. **Be Specific** — Include IDs, paths, counts, versions
-   - Good: `Added device FNNUF32-3BONEFH-FICIVH4-B4YJBB7...`
-   - Bad: `Added the phone device`
-
-2. **Use Backticks** — For technical values
-   - Good: `globalAnnounceEnabled: true`
-   - Bad: globalAnnounceEnabled set to true
-
-3. **Checkmarks for Verification** — Use ✅ for confirmed items
-   - `Connection status: connected: true ✅`
-
-4. **Tables for Comparisons** — When showing before/after
-   ```markdown
-   | Before | After |
-   |--------|-------|
-   | Old value | New value |
-   ```
-
-5. **End with `---`** — Horizontal rule after each entry
+**Rules:**
+1. **REQUIRED** — every session MUST have a session log file
+2. Be specific — include IDs, paths, counts, versions
+3. Include Verification section with ✅ checkmarks
+4. Include Pending section if work is incomplete
+5. All technical detail goes HERE, not in the context log
 
 ---
 
@@ -160,7 +140,7 @@ Understand the existing structure before modifying.
 | YYYY-MM-DD | **[Bold Title]**: [One sentence with `backtick` IDs and key details.] | [[session-log-link]] |
 ```
 
-**If no session log:** Use `—` (em-dash) instead of link
+**Session log link is REQUIRED** — every Change Log row must link to a session log file.
 
 **Examples:**
 ```markdown
@@ -217,7 +197,7 @@ Update status of work streams if changed.
 **Last Updated**: 2026-02-17 (Syncthing phone sync fixed — new device FNNUF32 added, global discovery enabled, direct IP configured. Phone now connected at 100% sync.)
 ```
 
-**2. Recent Session History (at TOP):**
+**2. Session Log File (in session-logs/):**
 ```markdown
 ### 2026-02-17: Syncthing Phone Sync Fixed — New Device Connected
 
@@ -263,14 +243,14 @@ This protocol works for any project. To use with a different project:
 1. **Create project context log** with same structure:
    - Last Updated header
    - Current Status Summary table
-   - Recent Session History section
+   - `session-logs/` directory for detailed session logs
    - Change Log table
 
 2. **Update this skill** or create project-specific variant pointing to correct file path
 
 3. **Key sections to include:**
    - `## Current Status Summary` — Component status table
-   - `## Recent Session History` — Detailed session entries
+   - `session-logs/` — Detailed session log files
    - `## Change Log` — One-liner history table
    - `## Useful Commands` — Command reference (optional)
    - `## Known Issues & Blockers` — Issue tracking (optional)
@@ -282,7 +262,7 @@ This protocol works for any project. To use with a different project:
 | Element | Location | Key Format |
 |---------|----------|------------|
 | Last Updated | Line 4 | `**Last Updated**: YYYY-MM-DD (summary)` |
-| Session Entry | Top of `## Recent Session History` | Full markdown with categories |
+| Session Log | `session-logs/YYYYMMDD_HHMMSS_slug.md` | Full markdown with categories |
 | Change Log | Top of `## Change Log` table | `\| date \| **Title**: details \| link \|` |
 | Commands | `## Useful Commands` | Bash code blocks with comments |
 
@@ -290,5 +270,5 @@ This protocol works for any project. To use with a different project:
 1. Specific IDs, paths, counts — never vague
 2. Always include Verification section with ✅
 3. Use `backticks` for technical values
-4. Session entry = detailed; Change Log = condensed
+4. Session log = detailed; Change Log = condensed summary with [[link]]
 5. Future AI agents are the primary audience

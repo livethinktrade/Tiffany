@@ -84,6 +84,7 @@ credentials/
 .claude/plans/
 .claude/telemetry/
 .claude/tasks/
+.claude/sessions/
 .claude/history.jsonl
 .claude/bun.lock
 

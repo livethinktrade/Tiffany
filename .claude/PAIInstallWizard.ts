@@ -295,7 +295,7 @@ function generateSettingsJson(config: InstallConfig): object {
 
   return {
     "$schema": "https://json.schemastore.org/claude-code-settings.json",
-    "paiVersion": "2.4",
+    "paiVersion": "4.0.3",
     "env": {
       "PAI_DIR": `${HOME}/.claude`,
       "PROJECTS_DIR": config.PROJECTS_DIR || "",
@@ -330,7 +330,7 @@ function generateSettingsJson(config: InstallConfig): object {
     },
     "pai": {
       "repoUrl": "github.com/danielmiessler/PAI",
-      "version": "2.4"
+      "version": "4.0.3"
     },
     "techStack": {
       "browser": "arc",
@@ -402,7 +402,7 @@ function generateSettingsJson(config: InstallConfig): object {
     "statusLine": { "type": "command", "command": "${PAI_DIR}/statusline-command.sh" },
     "alwaysThinkingEnabled": true,
     "_docs": {
-      "_overview": "PAI v2.4 settings. Run install wizard to customize.",
+      "_overview": "PAI v4.0.3 settings. Run install wizard to customize.",
       "_sections": {
         "contextFiles": "Files loaded at session start. Defaults load SKILL.md, AI Steering Rules, and DA Identity.",
         "daidentity": "AI identity (name, voice)",
@@ -472,7 +472,7 @@ async function main(): Promise<void> {
   print('');
   print(`${c.blue}${c.bold}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓${c.reset}`);
   print(`${c.blue}${c.bold}┃${c.reset}              ${c.cyan}PAI Installation Wizard${c.reset}                        ${c.blue}${c.bold}┃${c.reset}`);
-  print(`${c.blue}${c.bold}┃${c.reset}       ${c.gray}Personal AI Infrastructure v2.4${c.reset}                     ${c.blue}${c.bold}┃${c.reset}`);
+  print(`${c.blue}${c.bold}┃${c.reset}       ${c.gray}Personal AI Infrastructure v4.0.3${c.reset}                     ${c.blue}${c.bold}┃${c.reset}`);
   print(`${c.blue}${c.bold}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛${c.reset}`);
 
   // Step 1: Ensure Bun is installed/updated
@@ -595,7 +595,7 @@ async function main(): Promise<void> {
 
   print('');
   if (passed) {
-    print(`${c.green}${c.bold}✓ PAI v2.4 installed successfully!${c.reset}`);
+    print(`${c.green}${c.bold}✓ PAI v4.0.3 installed successfully!${c.reset}`);
     print('');
     print(`  ${c.cyan}Your AI:${c.reset} ${AI_NAME}`);
     print(`  ${c.cyan}Principal:${c.reset} ${PRINCIPAL_NAME}`);

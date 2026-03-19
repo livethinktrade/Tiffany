@@ -1,5 +1,8 @@
 {
-  "voiceProvider": "elevenlabs",
+  "voiceProvider": "edge-tts",
+  "edgeTts": {
+    "voice": "en-US-AvaNeural"
+  },
   "elevenlabs": {
     "voiceId": "jqcCZkN6Knx8BJ5TBdYR"
   },

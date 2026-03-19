@@ -48,6 +48,24 @@ COUNTS_CACHE="$PAI_DIR/MEMORY/STATE/counts-cache.sh"
 [ -f "$PAI_DIR/.env" ] && source "$PAI_DIR/.env"
 
 # ─────────────────────────────────────────────────────────────────────────────
+# CROSS-PLATFORM HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
+
+# stat_mtime: Get file modification time as epoch seconds (works on both macOS and Linux)
+stat_mtime() {
+    if [[ "$OSTYPE" == darwin* ]]; then
+        stat -f %m "$1" 2>/dev/null || echo 0
+    else
+        stat -c %Y "$1" 2>/dev/null || echo 0
+    fi
+}
+
+# fd: Use fdfind if fd is not available (Ubuntu/Debian installs fd-find as fdfind)
+if ! command -v fd &>/dev/null && command -v fdfind &>/dev/null; then
+    fd() { fdfind "$@"; }
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
 # PARSE INPUT (must happen before parallel block consumes stdin)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -120,7 +138,7 @@ mkdir -p "$_parallel_tmp"
 
         # Check cache validity
         if [ -f "$GIT_REPO_CACHE" ]; then
-            git_cache_mtime=$(stat -f %m "$GIT_REPO_CACHE" 2>/dev/null || echo 0)
+            git_cache_mtime=$(stat_mtime "$GIT_REPO_CACHE")
             git_cache_age=$(($(date +%s) - git_cache_mtime))
             [ "$git_cache_age" -lt "$GIT_CACHE_TTL" ] && cp "$GIT_REPO_CACHE" "$_parallel_tmp/git.sh" && exit 0
         fi
@@ -175,7 +193,7 @@ GITEOF
 {
     # 2. Location fetch (with caching)
     cache_age=999999
-    [ -f "$LOCATION_CACHE" ] && cache_age=$(($(date +%s) - $(stat -f %m "$LOCATION_CACHE" 2>/dev/null || echo 0)))
+    [ -f "$LOCATION_CACHE" ] && cache_age=$(($(date +%s) - $(stat_mtime "$LOCATION_CACHE")))
 
     if [ "$cache_age" -gt "$LOCATION_CACHE_TTL" ]; then
         loc_data=$(curl -s --max-time 2 "http://ip-api.com/json/?fields=city,regionName,country,lat,lon" 2>/dev/null)
@@ -194,7 +212,7 @@ GITEOF
 {
     # 3. Weather fetch (with caching)
     cache_age=999999
-    [ -f "$WEATHER_CACHE" ] && cache_age=$(($(date +%s) - $(stat -f %m "$WEATHER_CACHE" 2>/dev/null || echo 0)))
+    [ -f "$WEATHER_CACHE" ] && cache_age=$(($(date +%s) - $(stat_mtime "$WEATHER_CACHE")))
 
     if [ "$cache_age" -gt "$WEATHER_CACHE_TTL" ]; then
         lat="" lon=""
@@ -231,7 +249,7 @@ GITEOF
     # 4. File counts (with caching)
     counts_cache_valid=false
     if [ -f "$COUNTS_CACHE" ]; then
-        counts_cache_mtime=$(stat -f %m "$COUNTS_CACHE" 2>/dev/null || echo 0)
+        counts_cache_mtime=$(stat_mtime "$COUNTS_CACHE")
         counts_cache_age=$(($(date +%s) - counts_cache_mtime))
         [ "$counts_cache_age" -lt "$COUNTS_CACHE_TTL" ] && counts_cache_valid=true
     fi
@@ -245,7 +263,7 @@ GITEOF
         if [ -f "$GETCOUNTS_TOOL" ]; then
             bun run "$GETCOUNTS_TOOL" --shell > "$_parallel_tmp/counts.sh" 2>/dev/null
             # Map signals_count to learnings_count for compatibility
-            sed -i '' 's/signals_count/learnings_count/' "$_parallel_tmp/counts.sh" 2>/dev/null
+            sed -i 's/signals_count/learnings_count/' "$_parallel_tmp/counts.sh" 2>/dev/null
             # Add sessions_count (not in GetCounts.ts)
             sessions_count=$(fd -e jsonl . "$PAI_DIR/MEMORY" 2>/dev/null | wc -l | tr -d ' ')
             echo "sessions_count=$sessions_count" >> "$_parallel_tmp/counts.sh"
@@ -789,8 +807,8 @@ if [ -f "$RATINGS_FILE" ] && [ -s "$RATINGS_FILE" ]; then
     # Check cache validity (by mtime and ratings file mtime)
     cache_valid=false
     if [ -f "$LEARNING_CACHE" ]; then
-        cache_mtime=$(stat -f %m "$LEARNING_CACHE" 2>/dev/null || echo 0)
-        ratings_mtime=$(stat -f %m "$RATINGS_FILE" 2>/dev/null || echo 0)
+        cache_mtime=$(stat_mtime "$LEARNING_CACHE")
+        ratings_mtime=$(stat_mtime "$RATINGS_FILE")
         cache_age=$((now - cache_mtime))
         # Cache valid if: cache newer than ratings AND cache age < TTL
         if [ "$cache_mtime" -gt "$ratings_mtime" ] && [ "$cache_age" -lt "$LEARNING_CACHE_TTL" ]; then
@@ -999,7 +1017,7 @@ if [ "$MODE" = "normal" ]; then
     printf "${SLATE_600}────────────────────────────────────────────────────────────────────────${RESET}\n"
 
     # Refresh quote if stale (>30s)
-    quote_age=$(($(date +%s) - $(stat -f %m "$QUOTE_CACHE" 2>/dev/null || echo 0)))
+    quote_age=$(($(date +%s) - $(stat_mtime "$QUOTE_CACHE")))
     if [ "$quote_age" -gt 30 ] || [ ! -f "$QUOTE_CACHE" ]; then
         if [ -n "${ZENQUOTES_API_KEY:-}" ]; then
             new_quote=$(curl -s --max-time 1 "https://zenquotes.io/api/random/${ZENQUOTES_API_KEY}" 2>/dev/null | \

@@ -7,7 +7,9 @@ import { serve } from "bun";
 import { spawn } from "child_process";
 import { homedir } from "os";
 import { join } from "path";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, unlinkSync } from "fs";
+
+const IS_LINUX = process.platform === 'linux';
 
 // Load .env from ~/.claude directory
 const envPath = join(homedir(), '.claude', '.env');
@@ -32,7 +34,22 @@ if (existsSync(envPath)) {
 const PORT = parseInt(process.env.PORT || "8888");
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
-if (!ELEVENLABS_API_KEY) {
+// Load voice provider config
+let voiceProvider = 'elevenlabs';
+let edgeTtsVoice = 'en-US-AvaNeural';
+try {
+  const configPath = join(homedir(), '.claude', 'VoiceServer', 'config');
+  if (existsSync(configPath)) {
+    const configContent = readFileSync(configPath, 'utf-8');
+    const config = JSON.parse(configContent);
+    if (config.voiceProvider) voiceProvider = config.voiceProvider;
+    if (config.edgeTts?.voice) edgeTtsVoice = config.edgeTts.voice;
+  }
+} catch (error) {
+  console.warn('⚠️  Failed to load VoiceServer config, using defaults');
+}
+
+if (voiceProvider === 'elevenlabs' && !ELEVENLABS_API_KEY) {
   console.error('⚠️  ELEVENLABS_API_KEY not found in ~/.claude/.env');
   console.error('Add: ELEVENLABS_API_KEY=your_key_here');
 }
@@ -215,6 +232,35 @@ function validateInput(input: any): { valid: boolean; error?: string; sanitized?
   return { valid: true, sanitized };
 }
 
+// Generate speech using Edge TTS CLI
+async function generateSpeechEdgeTTS(text: string, voice?: string): Promise<string> {
+  const selectedVoice = voice || edgeTtsVoice;
+  const tempFile = `/tmp/voice-${Date.now()}.mp3`;
+
+  return new Promise((resolve, reject) => {
+    const proc = spawn('edge-tts', [
+      '--voice', selectedVoice,
+      '--text', text,
+      '--write-media', tempFile,
+    ]);
+
+    let stderr = '';
+    proc.stderr?.on('data', (data: Buffer) => { stderr += data.toString(); });
+
+    proc.on('error', (error) => {
+      reject(new Error(`Edge TTS spawn error: ${error.message}`));
+    });
+
+    proc.on('exit', (code) => {
+      if (code === 0) {
+        resolve(tempFile);
+      } else {
+        reject(new Error(`Edge TTS exited with code ${code}: ${stderr}`));
+      }
+    });
+  });
+}
+
 // Generate speech using ElevenLabs API with full prosody support
 async function generateSpeech(
   text: string,
@@ -274,18 +320,20 @@ function getVolumeSetting(requestVolume?: number): number {
   return 1.0; // Default to full volume
 }
 
-// Play audio using afplay (macOS)
-async function playAudio(audioBuffer: ArrayBuffer, requestVolume?: number): Promise<void> {
-  const tempFile = `/tmp/voice-${Date.now()}.mp3`;
-
-  // Write audio to temp file
-  await Bun.write(tempFile, audioBuffer);
-
+// Play an audio file using platform-appropriate player
+async function playAudioFile(filePath: string, requestVolume?: number): Promise<void> {
   const volume = getVolumeSetting(requestVolume);
 
   return new Promise((resolve, reject) => {
-    // afplay -v takes a value from 0.0 to 1.0
-    const proc = spawn('/usr/bin/afplay', ['-v', volume.toString(), tempFile]);
+    let proc;
+    if (IS_LINUX) {
+      // mpg123 -f takes volume as 0-32768 (linear scale)
+      const mpg123Volume = Math.round(volume * 32768);
+      proc = spawn('mpg123', ['-q', '-f', mpg123Volume.toString(), filePath]);
+    } else {
+      // afplay -v takes a value from 0.0 to 1.0
+      proc = spawn('/usr/bin/afplay', ['-v', volume.toString(), filePath]);
+    }
 
     proc.on('error', (error) => {
       console.error('Error playing audio:', error);
@@ -294,15 +342,22 @@ async function playAudio(audioBuffer: ArrayBuffer, requestVolume?: number): Prom
 
     proc.on('exit', (code) => {
       // Clean up temp file
-      spawn('/bin/rm', [tempFile]);
+      try { unlinkSync(filePath); } catch {}
 
       if (code === 0) {
         resolve();
       } else {
-        reject(new Error(`afplay exited with code ${code}`));
+        reject(new Error(`Audio player exited with code ${code}`));
       }
     });
   });
+}
+
+// Play audio from buffer (writes to temp file then plays)
+async function playAudio(audioBuffer: ArrayBuffer, requestVolume?: number): Promise<void> {
+  const tempFile = `/tmp/voice-${Date.now()}.mp3`;
+  await Bun.write(tempFile, audioBuffer);
+  return playAudioFile(tempFile, requestVolume);
 }
 
 // Spawn a process safely
@@ -349,65 +404,83 @@ async function sendNotification(
   const safeTitle = titleValidation.sanitized!;
   let safeMessage = stripMarkers(messageValidation.sanitized!);
 
-  // Generate and play voice using ElevenLabs
-  if (voiceEnabled && ELEVENLABS_API_KEY) {
-    try {
-      const voice = voiceId || DEFAULT_VOICE_ID;
+  // Generate and play voice
+  if (voiceEnabled) {
+    const spokenMessage = applyPronunciations(safeMessage);
+    let played = false;
 
-      // Get voice configuration (personality settings)
-      const voiceConfig = getVoiceConfig(voice);
+    // Try primary provider
+    if (voiceProvider === 'edge-tts') {
+      try {
+        console.log(`🎙️  Generating speech via Edge TTS (voice: ${edgeTtsVoice})`);
+        const audioFile = await generateSpeechEdgeTTS(spokenMessage);
+        const volume = requestProsody?.volume ?? daVoiceProsody?.volume;
+        await playAudioFile(audioFile, volume);
+        played = true;
+      } catch (error) {
+        console.error("Edge TTS failed:", error);
+        console.log("🔄 Falling back to ElevenLabs...");
+      }
+    }
 
-      // Build prosody: request > voice config > DA config > defaults
-      let prosody: Partial<ProsodySettings> = {};
+    // Try ElevenLabs (primary or fallback)
+    if (!played && ELEVENLABS_API_KEY) {
+      try {
+        const voice = voiceId || DEFAULT_VOICE_ID;
+        const voiceConfig = getVoiceConfig(voice);
 
-      // First try voice config from AGENTPERSONALITIES.md
-      if (voiceConfig) {
-        if (voiceConfig.prosody) {
-          // New format: nested prosody object
-          prosody = voiceConfig.prosody;
-        } else {
-          // Legacy format: flat fields
-          prosody = {
-            stability: voiceConfig.stability,
-            similarity_boost: voiceConfig.similarity_boost,
-            style: voiceConfig.style ?? DEFAULT_PROSODY.style,
-            speed: voiceConfig.speed ?? DEFAULT_PROSODY.speed,
-            use_speaker_boost: voiceConfig.use_speaker_boost ?? DEFAULT_PROSODY.use_speaker_boost,
-          };
+        let prosody: Partial<ProsodySettings> = {};
+        if (voiceConfig) {
+          if (voiceConfig.prosody) {
+            prosody = voiceConfig.prosody;
+          } else {
+            prosody = {
+              stability: voiceConfig.stability,
+              similarity_boost: voiceConfig.similarity_boost,
+              style: voiceConfig.style ?? DEFAULT_PROSODY.style,
+              speed: voiceConfig.speed ?? DEFAULT_PROSODY.speed,
+              use_speaker_boost: voiceConfig.use_speaker_boost ?? DEFAULT_PROSODY.use_speaker_boost,
+            };
+          }
+          console.log(`👤 Voice: ${voiceConfig.description}`);
+        } else if (voice === DEFAULT_VOICE_ID && daVoiceProsody) {
+          prosody = daVoiceProsody;
+          console.log(`👤 Voice: DA default`);
         }
-        console.log(`👤 Voice: ${voiceConfig.description}`);
-      } else if (voice === DEFAULT_VOICE_ID && daVoiceProsody) {
-        // Using DA's default voice - use prosody from settings.json
-        prosody = daVoiceProsody;
-        console.log(`👤 Voice: DA default (Kai)`);
-      }
 
-      // Request prosody overrides config prosody
-      if (requestProsody) {
-        prosody = { ...prosody, ...requestProsody };
-        console.log(`🎛️  Using request prosody overrides`);
-      }
+        if (requestProsody) {
+          prosody = { ...prosody, ...requestProsody };
+        }
 
-      const settings = { ...DEFAULT_PROSODY, ...prosody };
-      const volume = (prosody as any)?.volume ?? daVoiceProsody?.volume;
-      console.log(`🎙️  Generating speech (voice: ${voice}, stability: ${settings.stability}, style: ${settings.style}, speed: ${settings.speed}, volume: ${volume ?? 1.0})`);
+        const settings = { ...DEFAULT_PROSODY, ...prosody };
+        const volume = (prosody as any)?.volume ?? daVoiceProsody?.volume;
+        console.log(`🎙️  Generating speech via ElevenLabs (voice: ${voice}, stability: ${settings.stability}, style: ${settings.style}, speed: ${settings.speed}, volume: ${volume ?? 1.0})`);
 
-      const spokenMessage = applyPronunciations(safeMessage);
         const audioBuffer = await generateSpeech(spokenMessage, voice, prosody);
-      await playAudio(audioBuffer, volume);
-    } catch (error) {
-      console.error("Failed to generate/play speech:", error);
+        await playAudio(audioBuffer, volume);
+        played = true;
+      } catch (error) {
+        console.error("ElevenLabs failed:", error);
+      }
+    }
+
+    if (!played) {
+      console.error("⚠️  No TTS provider succeeded");
     }
   }
 
-  // Display macOS notification - escape for AppleScript
-  try {
-    const escapedTitle = escapeForAppleScript(safeTitle);
-    const escapedMessage = escapeForAppleScript(safeMessage);
-    const script = `display notification "${escapedMessage}" with title "${escapedTitle}" sound name ""`;
-    await spawnSafe('/usr/bin/osascript', ['-e', script]);
-  } catch (error) {
-    console.error("Notification display error:", error);
+  // Display notification (macOS only - osascript not available on Linux)
+  if (!IS_LINUX) {
+    try {
+      const escapedTitle = escapeForAppleScript(safeTitle);
+      const escapedMessage = escapeForAppleScript(safeMessage);
+      const script = `display notification "${escapedMessage}" with title "${escapedTitle}" sound name ""`;
+      await spawnSafe('/usr/bin/osascript', ['-e', script]);
+    } catch (error) {
+      console.error("Notification display error:", error);
+    }
+  } else {
+    console.log(`📢 ${safeTitle}: ${safeMessage}`);
   }
 }
 
@@ -538,7 +611,9 @@ const server = serve({
         JSON.stringify({
           status: "healthy",
           port: PORT,
-          voice_system: "ElevenLabs",
+          platform: IS_LINUX ? "linux" : "macos",
+          voice_system: voiceProvider,
+          voice_name: voiceProvider === 'edge-tts' ? edgeTtsVoice : DEFAULT_VOICE_ID,
           default_voice_id: DEFAULT_VOICE_ID,
           api_key_configured: !!ELEVENLABS_API_KEY
         }),
@@ -557,7 +632,13 @@ const server = serve({
 });
 
 console.log(`🚀 Voice Server running on port ${PORT}`);
-console.log(`🎙️  Using ElevenLabs TTS (default voice: ${DEFAULT_VOICE_ID})`);
+console.log(`🖥️  Platform: ${IS_LINUX ? 'Linux/WSL2' : 'macOS'}`);
+if (voiceProvider === 'edge-tts') {
+  console.log(`🎙️  Using Edge TTS (voice: ${edgeTtsVoice})`);
+  if (ELEVENLABS_API_KEY) console.log(`🔄 ElevenLabs available as fallback`);
+} else {
+  console.log(`🎙️  Using ElevenLabs TTS (default voice: ${DEFAULT_VOICE_ID})`);
+}
 console.log(`📡 POST to http://localhost:${PORT}/notify`);
 console.log(`🔒 Security: CORS restricted to localhost, rate limiting enabled`);
 console.log(`🔑 API Key: ${ELEVENLABS_API_KEY ? '✅ Configured' : '❌ Missing'}`);

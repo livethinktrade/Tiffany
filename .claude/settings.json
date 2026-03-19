@@ -1,48 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "paiVersion": "2.4",
   "env": {
     "PAI_DIR": "/home/michael/tiffany-pai/.claude",
     "PROJECTS_DIR": "/home/michael",
     "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "80000",
     "BASH_DEFAULT_TIMEOUT_MS": "600000"
-  },
-  "contextFiles": [
-    "skills/CORE/SKILL.md",
-    "skills/CORE/SYSTEM/AISTEERINGRULES.md",
-    "skills/CORE/USER/AISTEERINGRULES.md",
-    "skills/CORE/USER/DAIDENTITY.md"
-  ],
-  "daidentity": {
-    "name": "Tiffany",
-    "fullName": "Tiffany - Personal AI Infrastructure",
-    "displayName": "Tiffany",
-    "color": "#EC4899",
-    "voiceId": "jqcCZkN6Knx8BJ5TBdYR",
-    "voice": {
-      "stability": 0.50,
-      "similarity_boost": 0.75,
-      "style": 0.90,
-      "speed": 1.1,
-      "use_speaker_boost": true,
-      "volume": 0.8
-    },
-    "startupCatchphrase": "Tiffany here, ready to help!"
-  },
-  "principal": {
-    "name": "Michael",
-    "timezone": "America/Chicago"
-  },
-  "pai": {
-    "repoUrl": "github.com/livethinktrade/Tiffany",
-    "version": "2.4",
-    "upstreamUrl": "github.com/danielmiessler/PAI"
-  },
-  "techStack": {
-    "terminal": "Kitty",
-    "packageManager": "bun",
-    "pythonPackageManager": "uv",
-    "language": "TypeScript"
   },
   "permissions": {
     "allow": [
@@ -104,67 +66,137 @@
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "hooks": [{ "type": "command", "command": "${PAI_DIR}/hooks/SecurityValidator.hook.ts" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/SecurityValidator.hook.ts"
+          }
+        ]
       },
       {
         "matcher": "Edit",
-        "hooks": [{ "type": "command", "command": "${PAI_DIR}/hooks/SecurityValidator.hook.ts" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/SecurityValidator.hook.ts"
+          }
+        ]
       },
       {
         "matcher": "Write",
-        "hooks": [{ "type": "command", "command": "${PAI_DIR}/hooks/SecurityValidator.hook.ts" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/SecurityValidator.hook.ts"
+          }
+        ]
       },
       {
         "matcher": "Read",
-        "hooks": [{ "type": "command", "command": "${PAI_DIR}/hooks/SecurityValidator.hook.ts" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/SecurityValidator.hook.ts"
+          }
+        ]
       },
       {
         "matcher": "AskUserQuestion",
-        "hooks": [{ "type": "command", "command": "${PAI_DIR}/hooks/SetQuestionTab.hook.ts" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/SetQuestionTab.hook.ts"
+          }
+        ]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "AskUserQuestion",
-        "hooks": [{ "type": "command", "command": "${PAI_DIR}/hooks/QuestionAnswered.hook.ts" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/QuestionAnswered.hook.ts"
+          }
+        ]
       }
     ],
     "SessionEnd": [
       {
         "hooks": [
-          { "type": "command", "command": "${PAI_DIR}/hooks/WorkCompletionLearning.hook.ts" },
-          { "type": "command", "command": "${PAI_DIR}/hooks/SessionSummary.hook.ts" }
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/WorkCompletionLearning.hook.ts"
+          },
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/SessionSummary.hook.ts"
+          }
         ]
       }
     ],
     "UserPromptSubmit": [
       {
         "hooks": [
-          { "type": "command", "command": "${PAI_DIR}/hooks/FormatReminder.hook.ts" },
-          { "type": "command", "command": "${PAI_DIR}/hooks/AutoWorkCreation.hook.ts" },
-          { "type": "command", "command": "${PAI_DIR}/hooks/ExplicitRatingCapture.hook.ts" },
-          { "type": "command", "command": "${PAI_DIR}/hooks/ImplicitSentimentCapture.hook.ts" },
-          { "type": "command", "command": "${PAI_DIR}/hooks/UpdateTabTitle.hook.ts" }
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/FormatReminder.hook.ts"
+          },
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/AutoWorkCreation.hook.ts"
+          },
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/ExplicitRatingCapture.hook.ts"
+          },
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/ImplicitSentimentCapture.hook.ts"
+          },
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/UpdateTabTitle.hook.ts"
+          }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "${PAI_DIR}/hooks/StartupGreeting.hook.ts" },
-          { "type": "command", "command": "${PAI_DIR}/hooks/LoadContext.hook.ts" },
-          { "type": "command", "command": "${PAI_DIR}/hooks/CheckVersion.hook.ts" }
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/StartupGreeting.hook.ts"
+          },
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/LoadContext.hook.ts"
+          },
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/CheckVersion.hook.ts"
+          }
         ]
       }
     ],
     "Stop": [
       {
-        "hooks": [{ "type": "command", "command": "${PAI_DIR}/hooks/StopOrchestrator.hook.ts" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/StopOrchestrator.hook.ts"
+          }
+        ]
       }
     ],
     "SubagentStop": [
       {
-        "hooks": [{ "type": "command", "command": "${PAI_DIR}/hooks/AgentOutputCapture.hook.ts" }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PAI_DIR}/hooks/AgentOutputCapture.hook.ts"
+          }
+        ]
       }
     ]
   },
@@ -173,8 +205,46 @@
     "command": "${PAI_DIR}/statusline-command.sh"
   },
   "alwaysThinkingEnabled": true,
+  "paiVersion": "4.0.3",
+  "contextFiles": [
+    "skills/CORE/SKILL.md",
+    "skills/CORE/SYSTEM/AISTEERINGRULES.md",
+    "skills/CORE/USER/AISTEERINGRULES.md",
+    "skills/CORE/USER/DAIDENTITY.md"
+  ],
+  "daidentity": {
+    "name": "Tiffany",
+    "fullName": "Tiffany - Personal AI Infrastructure",
+    "displayName": "Tiffany",
+    "color": "#EC4899",
+    "voiceId": "jqcCZkN6Knx8BJ5TBdYR",
+    "voice": {
+      "stability": 0.5,
+      "similarity_boost": 0.75,
+      "style": 0.9,
+      "speed": 1.1,
+      "use_speaker_boost": true,
+      "volume": 0.8
+    },
+    "startupCatchphrase": "Tiffany here, ready to help!"
+  },
+  "principal": {
+    "name": "Michael",
+    "timezone": "America/Chicago"
+  },
+  "pai": {
+    "repoUrl": "github.com/livethinktrade/Tiffany",
+    "version": "4.0.3",
+    "upstreamUrl": "github.com/danielmiessler/PAI"
+  },
+  "techStack": {
+    "terminal": "Kitty",
+    "packageManager": "bun",
+    "pythonPackageManager": "uv",
+    "language": "TypeScript"
+  },
   "_docs": {
-    "_overview": "SETTINGS.JSON - Central configuration for PAI v2.4. Replace __INSTALL_WILL_SET_THIS__ placeholders with your paths.",
+    "_overview": "SETTINGS.JSON - Central configuration for PAI v4.0.3. Replace __INSTALL_WILL_SET_THIS__ placeholders with your paths.",
     "_sections": {
       "contextFiles": "Files loaded at session start. Defaults: SKILL.md, AISTEERINGRULES (SYSTEM+USER), DAIDENTITY. Customize to load additional context.",
       "daidentity": "AI identity (name, voice). Edit directly to customize.",
